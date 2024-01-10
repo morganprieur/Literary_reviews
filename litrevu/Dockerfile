@@ -7,4 +7,4 @@ WORKDIR /code
 COPY requirements.txt /code/
 RUN apt update && apt install nano
 RUN pip install -r requirements.txt
-COPY . /code/`
+COPY . /code/
