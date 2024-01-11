@@ -1,19 +1,16 @@
 
 # Tech watch 
 
-Ta veille doit inclure les parties suivantes : 
-1. Une liste des différents flux (au moins cinq) que tu surveilles avec une explication de l'intérêt de chacun ; 
-
 
 ## Followed threads 
 
-1. The VSCode extensions tab (found into the VSCode workspace) 
+1. The VSCode "Extensions" tab (found into the VSCode dashboard) 
 *  Interests: 
     - It offers suitable tools for working on VSCode. 
     - The extensions are always up to date. 
     - The informations about the usage popularity are displayed at the top of the page 
     (example for Python: (Microsoft)[microsoft.com] | 107,169,708 installs | 5 stars (571) | lisense Free) 
-    - The docs are readable at the same place on the web. 
+    - All the docs are readable at the same place on the web. 
 
 This thread doesn't be enough, but this is a easy way to find a first list of tools. 
 
@@ -34,24 +31,31 @@ Daily.dev isn't probably the best, but it's close.
     - The reference about eco conception web! 
 
 
-4. (Alex so yes)[https://alexsoyes.com/]
+4. (Dveloppez.com)[https://www.developpez.com/]
 *  Interests: 
     - In french, because be sure of having everything understood is interesting.  
+    - IT news, included business model of large platforms, surveys, and comments associated with the articles. 
+
+
+5. (Alex so yes)[https://alexsoyes.com/]
+*  Interests: 
+    - In french.  
     - This blog and newsletter gives other blogs and newsletters, by languages or technologies. 
     - This blog doesn't focus on the last release of a technology, but rather development or feature articles. 
+    - He's testing "code with AI". 
 
 
-5. (Journal du hacker)[https://www.journalduhacker.net/] 
+6. (Journal du hacker)[https://www.journalduhacker.net/] 
 *  Interests: 
     - Francophone news about opensource and "logiciels libres" tools and technologies. 
 
 
-6. (The "partage" part of the linuxfr website)[https://linuxfr.org/liens] 
+7. (The "partage" part of the linuxfr website)[https://linuxfr.org/liens] 
 *  Interests: 
     - News about Linux environment. 
 
 
-7. (The Django subreddit)[https://www.reddit.com/r/django/] 
+8. (The Django subreddit)[https://www.reddit.com/r/django/] 
 *  Interests: 
     - Q/A about Django. 
 
