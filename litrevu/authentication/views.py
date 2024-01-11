@@ -50,45 +50,48 @@ from django.contrib.auth.decorators import login_required
 
 
 # # @with_ip_geolocation 
-# @login_required 
-# def home(request): 
-#     # print(f'dir(request) : {dir(request)}') 
+@login_required 
+def home(request): 
+    # print(f'dir(request) : {dir(request)}') 
 
-#     ots = Work_order.objects.all() 
-#     ots_count = ots.count 
-#     for ot in ots: 
-#         # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
-#         # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
-#               type='COMPTE-RENDU D\'INTERVENTION')) 
-#         documents = Document.objects.filter( 
-#             work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
-#             ) | Document.objects.filter( 
-#             work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
-#         ) 
-#         docs_count = documents.count 
-#     # ---- 
-#     # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-#     # if x_forwarded_for:
-#     #     ip = x_forwarded_for.split(',')[0]
-#     # # ip = '90.51.91.219' 
-#     # else:
-#     #     ip = request.META.get('REMOTE_ADDR') 
-#     # ---- 
-#     return render( 
-#         request, 'uthdemo/home.html', context={
-#             'ots': ots, 
-#             'ots_count': ots_count, 
-#             'documents': documents, 
-#             'docs_count': docs_count, 
-#             # 'ip': ip, 
-#             # 'location': location 
-#         } 
-#     ) 
-#     # ---- 
-#     # "https://api-adresse.data.gouv.fr/search/?q==7+bd+lamarck+bourges&limit=1" 
-#     # ---- 
-#     # return HttpResponse("Welcome! You are visiting from: {}".format(ip)) 
-#     # ---- 
+    test = 'Hello home' 
+
+    # ots = Work_order.objects.all() 
+    # ots_count = ots.count 
+    # for ot in ots: 
+    #     # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
+    #     # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
+    #           type='COMPTE-RENDU D\'INTERVENTION')) 
+    #     documents = Document.objects.filter( 
+    #         work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
+    #         ) | Document.objects.filter( 
+    #         work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
+    #     ) 
+    #     docs_count = documents.count 
+    # ---- 
+    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    # if x_forwarded_for:
+    #     ip = x_forwarded_for.split(',')[0]
+    # # ip = '90.51.91.219' 
+    # else:
+    #     ip = request.META.get('REMOTE_ADDR') 
+    # ---- 
+    return render( 
+        request, 'auth/home.html', context={ 
+            'test': test, 
+            # 'ots': ots, 
+            # 'ots_count': ots_count, 
+            # 'documents': documents, 
+            # 'docs_count': docs_count, 
+            # 'ip': ip, 
+            # 'location': location 
+        } 
+    ) 
+    # ---- 
+    # "https://api-adresse.data.gouv.fr/search/?q==7+bd+lamarck+bourges&limit=1" 
+    # ---- 
+    # return HttpResponse("Welcome! You are visiting from: {}".format(ip)) 
+    # ---- 
 
 
 # @login_required 

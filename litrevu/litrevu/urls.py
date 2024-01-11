@@ -15,21 +15,47 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path 
+import authentication.views 
+
+from django.contrib.auth.views import LoginView, LogoutView 
+# from uthdemo.views import SignupPageView 
+
+# afficher images (https://zestedesavoir.com/tutoriels/598/developpez-votre-site-web-avec-le-framework-django/263_premiers-pas/1525_la-gestion-des-fichiers/) 
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 urlpatterns = [
     path('admin/', admin.site.urls), 
+
+    path('home/', authentication.views.home, name='home'), 
+
+    path('login/', LoginView.as_view( 
+        template_name='auth/login.html', 
+        redirect_authenticated_user=True), 
+        name='login'), 
+
+
+    # path('login', LoginView.as_view( 
+    #     template_name='uthdemo/login.html', 
+    #     redirect_authenticated_user=True), 
+    #     name='login'), 
+
+    #     # path('', LoginView.as_view( 
+    #     #         template_name='uthdemo/login.html', 
+    #     #         redirect_authenticated_user=True), 
+    #     #     name='login'), 
+    #     # path('', uthdemo.views.LoginPageView.as_view(), name='login'),
+    #     # path('', uthdemo.views.login_page, name='login'), 
+    #     path('logout/', uthdemo.views.logout_user, name='logout'), 
+    #     path('signup', SignupPageView.as_view(), name='signup'), 
+    #     # path('signup/', uthdemo.views.signup_page, name='signup'), 
+
 ] 
 
 
 # # ======== Exemple demo ======== # 
-# from django.contrib import admin 
-# from django.urls import path, include 
-# import uthdemo.views 
-
-# from django.contrib.auth.views import LoginView, LogoutView 
-# from uthdemo.views import SignupPageView 
 
 # # fotoblog 
 # from django.conf import settings 
@@ -51,25 +77,9 @@ urlpatterns = [
 # urlpatterns = [ 
 
 #     path('uthdemo/', include('uthdemo.urls')), 
-
 #     path('', include(router.urls)), 
 
-#     path('admin/', admin.site.urls), 
-#     path('login', LoginView.as_view( 
-#             template_name='uthdemo/login.html', 
-#             redirect_authenticated_user=True), 
-#         name='login'), 
-#     # path('', LoginView.as_view( 
-#     #         template_name='uthdemo/login.html', 
-#     #         redirect_authenticated_user=True), 
-#     #     name='login'), 
-#     # path('', uthdemo.views.LoginPageView.as_view(), name='login'),
-#     # path('', uthdemo.views.login_page, name='login'), 
-#     path('logout/', uthdemo.views.logout_user, name='logout'), 
-#     path('signup', SignupPageView.as_view(), name='signup'), 
-#     # path('signup/', uthdemo.views.signup_page, name='signup'), 
 
-#     path('home/', uthdemo.views.home, name='home'), 
 #     path('work_order_detail/<work_order_id>/', uthdemo.views.work_order_detail, name='work_order_detail'), 
 #     # http://localhost:9000/work_orders/?d8f47724-4eea-4924-8ffe-38e61f4a6d74/ 
 #     path('ebp_detail/<ebp_id>/', uthdemo.views.ebp_detail, name='ebp_detail'), 
@@ -83,10 +93,11 @@ urlpatterns = [
 
 # ] 
 
-# # fotoblog/urls.py 
-# # TODO: only in DEBUG mode, change ASAP 
-# if settings.DEBUG:
-#     urlpatterns += static(
-#         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# fotoblog/urls.py 
+# TODO: only in DEBUG mode, change ASAP 
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
 # # ======== /Exemple connect-demo ======== # 
 

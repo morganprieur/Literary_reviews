@@ -1,0 +1,36 @@
+<!-- templates/base.html --> 
+{# <DOCTYPE html> #}
+    <!-- <html> -->
+    {% load static %} 
+        <head>
+            <title>Litrevu</title>
+            <link rel="stylesheet" href="{% static 'CSS/w3.css' %}" > 
+            <link rel="stylesheet" media="screen" viewport="screen" href="{% static 'CSS/styles.css' %}" rel="stylesheet">
+        </head>
+        <body>
+            <div id="home" class="container center"> 
+                
+                <div id="header"> 
+                    <div id="logo"> 
+                        <img src="../../../authentication/images/raton_de_face.jpg" alt="Alt logo" height="100px"> 
+                    </div> 
+                    {% block header %} {% endblock %} 
+                </div> 
+
+                {% block content %}{% endblock content %} 
+    
+            </div> 
+            <hr> 
+            <div id="footer"> 
+                <p>
+                {%  if user.is_authenticated %}
+                    Vous êtes connecté en tant que {{ request.user }}. <br> 
+                    <a class="w3-text-orange" href="{# % url 'logout' % #}">Se déconnecter</a> | {% endif %} <a href="{% url 'home' %}">Accueil</a> 
+                </p>
+            </div> 
+        </body>
+        <!-- <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+        <script src="{% static 'CSS/map_home.js' %}"></script>
+        <script src="{% static 'CSS/bootstrap-dist/js/bootstrap.bundle.min.js' %}"></script> -->
+    <!-- </html> -->
+    

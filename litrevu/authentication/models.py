@@ -27,9 +27,6 @@ class Ticket(models.Model):
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
     ) 
-    # ERRORS:
-    # authentication.Ticket.image: (fields.E210) Cannot use ImageField because Pillow is not installed.
-    #     HINT: Get Pillow at https://pypi.org/project/Pillow/ or run command "python -m pip install Pillow".
     image = models.ImageField( 
         null=True, 
         blank=True, 
@@ -81,5 +78,6 @@ class UserFollows(models.Model):
 
     class Meta: 
         unique_together = ('user', 'followed_user', ) 
+        verbose_name_plural = 'User Follows'
 
 

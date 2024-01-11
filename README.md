@@ -13,7 +13,10 @@ Build an application to request and write books' reviews with Django, and follow
 `docker compose up --build` 
 
 
-### 1. Créer un superutilisateur après le lancement des containers
+## En construction 
+A partir d'ici, c'est en travaux, l'ordre et les chemins sont à mettre à jour. Merci de votre compréhension. 
+
+||### 1. Créer un superutilisateur après le lancement des containers
 
 *  Depuis le dossier contant docker-compose : lancer le container 'web' avec `exec` et lancer une invite de commande pour accéder à une console dans le container :     
 `docker exec -it setup_api_api_1 bash` 
@@ -98,16 +101,13 @@ Régler la quantité de détails avec `-v` : `3` = le maximum
 `user.password = make_password('<password>')`    
 `user.save()`    
 
-*  Vérifier dans l'itf web qu'il est bien créé.    
-
+*  Vérifier dans l'itf web qu'il est bien créé.||
 
 
 
 ## Commandes utiles 
 
-### Migrate 
+Ouvrir le fichier de commande désiré pour vérifier le script (avec / sans Docker, nom du container, chemin de manage.py, nom de l'app à créer...) 
 
-Pour faire les migrations dans le container de l'API, se placer à la racine de l'API et taper : 
-    $ `./migrate` 
-Ouvrir le fichier pour voir les commandes appelées. 
+$ `./migrate` 
 
