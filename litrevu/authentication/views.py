@@ -1,9 +1,12 @@
 
-from django.shortcuts import redirect, render
 # import des fonctions authenticate, login et logout 
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required 
+from django.shortcuts import redirect, render 
+from django.views.generic import View 
 
+from django.conf import settings 
+from . import forms 
 
 
 # ============ login ============================== # 
@@ -26,24 +29,29 @@ from django.contrib.auth.decorators import login_required
 # #     return render(request, 'uthdemo/signup.html', context={'form': form}) 
 
 
-# class SignupPageView(View): 
-#     template_name = 'uthdemo/signup.html' 
-#     form_class = forms.SignupForm 
+class SignupPageView(View): 
+    template_name = 'auth/signup.html' 
+    # template_name = 'uthdemo/signup.html' 
+    form_class = forms.SignupForm 
 
-#     def get(self, request): 
-#         form = self.form_class() 
-#         # message = '' 
-#         return render(request, self.template_name, context={'form': form}) 
+    def get(self, request): 
+        form = self.form_class() 
+        # message = '' 
+        return render( 
+            request, 
+            self.template_name, 
+            context={'form': form}) 
 
-#     def post(self, request): 
-#         form = self.form_class(request.POST) 
-#         if form.is_valid(): 
-#             user = form.save()
-#             # auto-login user
-#             login(request, user)
-#             return redirect(settings.LOGIN_REDIRECT_URL) 
+    def post(self, request): 
+        form = self.form_class(request.POST) 
+        if form.is_valid(): 
+            user = form.save()
+            # auto-login user
+            login(request, user)
+            return redirect(settings.LOGIN_REDIRECT_URL) 
 
 
+# TODO: set the content of this page 
 # # @with_ip_geolocation 
 @login_required 
 def home(request): 
@@ -89,7 +97,7 @@ def home(request):
     # ---- 
 
 
-# blog/views.py 
+# authentication/views.py 
 def logout_user(request):
     logout(request)
     return redirect('home')

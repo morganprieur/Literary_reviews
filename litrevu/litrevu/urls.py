@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path 
-import authentication.views 
+from authentication import views 
 
 from django.contrib.auth.views import LoginView, LogoutView 
-# from uthdemo.views import SignupPageView 
+# from authentication.views import SignupPageView 
 
 # afficher images (https://zestedesavoir.com/tutoriels/598/developpez-votre-site-web-avec-le-framework-django/263_premiers-pas/1525_la-gestion-des-fichiers/) 
 from django.conf.urls.static import static
@@ -29,14 +29,15 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls), 
 
-    path('home/', authentication.views.home, name='home'), 
+    path('home/', views.home, name='home'), 
 
     path('login/', LoginView.as_view( 
         template_name='auth/login.html', 
         redirect_authenticated_user=False), 
-        # redirect_authenticated_user=True), 
+        # redirect_authenticated_user=True),  # redirects to accounts/user//?next=home/ 
         name='login'), 
-    path('logout/', authentication.views.logout_user, name='logout'), 
+    path('logout/', views.logout_user, name='logout'), 
+    path('signup/', views.SignupPageView.as_view(), name='signup'), 
 
 
     # path('login', LoginView.as_view( 
@@ -51,7 +52,7 @@ urlpatterns = [
     #     # path('', uthdemo.views.LoginPageView.as_view(), name='login'),
     #     # path('', uthdemo.views.login_page, name='login'), 
     #     
-    #     path('signup', SignupPageView.as_view(), name='signup'), 
+    #     
     #     # path('signup/', uthdemo.views.signup_page, name='signup'), 
 
 ] 
