@@ -25,7 +25,7 @@
                 <p>
                 {%  if user.is_authenticated %}
                     Vous êtes connecté en tant que {{ request.user }}. <br> 
-                    <a class="w3-text-orange" href="{# % url 'logout' % #}">Se déconnecter</a> | {% endif %} <a href="{% url 'home' %}">Accueil</a> 
+                    <a class="w3-text-orange" href="{% url 'logout' %}">Se déconnecter</a> | {% endif %} <a href="{% url 'home' %}">Accueil</a> 
                 </p>
             </div> 
         </body>

@@ -114,27 +114,18 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-# STATIC_URL = 'static/'  # origin 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
+LOGIN_URL = 'login' 
+LOGIN_REDIRECT_URL = 'home' 
 
 # chemin des fichiers à utiliser 
 STATIC_URL = 'authentication/static/' 
 # chemin où enregistrer les fichiers 
 STATIC_ROOT = BASE_DIR.joinpath("authentication/static/") 
-# STATIC_ROOT = os.path.join(BASE_DIR, "static/") 
 
 # fotoblog/settings.py 
 # chemin des fichiers à afficher 
-# MEDIA_URL = '/media/' 
-# django.core.exceptions.ImproperlyConfigured: runserver can't serve media if MEDIA_URL is within STATIC_URL. 
-# MEDIA_URL = '/uthdemo/static/images/' 
 MEDIA_URL = 'authentication/images/' 
-# chemin où enregistrer les fichiers media  
-# MEDIA_ROOT = BASE_DIR.join_path('media/')
+# chemin où enregistrer les fichiers media 
 MEDIA_ROOT = BASE_DIR.joinpath('authentication/images/') 
 
 # fotoblog/settings.py 

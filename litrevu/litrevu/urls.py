@@ -33,8 +33,10 @@ urlpatterns = [
 
     path('login/', LoginView.as_view( 
         template_name='auth/login.html', 
-        redirect_authenticated_user=True), 
+        redirect_authenticated_user=False), 
+        # redirect_authenticated_user=True), 
         name='login'), 
+    path('logout/', authentication.views.logout_user, name='logout'), 
 
 
     # path('login', LoginView.as_view( 
@@ -48,7 +50,7 @@ urlpatterns = [
     #     #     name='login'), 
     #     # path('', uthdemo.views.LoginPageView.as_view(), name='login'),
     #     # path('', uthdemo.views.login_page, name='login'), 
-    #     path('logout/', uthdemo.views.logout_user, name='logout'), 
+    #     
     #     path('signup', SignupPageView.as_view(), name='signup'), 
     #     # path('signup/', uthdemo.views.signup_page, name='signup'), 
 

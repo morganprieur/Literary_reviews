@@ -1,8 +1,9 @@
-from django.shortcuts import render
 
+from django.shortcuts import redirect, render
 # import des fonctions authenticate, login et logout 
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required 
+
 
 
 # ============ login ============================== # 
@@ -12,12 +13,6 @@ from django.contrib.auth.decorators import login_required
 # from django.shortcuts import redirect, render
 
 # from . import forms 
-
-
-# # blog/views.py 
-# def logout_user(request):
-#     logout(request)
-#     return redirect('login')
 
 # # def signup_page(request):
 # #     form = forms.SignupForm()
@@ -92,6 +87,13 @@ def home(request):
     # ---- 
     # return HttpResponse("Welcome! You are visiting from: {}".format(ip)) 
     # ---- 
+
+
+# blog/views.py 
+def logout_user(request):
+    logout(request)
+    return redirect('home')
+    # return redirect('login')
 
 
 # @login_required 
