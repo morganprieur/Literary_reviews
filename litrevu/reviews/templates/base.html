@@ -8,13 +8,16 @@
             <link rel="stylesheet" media="screen" viewport="screen" href="{% static 'CSS/styles.css' %}" rel="stylesheet">
         </head>
         <body>
-            <div id="home" class="container center"> 
+            <div id="home" class="container div_"> 
                 
                 <div id="header"> 
                     <div id="logo"> 
-                        <img src="../../../authentication/images/raton_de_face.jpg" alt="Alt logo" height="100px"> 
+                        <img src="../../../reviews/images/logo.png" alt="Alt logo" height="100px"> 
+                        <!-- <img src="../../../reviews/images/raton_de_face.jpg" alt="Alt logo" height="100px">  -->
                     </div> 
-                    {% block header %} {% endblock %} 
+                    <h2 class="text_center green">{{ header }}</h2> 
+                    <div class="clear"></div>
+                    <hr> 
                 </div> 
 
                 {% block content %}{% endblock content %} 

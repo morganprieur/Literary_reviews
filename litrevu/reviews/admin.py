@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from authentication.models import ( 
+from reviews.models import ( 
     Ticket, 
     Review, 
     UserFollows, 

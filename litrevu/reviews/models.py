@@ -80,4 +80,3 @@ class UserFollows(models.Model):
         unique_together = ('user', 'followed_user', ) 
         verbose_name_plural = 'User Follows'
 
-

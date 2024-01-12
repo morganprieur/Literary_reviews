@@ -1,4 +1,4 @@
-<Doctype html> 
+<!-- <Doctype html>  -->
 
 <!-- blog/templates/auth/home.html --> 
 {% extends 'base.html' %}
@@ -8,17 +8,19 @@
     <!-- <p>You are visiting from: {# { ip } #}</p>  -->
     <!-- <p>Your location is: {# { location } #}</p>  -->
 
-    {% block header %} 
-    {# { block.super } #} 
-    <h2 class="w80 center green">Home</h2> 
-    <hr> 
-    {% endblock %} 
-
 
     {% block content %} 
     <div>
 
-        Text : {{ test }} 
+        {% for f in followed %}
+        <ul>
+            <li>
+                relation : {{ f.id }} <br> 
+                Suiveur : {{ f.user_id }} <br> 
+                Suivis : {{ f.followed_user_id }} <br> 
+            </li>
+        </ul>
+        {% endfor %}
 
         <!-- <a href="{# % url 'ebp_detail' ebp_id=ebp.id % #}">  --> 
             <!-- <img src="../../uthdemo/{# { ebp.qrcode } #}" alt="Accès doc" height="100px">  -->

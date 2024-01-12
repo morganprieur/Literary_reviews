@@ -13,17 +13,15 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+""" 
 from django.contrib import admin
-from django.urls import path 
-from authentication import views 
-
 from django.contrib.auth.views import LoginView, LogoutView 
-# from authentication.views import SignupPageView 
+from django.urls import path 
+from reviews import views 
 
 # afficher images (https://zestedesavoir.com/tutoriels/598/developpez-votre-site-web-avec-le-framework-django/263_premiers-pas/1525_la-gestion-des-fichiers/) 
-from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -32,7 +30,7 @@ urlpatterns = [
     path('home/', views.home, name='home'), 
 
     path('login/', LoginView.as_view( 
-        template_name='auth/login.html', 
+        template_name='rev/login.html', 
         redirect_authenticated_user=False), 
         # redirect_authenticated_user=True),  # redirects to accounts/user//?next=home/ 
         name='login'), 
@@ -57,6 +55,12 @@ urlpatterns = [
 
 ] 
 
+# fotoblog/urls.py 
+# TODO: only in DEBUG mode, change ASAP 
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
+
 
 # # ======== Exemple demo ======== # 
 
@@ -68,20 +72,21 @@ urlpatterns = [
 # from uthdemo import views 
 # from rest_framework import routers 
 
+# api : 
 # router = routers.DefaultRouter() 
 # router.register(r'users', views.UserViewSet) 
 
 # app_name = 'uthdemo' 
 
+# api : 
 # router.register(r'documents', views.DocumentViewSet) 
 # router.register(r'work_orders', views.Work_orderViewSet) 
 # router.register(r'ebp', views.EbpViewSet) 
 
 # urlpatterns = [ 
-
+#   # api : 
 #     path('uthdemo/', include('uthdemo.urls')), 
 #     path('', include(router.urls)), 
-
 
 #     path('work_order_detail/<work_order_id>/', uthdemo.views.work_order_detail, name='work_order_detail'), 
 #     # http://localhost:9000/work_orders/?d8f47724-4eea-4924-8ffe-38e61f4a6d74/ 
@@ -91,16 +96,5 @@ urlpatterns = [
 #     # fotoblog tuto 
 #     # path('blog/<int:blog_id>', blog.views.view_blog, name='view_blog'), 
 
-#     # api-auth/login/ 
-#     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')), 
 
-# ] 
-
-# fotoblog/urls.py 
-# TODO: only in DEBUG mode, change ASAP 
-if settings.DEBUG:
-    urlpatterns += static(
-        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
-# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
-# # ======== /Exemple connect-demo ======== # 
 

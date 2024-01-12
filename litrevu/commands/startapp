@@ -1,1 +1,1 @@
-python manage.py startapp reviews
+python litrevu/manage.py startapp reviews

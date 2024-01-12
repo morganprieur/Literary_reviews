@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-import os 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY') 
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles', 
-    'authentication', 
-] 
+    'django.contrib.staticfiles',
+    'reviews', 
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -117,26 +117,27 @@ USE_TZ = True
 LOGIN_URL = 'login' 
 LOGIN_REDIRECT_URL = 'home' 
 
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.0/howto/static-files/
+
+# STATIC_URL = 'static/' 
+
 # chemin des fichiers à utiliser 
-STATIC_URL = 'authentication/static/' 
+STATIC_URL = 'reviews/static/' 
 # chemin où enregistrer les fichiers 
-STATIC_ROOT = BASE_DIR.joinpath("authentication/static/") 
+STATIC_ROOT = BASE_DIR.joinpath("reviews/static/") 
 
 # fotoblog/settings.py 
 # chemin des fichiers à afficher 
-MEDIA_URL = 'authentication/images/' 
+MEDIA_URL = 'reviews/images/' 
 # chemin où enregistrer les fichiers media 
-MEDIA_ROOT = BASE_DIR.joinpath('authentication/images/') 
+MEDIA_ROOT = BASE_DIR.joinpath('reviews/images/') 
 
-# fotoblog/settings.py 
-# MEDIA_ URL = 'uthdemo/media/'
-# MEDIA_ROOT = BASE_DIR.joinpath('uthdemo/media/')
 
+# AUTH_USER_MODEL = 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# AUTH_USER_MODEL = 
-

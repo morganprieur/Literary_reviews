@@ -1,9 +1,10 @@
 
-# import des fonctions authenticate, login et logout 
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required 
 from django.shortcuts import redirect, render 
 from django.views.generic import View 
+
+from reviews.models import Review, Ticket, UserFollows 
 
 from django.conf import settings 
 from . import forms 
@@ -11,27 +12,8 @@ from . import forms
 
 # ============ login ============================== # 
 
-# # authentication/views.py
-# from django.contrib.auth import authenticate, login, logout
-# from django.shortcuts import redirect, render
-
-# from . import forms 
-
-# # def signup_page(request):
-# #     form = forms.SignupForm()
-# #     if request.method == 'POST':
-# #         form = forms.SignupForm(request.POST)
-# #         if form.is_valid():
-# #             user = form.save()
-# #             # auto-login user
-# #             login(request, user)
-# #             return redirect(settings.LOGIN_REDIRECT_URL)
-# #     return render(request, 'uthdemo/signup.html', context={'form': form}) 
-
-
 class SignupPageView(View): 
-    template_name = 'auth/signup.html' 
-    # template_name = 'uthdemo/signup.html' 
+    template_name = 'rev/signup.html' 
     form_class = forms.SignupForm 
 
     def get(self, request): 
@@ -46,18 +28,22 @@ class SignupPageView(View):
         form = self.form_class(request.POST) 
         if form.is_valid(): 
             user = form.save()
-            # auto-login user
+            # auto-login user: 
             login(request, user)
             return redirect(settings.LOGIN_REDIRECT_URL) 
 
 
 # TODO: set the content of this page 
-# # @with_ip_geolocation 
 @login_required 
 def home(request): 
     # print(f'dir(request) : {dir(request)}') 
+    # print(f'request : {request}') 
 
+    header = 'Flux'
     test = 'Hello home' 
+
+    followed = UserFollows.objects.filter( 
+        user__username=request.user.username) 
 
     # ots = Work_order.objects.all() 
     # ots_count = ots.count 
@@ -80,8 +66,10 @@ def home(request):
     #     ip = request.META.get('REMOTE_ADDR') 
     # ---- 
     return render( 
-        request, 'auth/home.html', context={ 
+        request, 'rev/home.html', context={ 
+            'header': header, 
             'test': test, 
+            'followed': followed, 
             # 'ots': ots, 
             # 'ots_count': ots_count, 
             # 'documents': documents, 
@@ -97,11 +85,16 @@ def home(request):
     # ---- 
 
 
-# authentication/views.py 
+# reviews/views.py 
 def logout_user(request):
     logout(request)
     return redirect('home')
     # return redirect('login')
+
+@login_required
+def flow_page(request): 
+    print('request : ', request) 
+
 
 
 # @login_required 
