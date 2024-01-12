@@ -1,14 +1,17 @@
-/* body { 
+body { 
   font-family: sans-serif; 
 } 
 a { 
   text-decoration: none; 
-  color:#82b827; 
-  /* color:orangered;  */ /* 
+  /* color:#82b827;  */
+  color:orangered;   
 } 
-img { 
+hr { 
+  border-top: 2px solid #ddd;  
+}
+/* img { 
   margin: 5px 0; 
-} 
+}  */
 
 .bold { 
   font-weight: bold; 
@@ -16,19 +19,24 @@ img {
 .center { 
     margin: 0 auto; 
 } 
-.no-block { 
+/* .no-block { 
     display: inline; 
 } 
 .objects_list { 
   width: 80%; 
   text-align: center; 
-} 
+}  */
 .text_center { 
   text-align: center; 
 } 
 
+.container { 
+  width: 90%; 
+  margin: 0 auto; 
+  margin-bottom: 20px; 
+}
 
-@media only screen and (max-width: 500px) {
+/* @media only screen and (max-width: 500px) {
   .pdf_doc { 
     margin: 5px auto; 
     width: 300px; 
@@ -38,23 +46,26 @@ img {
     height:200px; 
     width: 350px; 
   } 
-} 
+}  */
 
-@media only screen and (min-width: 501px) {
+/* @media only screen and (min-width: 501px) {
   #home { 
     width: 45%; 
     margin: 0 auto; 
-  } 
-  /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */ /* 
-  #map { 
+  }  */ 
+
+  /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */  
+  /* #map { 
     height:300px;
-  } 
-  .pdf_doc { 
+  }  */
+  /* .pdf_doc { 
     margin: 10px auto; 
     width: 400px; 
     height: 400px; 
   } 
-} 
- */
+}  */
 
- 
+
+
+
+
