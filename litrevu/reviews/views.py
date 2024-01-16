@@ -3,10 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
 from django.shortcuts import redirect, render 
 from django.views.generic import View 
-
-from reviews.models import Review, Ticket, UserFollows 
+# from django.views import View as V 
 
 from django.conf import settings 
+from reviews.models import Review, Ticket, UserFollows 
 from . import forms 
 
 
@@ -33,14 +33,14 @@ class SignupPageView(View):
             return redirect(settings.LOGIN_REDIRECT_URL) 
 
 
-# TODO: set the content of this page 
+# TODO: set the content of this page : 
 @login_required 
 def home(request): 
     # print(f'dir(request) : {dir(request)}') 
     # print(f'request : {request}') 
 
-    header = 'Flux'
-    test = 'Hello home' 
+    header = 'home' 
+    # test = 'Hello home' 
 
     followed = UserFollows.objects.filter( 
         user__username=request.user.username) 
@@ -68,7 +68,7 @@ def home(request):
     return render( 
         request, 'rev/home.html', context={ 
             'header': header, 
-            'test': test, 
+            # 'test': test, 
             'followed': followed, 
             # 'ots': ots, 
             # 'ots_count': ots_count, 
@@ -85,109 +85,112 @@ def home(request):
     # ---- 
 
 
+# marche pas : 
+# TypeError: View.__init__() takes 1 positional argument but 2 were given 
+# class LoginPageView(V):
+#     template_name = 'authentication/login.html'
+#     form_class = forms.LoginForm
+
+#     def get(self, request):
+#         form = self.form_class()
+#         message = ''
+#         return render(request, self.template_name, context={'form': form, 'message': message})
+        
+#     def post(self, request):
+#         form = self.form_class(request.POST)
+#         if form.is_valid():
+#             user = authenticate(
+#                 username=form.cleaned_data['username'],
+#                 password=form.cleaned_data['password'],
+#             )
+#             if user is not None:
+#                 login(request, user)
+#                 return redirect('home')
+#         message = 'Identifiants invalides.'
+#         return render(request, self.template_name, context={'form': form, 'message': message})
+
+
+@login_required 
+def abonnements(request): 
+    header = 'Abonnements'
+    # test = 'Hello home' 
+
+    followed = UserFollows.objects.filter( 
+        user__username=request.user.username) 
+
+    return render(request, 'rev/abonnements.html', context={ 
+            'header': header, 
+            # 'test': test, 
+            'followed': followed, 
+        } 
+    ) 
+
+    # def post(self, request): 
+    #     form = self.form_class(request.POST) 
+    #     if form.is_valid(): 
+    #         user = form.save()
+    #         # auto-login user: 
+    #         login(request, user)
+    #         return redirect(settings.LOGIN_REDIRECT_URL) 
+
+
+@login_required
+def delete_abo(request, abonnements_id): 
+    # print(dir(request)) 
+    abo = UserFollows.objects.get(id=abonnements_id) 
+    print('abo.id : ', abo.id, 'abo.followed_user : ', abo.followed_user) 
+
+    if request.method == 'POST': 
+        # abo = UserFollows.objects.get(id=abonnements_id) 
+        header = 'Abonnements' 
+        abo.delete() 
+        # return redirect('band_list') 
+        return redirect('abonnements', ) 
+    return render(request, 'rev/delete_abo.html', {'abo': abo}) 
+        # 'header': header, 
+        
+# # listings/views.py
+# def band_delete(request, id):
+#     band = Band.objects.get(id=id)  # nécessaire pour GET et pour POST
+
+#     if request.method == 'POST':
+#         # supprimer le groupe de la base de données
+#         band.delete()
+#         # rediriger vers la liste des groupes
+#         return redirect('band_list')
+#     # pas besoin de « else » ici. Si c'est une demande GET, continuez simplement
+#     return render(request,
+#                     'listings/band_delete.html',
+#                     {'band': band})
+
+
 # reviews/views.py 
 def logout_user(request):
     logout(request)
     return redirect('home')
     # return redirect('login')
 
-@login_required
-def flow_page(request): 
-    print('request : ', request) 
 
+# La classe LoginPageView est remplacée par django.contrib.auth.views.LoginView (urls.py) 
+# class LoginPageView(View):
+#     template_name = 'uthdemo/login.html'
+#     form_class = forms.LoginForm
 
+#     def get(self, request):
+#         form = self.form_class()
+#         message = ''
+#         return render(request, self.template_name, context={'form': form, 'message': message})
 
-# @login_required 
-# def work_order_detail(request, work_order_id): 
-#     print('request : ', request) 
-#     # template = loader.get_template('signup.html')  # pour classe 
-#     ot = get_object_or_404(Work_order, id=work_order_id)  # Work_order.objects.get(uuid=request) 
-#     documents = Document.objects.filter(work_order__id=ot.id) 
-#     docs_count = documents.count 
-#     return render( 
-#         request, 'uthdemo/work_order_detail.html', context={ 
-#             'ot': ot, 
-#             'documents': documents, 
-#             'docs_count': docs_count  
-#         } 
-#     ) 
-#     # return render( 
-#     #     request, 'uthdemo/work_order.html', context={ 
-#     #         'ot': ot, 
-#     #         'documents': documents 
-#     #     } 
-#     # ) 
-
-
-# @login_required 
-# def ebp_detail(request, ebp_id): 
-#     # print(f"ebp id : {Ebp.id}") 
-#     ebp = get_object_or_404(Ebp, id=ebp_id) 
-#     ots = Work_order.objects.filter(ebp__id=ebp_id) 
-#     # documents = Document.objects.filter(work_order__id=ot.id) 
-#     # documents = Document.objects.filter(work_order__ebp__id=ebp.id) 
-#     docs = Document.objects.filter(work_order__ebp__id=ebp.id) 
-#     # print(f"documents : {documents}") 
-#     documents = [] 
-#     for doc in docs: 
-#         # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
-#         # if 'ORDRE DE TRAVAUX' not in doc.type | 'COMPTE-RENDU' not in doc.type: 
-#         if 'DOCUMENTATION TECHNIQUE' in doc.type: 
-#             document = doc 
-#             documents.append(document) 
-
-#     return render( 
-#         request, 'uthdemo/ebp_detail.html', context={ 
-#             'ebp': ebp, 
-#             'ots': ots, 
-#             'documents': documents 
-#         } 
-#     ) 
-
-
-# @login_required 
-# def pt_detail(request, pt_id): 
-#     pt = get_object_or_404(Tech_point, id=pt_id) 
-#     ebps = Ebp.objects.filter(tech_point__id=pt_id) 
-#     ots = Work_order.objects.filter(tech_point__id=pt_id) 
-#     return render( 
-#         request, 
-#         'uthdemo/pt_detail.html', 
-#         context={ 
-#             'pt': pt, 
-#             'ebps': ebps, 
-#             'ots': ots, 
-#         } 
-#     ) 
-
-# # # blog/views.py
-# # # from django.shortcuts import get_object_or_404
-# # @login_required
-# # def view_blog(request, blog_id):
-# #     blog = get_object_or_404(models.Blog, id=blog_id)
-# #     return render(request, 'blog/view_blog.html', {'blog': blog})
-
-
-# # La classe LoginPageView est remplacée par django.contrib.auth.views.LoginView (urls.py) 
-# # class LoginPageView(View):
-# #     template_name = 'uthdemo/login.html'
-# #     form_class = forms.LoginForm
-
-# #     def get(self, request):
-# #         form = self.form_class()
-# #         message = ''
-# #         return render(request, self.template_name, context={'form': form, 'message': message})
-
-# #     def post(self, request):
-# #         form = self.form_class(request.POST)
-# #         if form.is_valid():
-# #             user = authenticate(
-# #                 username=form.cleaned_data['username'],
-# #                 password=form.cleaned_data['password'],
-# #             )
-# #             if user is not None:
-# #                 login(request, user)
-# #                 return redirect('home')
-# #         message = 'Identifiants invalides.'
-# #         return render(request, self.template_name, context={'form': form, 'message': message})
+#     def post(self, request):
+#         form = self.form_class(request.POST)
+#         if form.is_valid():
+#             user = authenticate(
+#                 username=form.cleaned_data['username'],
+#                 password=form.cleaned_data['password'],
+#             )
+#             if user is not None:
+#                 login(request, user)
+#                 return redirect('home')
+#         message = 'Identifiants invalides.'
+#         return render(request, self.template_name, context={'form': form, 'message': message})
 

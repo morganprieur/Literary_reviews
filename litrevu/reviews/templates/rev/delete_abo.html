@@ -1,0 +1,40 @@
+<!-- <Doctype html>  -->
+
+<!-- <Doctype html>  -->
+
+<!-- blog/templates/auth/home.html --> 
+{% extends 'base.html' %}
+
+{% block content %} 
+    <div> 
+        <h1>Supprimer le groupe</h1>
+
+        <p>Etes-vous sûr de vouloir supprimer l'abonnement {{ abo.id }} : {{ abo.followed_user }} ?</p> 
+
+        <form action="" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Supprimer">
+        </form>
+
+    </div>
+
+{% endblock content %} 
+
+
+{% comment %}
+{% block content %} 
+<div> 
+    <h5> 
+        L'abonnement a bien été supprimé. <br> 
+        <a href="{% url 'abonnements' %}">Abonnements</a>
+    </h5>
+    
+    <!-- <a href="{# % url 'ebp_detail' ebp_id=ebp.id % #}">  --> 
+        <!-- <img src="../../uthdemo/{# { ebp.qrcode } #}" alt="Accès doc" height="100px">  -->
+        <!-- </a>  -->
+        
+</div>
+    
+{% endblock content %} 
+{% endcomment %}
+
