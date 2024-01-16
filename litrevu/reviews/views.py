@@ -113,18 +113,35 @@ def home(request):
 
 @login_required 
 def abonnements(request): 
-    header = 'Abonnements'
-    # test = 'Hello home' 
+    header = 'Abonnements' 
 
     followed = UserFollows.objects.filter( 
         user__username=request.user.username) 
+    followers = UserFollows.objects.filter( 
+        followed_user__username=request.user.username) 
+    print(dir(followers[0])) 
 
     return render(request, 'rev/abonnements.html', context={ 
             'header': header, 
             # 'test': test, 
             'followed': followed, 
+            'followers': followers, 
         } 
     ) 
+
+""" 
+class UserFollows(models.Model): 
+    user = models.ForeignKey( 
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='following', 
+    ) 
+    followed_user = models.ForeignKey( 
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='followed_by', 
+    ) 
+""" 
     # def post(self, request): 
     #     form = self.form_class(request.POST) 
     #     if form.is_valid(): 
@@ -132,6 +149,10 @@ def abonnements(request):
     #         # auto-login user: 
     #         login(request, user)
     #         return redirect(settings.LOGIN_REDIRECT_URL) 
+
+
+
+
 
 
 @login_required

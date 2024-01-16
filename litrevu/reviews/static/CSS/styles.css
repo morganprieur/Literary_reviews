@@ -76,6 +76,7 @@ button:hover {
   border: var(--deco_color) solid 1px; 
   border-radius: 10px; 
   padding: 1rem; 
+  margin-bottom: 20px; 
 } 
 .login a { 
   width: 95%; 
