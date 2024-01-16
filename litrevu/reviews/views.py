@@ -18,6 +18,7 @@ class SignupPageView(View):
 
     def get(self, request): 
         form = self.form_class() 
+        print(form.as_p) 
         # message = '' 
         return render( 
             request, 
@@ -124,7 +125,6 @@ def abonnements(request):
             'followed': followed, 
         } 
     ) 
-
     # def post(self, request): 
     #     form = self.form_class(request.POST) 
     #     if form.is_valid(): 
@@ -136,9 +136,8 @@ def abonnements(request):
 
 @login_required
 def delete_abo(request, abonnements_id): 
-    # print(dir(request)) 
     abo = UserFollows.objects.get(id=abonnements_id) 
-    print('abo.id : ', abo.id, 'abo.followed_user : ', abo.followed_user) 
+    # print('abo.id : ', abo.id, 'abo.followed_user : ', abo.followed_user) 
 
     if request.method == 'POST': 
         # abo = UserFollows.objects.get(id=abonnements_id) 

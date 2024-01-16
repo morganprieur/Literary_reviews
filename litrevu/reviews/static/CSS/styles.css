@@ -1,18 +1,49 @@
+:root { 
+  --back_color: #5b5650; 
+  --text_color: #ddd; 
+  --deco_color: #ff4500; 
+  --button_color: #ffa07a; 
+  --button_hover: #fa8072; 
+} 
 body { 
   font-family: sans-serif; 
+  background-color: var(--back_color); 
+  color: var(--text_color); 
 } 
 a { 
   text-decoration: none; 
-  /* color:#82b827;  */
-  color:orangered;   
+  /* color:#82b827;  */ 
+  color: var(--button_color);   
+} 
+a:hover {
+  color: var(--button_hover); 
 } 
 hr { 
-  border-top: 2px solid #ddd;  
-}
+  border-top: 2px solid var(--text_color);  
+} 
+input { 
+  background-color: #eeeeee; 
+} 
+button { 
+  display: block; 
+  width: 100%; 
+  background-color: var(--button_color); 
+  border: var(--back_color) solid 1px; 
+} 
+button:hover { 
+  background-color: var(--button_hover); 
+  border: var(--back_color) solid 1px; 
+} 
 /* img { 
   margin: 5px 0; 
 }  */
 
+/* .demi-button { 
+  display: block; 
+  width: 50%; 
+  background-color: lightsalmon; 
+  border: none; 
+}  */
 .bold { 
   font-weight: bold; 
 } 
@@ -22,13 +53,6 @@ hr {
 .clear { 
   clear: both; 
 } 
-/* .no-block { 
-    display: inline; 
-} 
-.objects_list { 
-  width: 80%; 
-  text-align: center; 
-}  */
 .text_center { 
   text-align: center; 
 } 
@@ -47,6 +71,19 @@ hr {
   padding-top: 1rem; 
   /* height: 100px;  */
   vertical-align: middle; 
+} 
+.cadre { 
+  border: var(--deco_color) solid 1px; 
+  border-radius: 10px; 
+  padding: 1rem; 
+} 
+.login a { 
+  width: 95%; 
+  display: block; 
+} 
+.signup, .login { 
+  width: 70%; 
+  margin: 0 auto; 
 } 
 
 /* @media only screen and (max-width: 500px) {

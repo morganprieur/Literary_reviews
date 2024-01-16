@@ -12,7 +12,7 @@
                 
                 <div id="header"> 
                     <div id="logo"> 
-                        <img src="../../../reviews/images/logo.png" alt="Alt logo" height="100px"> 
+                        <img src="../../../reviews/images/logo_gris.png" alt="Alt logo" height="100px"> 
                         <!-- <img src="../../../reviews/images/raton_de_face.jpg" alt="Alt logo" height="100px">  -->
                     </div> 
                     <h2 class="text_center green">{{ header }}</h2> 
@@ -26,8 +26,9 @@
             <div id="footer"> 
                 <p>
                 {%  if user.is_authenticated %}
-                    Vous êtes connecté en tant que {{ request.user }}. <br> 
-                    <a class="w3-text-deep-orange" href="{% url 'logout' %}">Se déconnecter</a> | {% endif %} <a href="{% url 'home' %}">Accueil</a> 
+                    Vous êtes connecté en tant que {{ request.user }} | 
+                    <a href="{% url 'logout' %}">Se déconnecter</a> | {% endif %} <a href="{% url 'home' %}">Accueil</a> 
+                    <!-- <a class="w3-text-deep-orange" href="{# % url 'logout' % #}">Se déconnecter</a> | {# % endif % #} <a href="{# % url 'home' % #}">Accueil</a>  -->
                 </p>
             </div> 
         </div> 

@@ -1,13 +1,41 @@
-<!-- reviews/templates/rev/login.html -->
-{% extends 'base.html' %}
-{% block content %}
-    <p>{{ message }}</p>
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <button type="submit" >Se connecter</button>
-    </form> 
-    <p>Pas encore membre ? <a href="{% url 'signup' %}">Inscrivez-vous maintenant !</a> 
-    </p> 
+<!-- reviews/templates/rev/login.html --> 
+<DOCTYPE html>
+<html>
+    {% load static %} 
+    <head>
+        <title>Litrevu</title>
+        <link rel="stylesheet" href="{% static 'CSS/w3.css' %}" > 
+        <link rel="stylesheet" media="screen" viewport="screen" href="{% static 'CSS/styles.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div id="home" class="container div_"> 
+            
+            <div id="header"> 
+                <div id="logo"> 
+                    <img src="../../../reviews/images/logo.png" alt="Alt logo" height="100px"> 
+                    <!-- <img src="../../../reviews/images/raton_de_face.jpg" alt="Alt logo" height="100px">  -->
+                </div> 
+                <h2 class="text_center green">Connexion</h2> 
+                <div class="clear"></div>
+                <hr> 
+            </div> 
 
-{% endblock content %}
+            <div class="login cadre w3-row">
+                <div class="w3-col m6"> 
+                    <p>
+                        <a class="w3-center" href="{% url 'signup' %}">Inscrivez-vous maintenant !</a> 
+                    </p> 
+                </div> 
+                <div class="w3-col m6"> 
+                    <p>{{ message }}</p>
+                    <form method="post">
+                        {{ form.as_p }}
+                        {% csrf_token %}
+                        <button type="submit" >Se connecter</button>
+                    </form> 
+                </div> 
+            </div> 
+        </div> 
+    </body> 
+</html> 
+
