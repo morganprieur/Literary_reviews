@@ -1,19 +1,16 @@
-<!-- <Doctype html>  -->
-
-<!-- <Doctype html>  -->
 
 <!-- blog/templates/auth/home.html --> 
 {% extends 'base.html' %}
 
 {% block content %} 
     <div> 
-        <h1>Supprimer le groupe</h1>
+        <h1>Se désabonner</h1>
 
         <p>Etes-vous sûr de vouloir supprimer l'abonnement {{ abo.id }} : {{ abo.followed_user }} ?</p> 
 
         <form action="" method="post">
         {% csrf_token %}
-        <input type="submit" value="Supprimer">
+        <input type="submit" value="Se désabonner">
         </form>
 
     </div>

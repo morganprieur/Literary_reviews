@@ -7,8 +7,28 @@
 {% block content %} 
     <div class="cadre"> 
         <h3 class="w3-center">Suivre d'autres membres</h3> 
+        <form action="" method="get">
+            {% csrf_token %}
+            {{ form }} 
+            <input type="submit" value="Submit">
+        </form> 
 
+        {% if users %} 
+        {{ users.all.count }} 
+        <h2>Résultats de la recherche :</h2> 
+        <table class="w3-table w3-striped"> 
+            {% for u in users %} 
+            <tr> 
+                <td>{{ u }} (id : {{ u.id }}) </td> 
+                <td><a href="{% url 'create-abo' user_id=u.id %}">S'abonner</a> </td>
+            </tr>
+            {% empty %} 
+                <p>Aucun membre n'a ce pseudo </p> 
+            {% endfor %} 
+        </table> 
+        {% endif %} 
     </div> 
+
     <div class="cadre"> 
         <h3 class="w3-center">Abonnements</h3> 
         Nombre d'abonnements : {{ followed.all.count }} <br> 
@@ -24,6 +44,7 @@
             {% endfor %} 
         </table> 
     </div> 
+
     <div class="cadre"> 
         <h3 class="w3-center">Abonnés</h3> 
         Nombre d'abonnés : {{ followers.all.count }} <br> 

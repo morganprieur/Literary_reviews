@@ -33,6 +33,7 @@ urlpatterns = [
     # path("about/", GreetingView.as_view(greeting="G'day")),
     # path('abonnements/<abonnements_id>/delete', views.conf_abo_delete, name='conf_abo_delete'), 
 
+    path('create_abo.html/<user_id>/', views.create_abo, name='create-abo'), 
 
     path('delete_abo/<abonnements_id>/', views.delete_abo, name='delete-abo'), 
     path('delete_abo/', views.delete_abo, name='delete-abo'), 

@@ -1,0 +1,20 @@
+
+<!-- blog/templates/auth/home.html --> 
+{% extends 'base.html' %}
+
+{% block content %} 
+    <div> 
+        <h1>S'abonner à un utilisateur</h1>
+
+        <p>Etes-vous sûr de vouloir vous abonner à : <span class="bold">{{ user.username }}</span> ?</p> 
+
+        <form action="" method="post">
+        {% csrf_token %}
+        <input type="submit" value="S'abonner">
+        </form>
+
+    </div>
+
+{% endblock content %} 
+
+

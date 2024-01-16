@@ -1,5 +1,6 @@
 
 from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.models import User 
 from django.contrib.auth.decorators import login_required 
 from django.shortcuts import redirect, render 
 from django.views.generic import View 
@@ -88,6 +89,7 @@ def home(request):
 
 # marche pas : 
 # TypeError: View.__init__() takes 1 positional argument but 2 were given 
+# try with class LoginView(V): 
 # class LoginPageView(V):
 #     template_name = 'authentication/login.html'
 #     form_class = forms.LoginForm
@@ -114,34 +116,52 @@ def home(request):
 @login_required 
 def abonnements(request): 
     header = 'Abonnements' 
+    users = [] 
+    form = forms.UserForm(request.GET) 
 
     followed = UserFollows.objects.filter( 
         user__username=request.user.username) 
     followers = UserFollows.objects.filter( 
         followed_user__username=request.user.username) 
-    print(dir(followers[0])) 
+
+    if form.is_valid():
+        username = form.cleaned_data['username'] 
+        users = User.objects.filter(username__icontains=username) 
 
     return render(request, 'rev/abonnements.html', context={ 
             'header': header, 
-            # 'test': test, 
             'followed': followed, 
             'followers': followers, 
+            'users': users, 
+            'form': form, 
         } 
     ) 
 
-""" 
-class UserFollows(models.Model): 
-    user = models.ForeignKey( 
-        settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE, 
-        related_name='following', 
-    ) 
-    followed_user = models.ForeignKey( 
-        settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE, 
-        related_name='followed_by', 
-    ) 
-""" 
+
+@login_required 
+def create_abo(request, user_id): 
+    # print(user_id) 
+    # print(request.user.id) 
+    user = User.objects.get(id=user_id) 
+    # print(user) 
+
+    if request.method == 'POST': 
+        abo = UserFollows.objects.create(followed_user=user, user=request.user) 
+        print('abo.followed_user : ', abo.followed_user, 'abo.user : ', abo.user) 
+        header = 'Abonnements' 
+        abo.save() 
+        # return redirect('band_list') 
+        return redirect('abonnements',)  # context={ 
+        #     'header': header, 
+        # }) 
+    else: 
+        header = 'S\'abonner' 
+        return render(request, 'rev/create_abo.html', context={ 
+            'header': header, 
+            'user': user}) 
+
+
+
     # def post(self, request): 
     #     form = self.form_class(request.POST) 
     #     if form.is_valid(): 
@@ -149,9 +169,6 @@ class UserFollows(models.Model):
     #         # auto-login user: 
     #         login(request, user)
     #         return redirect(settings.LOGIN_REDIRECT_URL) 
-
-
-
 
 
 
@@ -168,7 +185,30 @@ def delete_abo(request, abonnements_id):
         return redirect('abonnements', ) 
     return render(request, 'rev/delete_abo.html', {'abo': abo}) 
         # 'header': header, 
-        
+
+
+# # ======== tuto ======== # 
+# from .forms import NameForm
+# def get_name(request):
+#     # if this is a POST request we need to process the form data
+#     if request.method == "POST":
+#         # create a form instance and populate it with data from the request:
+#         form = NameForm(request.POST)
+#         # check whether it's valid:
+#         if form.is_valid():
+#             # process the data in form.cleaned_data as required
+#             # ...
+#             # redirect to a new URL:
+#             return HttpResponseRedirect("/thanks/")
+
+#     # if a GET (or any other method) we'll create a blank form
+#     else:
+#         form = NameForm()
+
+#     return render(request, "name.html", {"form": form})
+# # ======== /tuto ======== # 
+
+
 # # listings/views.py
 # def band_delete(request, id):
 #     band = Band.objects.get(id=id)  # nécessaire pour GET et pour POST
