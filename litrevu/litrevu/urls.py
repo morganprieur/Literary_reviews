@@ -28,7 +28,9 @@ urlpatterns = [
     path('admin/', admin.site.urls), 
 
     path('home/', views.home, name='home'), 
+
     path('create_ticket/', views.create_ticket, name='create-ticket'), 
+    path('create_review/', views.create_review, name='create-review'), 
 
     # abonnements 
     path('abonnements/', views.abonnements, name='abonnements'), 

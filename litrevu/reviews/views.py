@@ -45,27 +45,28 @@ def home(request):
         user__username=request.user.username) 
 
     tickets = Ticket.objects.all() 
-
-    # ots = Work_order.objects.all() 
-    # ots_count = ots.count 
-    # for ot in ots: 
-    #     # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
-    #     # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
-    #           type='COMPTE-RENDU D\'INTERVENTION')) 
-    #     documents = Document.objects.filter( 
-    #         work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
-    #         ) | Document.objects.filter( 
-    #         work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
-    #     ) 
-    #     docs_count = documents.count 
-    # ---- 
-    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    # if x_forwarded_for:
-    #     ip = x_forwarded_for.split(',')[0]
-    # # ip = '90.51.91.219' 
-    # else:
-    #     ip = request.META.get('REMOTE_ADDR') 
-    # ---- 
+    """ 
+        # ots = Work_order.objects.all() 
+        # ots_count = ots.count 
+        # for ot in ots: 
+        #     # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
+        #     # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
+        #           type='COMPTE-RENDU D\'INTERVENTION')) 
+        #     documents = Document.objects.filter( 
+        #         work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
+        #         ) | Document.objects.filter( 
+        #         work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
+        #     ) 
+        #     docs_count = documents.count 
+        # ---- 
+        # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        # if x_forwarded_for:
+        #     ip = x_forwarded_for.split(',')[0]
+        # # ip = '90.51.91.219' 
+        # else:
+        #     ip = request.META.get('REMOTE_ADDR') 
+        # ---- 
+    """ 
     return render( 
         request, 'rev/home.html', context={ 
             'header': header, 
@@ -73,44 +74,37 @@ def home(request):
             'tickets': tickets, 
         } 
     ) 
-            # 'ots': ots, 
-            # 'ots_count': ots_count, 
-            # 'documents': documents, 
-            # 'docs_count': docs_count, 
-            # 'ip': ip, 
-            # 'location': location 
     # ---- 
     # "https://api-adresse.data.gouv.fr/search/?q==7+bd+lamarck+bourges&limit=1" 
     # ---- 
     # return HttpResponse("Welcome! You are visiting from: {}".format(ip)) 
     # ---- 
 
+""" marche pas : 
+    # TypeError: View.__init__() takes 1 positional argument but 2 were given 
+    # try with class LoginView(V): 
+    # class LoginPageView(V):
+    #     template_name = 'authentication/login.html'
+    #     form_class = forms.LoginForm
 
-# marche pas : 
-# TypeError: View.__init__() takes 1 positional argument but 2 were given 
-# try with class LoginView(V): 
-# class LoginPageView(V):
-#     template_name = 'authentication/login.html'
-#     form_class = forms.LoginForm
-
-#     def get(self, request):
-#         form = self.form_class()
-#         message = ''
-#         return render(request, self.template_name, context={'form': form, 'message': message})
-        
-#     def post(self, request):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             user = authenticate(
-#                 username=form.cleaned_data['username'],
-#                 password=form.cleaned_data['password'],
-#             )
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect('home')
-#         message = 'Identifiants invalides.'
-#         return render(request, self.template_name, context={'form': form, 'message': message})
-
+    #     def get(self, request):
+    #         form = self.form_class()
+    #         message = ''
+    #         return render(request, self.template_name, context={'form': form, 'message': message})
+            
+    #     def post(self, request):
+    #         form = self.form_class(request.POST)
+    #         if form.is_valid():
+    #             user = authenticate(
+    #                 username=form.cleaned_data['username'],
+    #                 password=form.cleaned_data['password'],
+    #             )
+    #             if user is not None:
+    #                 login(request, user)
+    #                 return redirect('home')
+    #         message = 'Identifiants invalides.'
+    #         return render(request, self.template_name, context={'form': form, 'message': message})
+""" 
 
 @login_required 
 def abonnements(request): 
@@ -164,7 +158,7 @@ def delete_abo(request, abonnements_id):
         return redirect('abonnements', ) 
     return render(request, 'rev/delete_abo.html', {'abo': abo}) 
 
-# # ======== tuto ofrms.Form // marche pas ======== # 
+# # ======== tuto forms.Form // marche pas ======== # 
 # if request.method == "POST":
 #     form = PostcodeForm(request.POST)
 #     if form.is_valid():
@@ -197,6 +191,27 @@ def create_ticket(request):
         return render(request, 'rev/create_ticket.html', context={ 
             'header': header, 
             'form': form}) 
+
+@login_required 
+def create_review(request): 
+    form = forms.ReviewForm() 
+    if request.method == 'POST': 
+        form = forms.ReviewForm(request.POST) 
+        print(request.POST) 
+        if form.is_valid(): 
+            # print(dir(forms.ReviewForm)) 
+            review = form.save(commit=False) 
+            # review.ticket = none 
+            review.user = request.user 
+            review.save() 
+            return redirect('home') 
+    else: 
+        header = 'Créer une revue' 
+        form = forms.ReviewForm() 
+        return render(request, 'rev/create_review.html', context={ 
+            'header': header, 
+            'form': form}) 
+
 
 # # ======== tuto ModelForm ======== # 
 # blog/views.py

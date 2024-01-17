@@ -49,10 +49,16 @@ class TicketForm(ModelForm):
 #     )
 #     birth_date = forms.DateField(required=False)
 
-# class AuthorForm(ModelForm):
-#     class Meta:
-#         model = Author
-#         fields = ["name", "title", "birth_date"]
+class ReviewForm(ModelForm): 
+    class Meta: 
+        model = models.Review 
+        fields = ( 
+            # 'ticket', 
+            'rating', 
+            # 'user', 
+            'headline', 
+            'body' 
+        ) 
 
 
 # ex form sans utiliser la classe LoginView : 

@@ -1,0 +1,21 @@
+
+{% extends 'base.html' %} 
+
+{% block content %} 
+
+<form id="create_review" method="POST" enctype="multipart/form-data">
+    {% csrf_token %} 
+    <div class="input_large"> 
+        {{ form.as_p }} 
+        <button type="submit">Enregistrer</button> 
+    </div>
+</form> 
+<button onclick="history.back()">Retour</button> 
+
+
+
+
+{% endblock content %} 
+
+
+

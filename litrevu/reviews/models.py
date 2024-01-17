@@ -37,9 +37,12 @@ class Ticket(models.Model):
 
 
 class Review(models.Model): 
+    # file deepcode ignore django~null~true~nontext~field: <please specify a reason of ignoring this>
     ticket = models.ForeignKey( 
         Ticket, 
         on_delete=models.CASCADE, 
+        blank=True, 
+        null=True, 
     ) 
     rating = models.PositiveSmallIntegerField( 
         # max_length=1024, 
