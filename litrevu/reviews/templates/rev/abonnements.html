@@ -1,6 +1,4 @@
 
-<!-- <Doctype html>  -->
-
 <!-- blog/templates/auth/home.html --> 
 {% extends 'base.html' %}
 
@@ -8,13 +6,18 @@
     <div class="cadre"> 
         <h3 class="w3-center">Suivre d'autres membres</h3> 
         <form action="" method="get">
-            {% csrf_token %}
-            {{ form }} 
-            <input type="submit" value="Submit">
+            {% csrf_token %} 
+            <div class="w3-row input_large"> 
+                <div class="w3-col m6"> 
+                    {{ form }} 
+                </div>
+                <div class="w3-col m6"> 
+                    <button type="submit">Rechercher</button> 
+                </div>
+            </div>
         </form> 
 
         {% if users %} 
-        {{ users.all.count }} 
         <h2>Résultats de la recherche :</h2> 
         <table class="w3-table w3-striped"> 
             {% for u in users %} 
@@ -31,7 +34,6 @@
 
     <div class="cadre"> 
         <h3 class="w3-center">Abonnements</h3> 
-        Nombre d'abonnements : {{ followed.all.count }} <br> 
 
         <table class="w3-table w3-striped"> 
             {% for f in followed %} 

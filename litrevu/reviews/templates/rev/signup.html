@@ -28,15 +28,9 @@
                         <form method="post">
                             {{ form.as_p }}
                             {% csrf_token %} 
-                            <div class="w3-row"> 
-                                <div class="w3-col m6"> 
-                                    <button class="demi-button" onclick="history.back()">Retour</button> 
-                                </div> 
-                                <div class="w3-col m6">
-                                    <button class="demi-button" type="submit" >S’inscrire</button> 
-                                </div> 
-                            </div> 
+                            <button type="submit" >S’inscrire</button> 
                         </form> 
+                        <button onclick="history.back()">Retour</button> 
                     </div> 
                 </div> 
             </div> 

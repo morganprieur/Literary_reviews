@@ -16,7 +16,7 @@ class SignupForm(UserCreationForm):
 
 
 class UserForm(forms.Form): 
-        username = forms.CharField(label="pseudo", max_length=150) 
+        username = forms.CharField(label="pseudo ", max_length=150) 
 
 # class UserForm(ModelForm): 
 #     class Meta: 
