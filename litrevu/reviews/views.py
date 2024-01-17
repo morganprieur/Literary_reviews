@@ -38,14 +38,13 @@ class SignupPageView(View):
 # TODO: set the content of this page : 
 @login_required 
 def home(request): 
-    # print(f'dir(request) : {dir(request)}') 
-    # print(f'request : {request}') 
-
-    header = 'home' 
+    header = 'Accueil' 
     # test = 'Hello home' 
 
     followed = UserFollows.objects.filter( 
         user__username=request.user.username) 
+
+    tickets = Ticket.objects.all() 
 
     # ots = Work_order.objects.all() 
     # ots_count = ots.count 
@@ -70,16 +69,16 @@ def home(request):
     return render( 
         request, 'rev/home.html', context={ 
             'header': header, 
-            # 'test': test, 
             'followed': followed, 
+            'tickets': tickets, 
+        } 
+    ) 
             # 'ots': ots, 
             # 'ots_count': ots_count, 
             # 'documents': documents, 
             # 'docs_count': docs_count, 
             # 'ip': ip, 
             # 'location': location 
-        } 
-    ) 
     # ---- 
     # "https://api-adresse.data.gouv.fr/search/?q==7+bd+lamarck+bourges&limit=1" 
     # ---- 
@@ -124,7 +123,7 @@ def abonnements(request):
     followers = UserFollows.objects.filter( 
         followed_user__username=request.user.username) 
 
-    if form.is_valid():
+    if form.is_valid(): 
         username = form.cleaned_data['username'] 
         users = User.objects.filter(username__icontains=username) 
 
@@ -140,20 +139,14 @@ def abonnements(request):
 
 @login_required 
 def create_abo(request, user_id): 
-    # print(user_id) 
-    # print(request.user.id) 
     user = User.objects.get(id=user_id) 
-    # print(user) 
 
     if request.method == 'POST': 
         abo = UserFollows.objects.create(followed_user=user, user=request.user) 
-        print('abo.followed_user : ', abo.followed_user, 'abo.user : ', abo.user) 
+        # print('abo.followed_user : ', abo.followed_user, 'abo.user : ', abo.user) 
         header = 'Abonnements' 
         abo.save() 
-        # return redirect('band_list') 
-        return redirect('abonnements',)  # context={ 
-        #     'header': header, 
-        # }) 
+        return redirect('abonnements',) 
     else: 
         header = 'S\'abonner' 
         return render(request, 'rev/create_abo.html', context={ 
@@ -161,52 +154,113 @@ def create_abo(request, user_id):
             'user': user}) 
 
 
-
-    # def post(self, request): 
-    #     form = self.form_class(request.POST) 
-    #     if form.is_valid(): 
-    #         user = form.save()
-    #         # auto-login user: 
-    #         login(request, user)
-    #         return redirect(settings.LOGIN_REDIRECT_URL) 
-
-
-
 @login_required
 def delete_abo(request, abonnements_id): 
     abo = UserFollows.objects.get(id=abonnements_id) 
-    # print('abo.id : ', abo.id, 'abo.followed_user : ', abo.followed_user) 
 
     if request.method == 'POST': 
-        # abo = UserFollows.objects.get(id=abonnements_id) 
         header = 'Abonnements' 
         abo.delete() 
-        # return redirect('band_list') 
         return redirect('abonnements', ) 
     return render(request, 'rev/delete_abo.html', {'abo': abo}) 
-        # 'header': header, 
 
-
-# # ======== tuto ======== # 
-# from .forms import NameForm
-# def get_name(request):
-#     # if this is a POST request we need to process the form data
-#     if request.method == "POST":
-#         # create a form instance and populate it with data from the request:
-#         form = NameForm(request.POST)
-#         # check whether it's valid:
-#         if form.is_valid():
-#             # process the data in form.cleaned_data as required
-#             # ...
-#             # redirect to a new URL:
-#             return HttpResponseRedirect("/thanks/")
-
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = NameForm()
-
-#     return render(request, "name.html", {"form": form})
+# # ======== tuto ofrms.Form // marche pas ======== # 
+# if request.method == "POST":
+#     form = PostcodeForm(request.POST)
+#     if form.is_valid():
+#         cd = form.cleaned_data
+#         pc = Postcode(
+#             start_postcode = cd['start_postcode'], <-- unexpected attribut 'title' (['title]) 
+#             end_postcode = cd['end_postcode'],
+#             result_measurement_unit = cd['distance_unit']
+#         )
+#         pc.save()
 # # ======== /tuto ======== # 
+
+@login_required 
+def create_ticket(request): 
+    form = forms.TicketForm() 
+    if request.method == 'POST': 
+        form = forms.TicketForm( 
+            request.POST, request.FILES) 
+        print(request.POST) 
+        print(request.FILES) 
+        if form.is_valid(): 
+            print(dir(forms.TicketForm)) 
+            ticket = form.save(commit=False) 
+            ticket.user = request.user 
+            ticket.save() 
+            return redirect('home') 
+    else: 
+        header = 'Créer un ticket' 
+        form = forms.TicketForm() 
+        return render(request, 'rev/create_ticket.html', context={ 
+            'header': header, 
+            'form': form}) 
+
+# # ======== tuto ModelForm ======== # 
+# blog/views.py
+# from django.shortcuts import redirect, render
+# from . import forms
+
+# @login_required
+# def photo_upload(request):
+#     form = forms.PhotoForm()
+#     if request.method == 'POST':
+#         form = forms.PhotoForm( 
+#             request.POST, request.FILES)
+#         if form.is_valid():
+#             photo = form.save(commit=False)
+#             # set the uploader to the user before saving the model
+#             photo.uploader = request.user
+#             # now we can save
+#             photo.save()
+#             return redirect('home')
+#     return render(request, 'blog/photo_upload.html', context={'form': form})
+# # ======== /tuto ======== # 
+
+# TODO: corriger pour l'utiliser à la place de ModelForm 
+# ======== forms.Form ======== # 
+# @login_required 
+# def create_ticket(request): 
+#     form = forms.TicketForm() 
+#     if request.method == 'POST': 
+#         form = forms.TicketForm( 
+#             request.POST, request.FILES) 
+#         print(request.POST) 
+#         print(request.FILES) 
+#         if form.is_valid(): 
+#             # print(dir(form)) 
+#             # ticket = forms.TicketForm( 
+#             #     title = cd['title'], 
+#             #     description = cd['description'], 
+#             #     image = cd['image'] 
+#             # ) 
+#             # title = form.cleaned_data['title'] 
+#             # description = form.cleaned_data['description'] 
+#             # image = form.cleaned_data['image'] 
+#             # ticket = Ticket.objects.create(form) 
+#             print(dir(forms.TicketForm)) 
+#             cd = form.cleaned_data 
+#             ticket = forms.TicketForm( 
+#                 title = cd['title'], 
+#                 description = cd['description'], 
+#                 image = cd['image'] 
+#             ) 
+#             ticket.user = request.user 
+#             # print(ticket) 
+#             ticket.save() 
+#             # ticket = Ticket.objects.create(**form.cleaned_data) 
+#             return redirect('home') 
+#     else: 
+#         # if request.method == 'GET': 
+#         header = 'Créer un ticket' 
+#         form = forms.TicketForm() 
+#         return render(request, 'rev/create_ticket.html', context={ 
+#             'header': header, 
+#             'form': form}) 
+# ======== forms.Form ======== # 
+
 
 
 # # listings/views.py

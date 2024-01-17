@@ -2,16 +2,47 @@
 
 <!-- blog/templates/auth/home.html --> 
 {% extends 'base.html' %}
-<!-- {% load static %}  -->
-
-
-    <!-- <p>You are visiting from: {# { ip } #}</p>  -->
-    <!-- <p>Your location is: {# { location } #}</p>  -->
-
 
     {% block content %} 
-    <div>
 
+    <div class="w3-row"> 
+        <div class="w3-col m6"> 
+            <form action="../create_ticket" method="GET"> 
+                {% csrf_token %} 
+                <button type="submit">Créer un ticket</button> 
+            </form> 
+        </div>
+        <div class="w3-col m6"> 
+            <form method="GET"> 
+                {% csrf_token %} 
+                <button type="submit">Créer une revue</button> 
+            </form> 
+        </div>
+    </div> 
+
+    <div class="border_draft w3-margin-top"> 
+        <h5 class="w3-center">Registered tickets</h5>
+        <table class="w3-table w3-striped"> 
+            {% for t in tickets %} 
+            <tr> 
+                <td>{{ t.title }} (ID : {{ t.id }}) </td>
+                <td>{{ t.description }} </td>
+                <td><img src="../../../reviews/images/{{ t.image }}" alt="Image {{ t.user }}" height="100px"> </td>
+                <td><a href="{# % url 'edit-ticket' ticket_id=t.id % #}">Modifier</a> </td>
+            </tr>
+            {% empty %} 
+                <p>Il n'y a pas de ticket </p> 
+            {% endfor %} 
+        </table> 
+    </div> 
+
+
+
+    <div class="cadre"> 
+        
+    </div> 
+    
+    <div> 
         {% for f in followed %}
         <ul>
             <li>
@@ -22,39 +53,8 @@
         </ul>
         {% endfor %}
 
-        <!-- <a href="{# % url 'ebp_detail' ebp_id=ebp.id % #}">  --> 
-            <!-- <img src="../../uthdemo/{# { ebp.qrcode } #}" alt="Accès doc" height="100px">  -->
-        <!-- </a>  -->
 
-        {% comment %} 
-
-        {% for ot in ots %} 
-        <!-- {{ ot.id }}  -->
-        {% if '023' not in ot.id and '045' not in ot.id %} <!-- if doc.document_url|slice:":7" == 'images/' /  --> 
-        <div class="one_ot">
-            <h3>
-                <!-- <a href="http://164.132.50.21:9000/work_order_detail/{{ ot.id }}/" class="list-group-item list-group-item-action gap-3 py-3" aria-current="true"> -->
-                <!-- <a href="../work_order_detail/{{ ot.id }}/" class="list-group-item list-group-item-action gap-3 py-3" aria-current="true"> -->
-                <a href="{% url 'work_order_detail' work_order_id=ot.id %}" class="list-group-item list-group-item-action gap-3 py-3" aria-current="true">
-                    {{ ot.racine }}{{ ot.id }} - {{ ot.label }}  
-                </a> 
-            </p> 
-            <p>{{ ot.address.number }} {{ ot.address.street_name }}<br>  
-                {{ ot.address.zip_code }} {{ ot.address.city }}<br>
-                <br> 
-                <span class="mb-0 opacity-75">Localisation : 
-                    <a class="no-block" target="_blank" href="https://www.openstreetmap.org/#map=16/{{ ot.address.lng }}/{{ ot.address.lat }}">
-                        Open Street Map
-                    </a>
-                </span> 
-            </p> 
-            <div id="map"></div>
-        </div> 
-        <hr> 
-        {% endif %} 
-        {% endfor %} 
-
-        {% endcomment %}
+        
 
     </div>
 
@@ -62,9 +62,55 @@
 {% endblock content %} 
 
 
+{% comment %}
++ home page (= flow page) 
+    + boutons : 
+        - "Demander une critique" (ticket) 
+        - "Créer une critique" (review) 
+    + Flux des "?" des gens qu'on suit : 
+        + Cadre 1 : 
+            - "Vous avez publié une critique" (left) 
+            - date - heure (right) 
+            - note *** voir si je mets des "comms" par note *** 
+            - Commentaire 
+            + Cadre 11 : 
+                - "Ticket - username" 
+                - titre - auteur 
+                - image 
+        + Cadre 2 : 
+            - "username a demandé une critique" (left) 
+            - date - heure (right) 
+            - Titre - auteur 
+            - (image) 
+            - bouton "Créer une critique" 
+            - Bloquer la création d'une critique s/ un ticket si déjà faite 
+{% endcomment %} 
 
 {% comment %} 
-<!-- {% empty %} 
-    <p>Pas d'ordres de travaux </p>  -->
-<!-- {% endfor %}  --> 
-{% endcomment %} 
+    {% for ot in ots %} 
+    <!-- {{ ot.id }}  -->
+    {% if '023' not in ot.id and '045' not in ot.id %} <!-- if doc.document_url|slice:":7" == 'images/' /  --> 
+    <div class="one_ot">
+        <h3>
+            <a href="{% url 'work_order_detail' work_order_id=ot.id %}" class="list-group-item list-group-item-action gap-3 py-3" aria-current="true">
+                {{ ot.racine }}{{ ot.id }} - {{ ot.label }}  
+            </a> 
+        </p> 
+        <p>{{ ot.address.number }} {{ ot.address.street_name }}<br>  
+            {{ ot.address.zip_code }} {{ ot.address.city }}<br>
+            <br> 
+            <span class="mb-0 opacity-75">Localisation : 
+                <a class="no-block" target="_blank" href="https://www.openstreetmap.org/#map=16/{{ ot.address.lng }}/{{ ot.address.lat }}">
+                    Open Street Map
+                </a>
+            </span> 
+        </p> 
+        <div id="map"></div>
+    </div> 
+    <hr> 
+    {% endif %} 
+    {% endfor %} 
+{% endcomment %}
+
+
+

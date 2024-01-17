@@ -1,5 +1,4 @@
 <!-- reviews/templates/rev/signup.html --> 
-<!-- reviews/templates/rev/login.html --> 
 <DOCTYPE html>
     <html>
         {% load static %} 
@@ -7,19 +6,21 @@
             <title>Litrevu</title>
             <link rel="stylesheet" href="{% static 'CSS/w3.css' %}" > 
             <link rel="stylesheet" media="screen" viewport="screen" href="{% static 'CSS/styles.css' %}" rel="stylesheet">
-        </head>
+        </head> 
+
         <body>
             <div id="home" class="container div_"> 
-                
                 <div id="header"> 
-                    <div id="logo"> 
-                        <img src="../../../reviews/images/logo.png" alt="Alt logo" height="100px"> 
-                        <!-- <img src="../../../reviews/images/raton_de_face.jpg" alt="Alt logo" height="100px">  -->
-                    </div> 
-                    <h2 class="text_center green">Inscription</h2> 
-                    <div class="clear"></div>
-                    <hr> 
+                    <div class="w3-row"> 
+                        <div id="logo" class="w3-col m1">  
+                            <img src="../../../reviews/images/logo_gris.png" alt="Alt logo" height="100px"> 
+                        </div> 
+                        <div id="page_title" class="w3-col m10"> 
+                            <h2 class="text_center">Inscription</h2> 
+                        </div> 
+                    </div>
                 </div> 
+                <hr> 
     
                 <div class="signup cadre"> 
                         {% if form.errors %}

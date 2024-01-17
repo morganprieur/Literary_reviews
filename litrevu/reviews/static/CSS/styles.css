@@ -10,6 +10,7 @@ body {
   background-color: var(--back_color); 
   color: var(--text_color); 
 } 
+
 a { 
   text-decoration: none; 
   /* color:#82b827;  */ 
@@ -18,46 +19,77 @@ a {
 a:hover {
   color: var(--button_hover); 
 } 
-hr { 
-  border-top: 2px solid var(--text_color);  
-} 
-input { 
-  background-color: #eeeeee; 
-} 
 button { 
   display: block; 
   width: 100%; 
   background-color: var(--button_color); 
   border: var(--back_color) solid 1px; 
+  border-radius: 5px; 
 } 
 button:hover { 
   background-color: var(--button_hover); 
   border: var(--back_color) solid 1px; 
 } 
-/* img { 
-  margin: 5px 0; 
-}  */
+h2 { 
+  font-weight: 600; 
+} 
+hr { 
+  border-top: 2px solid var(--text_color);  
+} 
+input, 
+textarea { 
+  background-color: #eeeeee; 
+} 
+table { 
+  margin-top: 1rem; 
+  margin-bottom: 1rem; 
+} 
 
+/* ======== .classes ======== */ 
 .bold { 
   font-weight: bold; 
 } 
-.div_center { 
-    margin: 0 auto; 
+.border_draft { 
+  border: white solid 1px; 
+} 
+.cadre { 
+  border: var(--deco_color) solid 1px; 
+  border-radius: 10px; 
+  padding: 1rem; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
 } 
 .clear { 
   clear: both; 
 } 
-.text_center { 
-  text-align: center; 
-} 
-.input_large input { 
-  width: 85%; 
-} 
-
 .container { 
   width: 90%; 
   margin: 0 auto; 
   margin-bottom: 20px; 
+} 
+.div_center { 
+    margin: 0 auto; 
+} 
+.input_large input { 
+  width: 85%; 
+} 
+.login a { 
+  width: 95%; 
+  display: block; 
+} 
+.login, 
+.signup { 
+  width: 70%; 
+  margin: 0 auto; 
+} 
+.text_center { 
+  text-align: center; 
+} 
+
+/* ======== #ids ======== */ 
+#create_ticket > div > div:nth-child(2) input { 
+  height: 4rem; 
+  width: 30rem; 
 } 
 #logo { 
   max-width: 100px; 
@@ -67,20 +99,11 @@ button:hover {
   padding-top: 1rem; 
   margin-right: 1rem; 
 } 
-.cadre { 
-  border: var(--deco_color) solid 1px; 
-  border-radius: 10px; 
-  padding: 1rem; 
-  margin-bottom: 20px; 
-} 
-.login a { 
-  width: 95%; 
-  display: block; 
-} 
-.signup, .login { 
-  width: 70%; 
-  margin: 0 auto; 
-} 
+
+
+
+
+
 
 /* @media only screen and (max-width: 500px) {
   .pdf_doc { 

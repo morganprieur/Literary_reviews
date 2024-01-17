@@ -1,7 +1,8 @@
 
 # reviews/forms.py
 from django import forms 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model 
+# from django.contrib.auth.models import User 
 from django.contrib.auth.forms import UserCreationForm 
 from django.forms import ModelForm 
 
@@ -16,16 +17,29 @@ class SignupForm(UserCreationForm):
 
 
 class UserForm(forms.Form): 
-        username = forms.CharField(label="pseudo ", max_length=150) 
+    username = forms.CharField(label="pseudo ", max_length=150) 
 
 # class UserForm(ModelForm): 
 #     class Meta: 
 #         model = get_user_model() 
 #         fields = ['username'] 
 
-# class NameForm(forms.Form):
-#     your_name = forms.CharField(label="Your name", max_length=100)
 
+# class TicketForm(forms.Form): 
+#     title = forms.CharField(label="Titre ") 
+#     description = forms.CharField(label="Description ") 
+#     # user = forms.CharField(label="Utilisateur ") 
+#     image = forms.FileField(label="Télécharger un fichier ") 
+
+
+class TicketForm(ModelForm): 
+    class Meta: 
+        model = models.Ticket 
+        fields = ('title', 
+        'description', 
+        # 'user', 
+        'image' 
+    ) 
 
 # class AuthorForm(forms.Form):
 #     name = forms.CharField(max_length=100)
