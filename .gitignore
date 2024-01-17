@@ -1,3 +1,14 @@
 
+# tools for local work 
 .env
-/volumes
+snyk.exe
+.dcignore
+roadmap.md
+
+# storage 
+db.sqlite3
+litrevu/authentication/images/
+
+# For Docker (Not initialized for now) 
+volumes
+

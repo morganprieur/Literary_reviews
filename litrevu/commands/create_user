@@ -1,0 +1,6 @@
+# docker exec -it p9_work-web_p9-1 python manage.py 
+
+# from uthdemo.models import User 
+from django.contrib.auth.models import User 
+User.objects.create_user(username='user_tech', password='uthd-23#') 
+

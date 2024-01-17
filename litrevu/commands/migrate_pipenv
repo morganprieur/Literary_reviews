@@ -1,0 +1,4 @@
+python manage.py makemigrations reviews
+python manage.py migrate
+# docker exec -it p9_work-web_p9-1 python manage.py makemigrations authentication
+# docker exec -it p9_work-web_p9-1 python manage.py migrate

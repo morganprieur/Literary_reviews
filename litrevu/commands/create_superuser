@@ -1,0 +1,2 @@
+docker exec -it p9_work-web_p9-1 python manage.py createsuperuser
+
