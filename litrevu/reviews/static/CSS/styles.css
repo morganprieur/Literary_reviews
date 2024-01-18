@@ -59,6 +59,19 @@ table {
   margin-top: 1rem; 
   margin-bottom: 2rem; 
 } 
+.review { 
+  border: var(--text_color) solid 1px; 
+  border-radius: 10px; 
+  padding: 1rem; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
+} 
+.ticket { 
+  border: var(--text_color) solid 1px; 
+  padding: 1rem; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
+} 
 .clear { 
   clear: both; 
 } 

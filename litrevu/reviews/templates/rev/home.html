@@ -20,53 +20,71 @@
         </div>
     </div> 
 
-    <div class="border_draft w3-margin-top"> 
-        <h5 class="w3-center">Registered tickets</h5>
-        <table class="w3-table w3-striped"> 
-            {% for t in tickets %} 
-            <tr> 
-                <td>{{ t.title }} (ID : {{ t.id }}) </td>
-                <td>{{ t.description }} </td>
-                <td><img src="../../../reviews/images/{{ t.image }}" alt="Image {{ t.user }}" height="100px"> </td>
-                <td><a href="{# % url 'edit-ticket' ticket_id=t.id % #}">Modifier</a> </td>
-            </tr>
-            {% empty %} 
-                <p>Il n'y a pas de ticket </p> 
-            {% endfor %} 
-        </table> 
-    </div> 
-
-
 
     <div class="cadre"> 
-        
+        <h5 class="w3-center">Flux</h5>
+        {% for r in reviews %} 
+            <hr> 
+
+            <div class="review"> 
+                {% if r.user == user %}vous avez {% endif %} 
+                    {% for f in followers %} 
+                        {% if r.user.username == f.followed_user.username %} {{ r.followed_user.username }} a {% endif %}
+                    {% endfor %}                          
+                publié une revue 
+                <p>(ID : {{ r.id }})</p> 
+                <p>{{ r.time_created }} </p> 
+                <p>{{ r.headline }} - {{ r.rating }} </p> 
+                <p>{{ r.body }} </p> 
+                <p><a href="{# % url 'edit-review' review_id=t.id % #}">Modifier</a> </p> 
+
+                <div class="ticket"> 
+                    <p>{{ r.ticket.title }} (ID : {{ r.ticket.id }})</p> 
+                    <p>{{ r.ticket.time_created }} </p> 
+                    <p>{{ r.ticket.description }} </p> 
+                    <p><img src="../../../reviews/images/{{ r.ticket.image }}" alt="Image ticket {{ r.ticket.id }}" height="100px"> </p> 
+                    <p><a href="{# % url 'edit-ticket' ticket_id=t.id % #}">Modifier</a> </p> 
+                </div>
+            </div> 
+        {% empty %} 
+            <p>Il n'y a pas de revue </p> 
+        {% endfor %} 
+    </div> 
+
+    <div class="cadre"> 
+        {% for t in tickets %}
+        <div class="ticket"> 
+            <p>{{ t.title }} (ID : {{ t.id }})</p> 
+            <p>{{ t.time_created }} </p> 
+            <p>{{ t.description }} </p> 
+            <p><img src="../../../reviews/images/{{ t.image }}" alt="Image ticket {{ t.id }}" height="100px"> </p> 
+            <p><a href="{# % url 'edit-ticket' ticket_id=t.id % #}">Modifier</a> </p> 
+        </div> 
+        {% empty %} 
+            <p>Il n'y a pas de ticket </p> 
+        {% endfor %} 
     </div> 
     
     <div> 
-        {% for f in followed %}
+        {% for f in followers %}
         <ul>
             <li>
-                relation : {{ f.id }} <br> 
-                Suiveur : {{ f.user_id }} <br> 
-                Suivis : {{ f.followed_user_id }} <br> 
+                relation ID : {{ f.id }} <br> 
+                Suiveur : {{ f.user.username }} (ID {{ f.user_id }}) <br> 
+                Suivi : {{ f.followed_user.username }} (ID {{ f.followed_user_id }}) <br> 
             </li>
-        </ul>
+        </ul> 
+        {% empty %} 
+            <p>Il n'y a pas d'abonnement ni d'abonné </p> 
         {% endfor %}
-
-
-        
-
     </div>
-
 
 {% endblock content %} 
 
 
 {% comment %}
 + home page (= flow page) 
-    + boutons : 
-        - "Demander une critique" (ticket) 
-        - "Créer une critique" (review) 
+    + boutons 
     + Flux des "?" des gens qu'on suit : 
         + Cadre 1 : 
             - "Vous avez publié une critique" (left) 

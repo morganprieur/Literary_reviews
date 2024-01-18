@@ -36,10 +36,10 @@ class TicketForm(ModelForm):
     class Meta: 
         model = models.Ticket 
         fields = ('title', 
-        'description', 
-        # 'user', 
-        'image' 
-    ) 
+            'description', 
+            # 'user', 
+            'image' 
+        ) 
 
 # class AuthorForm(forms.Form):
 #     name = forms.CharField(max_length=100)
@@ -49,16 +49,27 @@ class TicketForm(ModelForm):
 #     )
 #     birth_date = forms.DateField(required=False)
 
+# class ReviewForm(forms.Form): 
+#             ticket = forms.ForeignKey() 
+#             rating = forms.PositiveSmallIntegerField(MinValueValidator(0), MaxValueValidator(5)) 
+#             # 'user', 
+#             headline =  forms.CharField(max_length=128)
+#             body = forms.TextField() 
+#         ) 
+
 class ReviewForm(ModelForm): 
     class Meta: 
         model = models.Review 
-        fields = ( 
-            # 'ticket', 
+        fields = [ 
+            'ticket', 
             'rating', 
-            # 'user', 
+            # 'user',  # auto: request.user 
             'headline', 
             'body' 
-        ) 
+        ] 
+        widgets = { 
+            'body': forms.Textarea(attrs={'rows': 4, 'cols': 15}), 
+        } 
 
 
 # ex form sans utiliser la classe LoginView : 

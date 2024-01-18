@@ -9,6 +9,7 @@ from django.views.generic import View
 from django.conf import settings 
 from reviews.models import Review, Ticket, UserFollows 
 from . import forms 
+from django.db.models import Q 
 
 
 # ============ login ============================== # 
@@ -39,39 +40,56 @@ class SignupPageView(View):
 @login_required 
 def home(request): 
     header = 'Accueil' 
-    # test = 'Hello home' 
 
-    followed = UserFollows.objects.filter( 
-        user__username=request.user.username) 
+    user = request.user 
+    followers = UserFollows.objects.filter( 
+        user__username=user.username) 
+    # list of userFollows.user 
+    print(followers[0].user.username) 
+    for f in followers: 
+        print(f.id) 
+        print(f.user.username) 
 
-    tickets = Ticket.objects.all() 
-    """ 
-        # ots = Work_order.objects.all() 
-        # ots_count = ots.count 
-        # for ot in ots: 
-        #     # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
-        #     # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
-        #           type='COMPTE-RENDU D\'INTERVENTION')) 
-        #     documents = Document.objects.filter( 
-        #         work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
-        #         ) | Document.objects.filter( 
-        #         work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
-        #     ) 
-        #     docs_count = documents.count 
-        # ---- 
-        # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        # if x_forwarded_for:
-        #     ip = x_forwarded_for.split(',')[0]
-        # # ip = '90.51.91.219' 
-        # else:
-        #     ip = request.META.get('REMOTE_ADDR') 
-        # ---- 
-    """ 
+
+    # ==== # 
+    # users_groups = request.user.groups.values_list('name', flat = True) 
+    # groups_as_list = list(users_groups) 
+    # print(str(request.user) + ' permissions : ' + str(groups_as_list)) 
+    # return groups_as_list 
+    tickets = Ticket.objects.filter(Q(user=user) | Q(user__username=user.username)).order_by('-time_created') 
+    reviews = Review.objects.filter(Q(user=user) | Q(user__username=user.username)).order_by('-time_created') 
+
+    # if user in followers: 
+    #     print('yes') 
+    # else: 
+    #     print('no') 
+
+    # followed_by = UserFollows.objects.filter( 
+    #     Q(followed_user__username=user.username) and Q(user in followers)) 
+    # print(followed_by) 
+
+    # posts = [tickets, reviews] 
+    # followed_posts = 
+    # for followed_posts in reviews: 
+    #     filter(Q(user=request.user) | Q(user=request.user.followed)) 
+    # ==== 
+    # for ot in ots: 
+    #     # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
+    #     # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
+    #           type='COMPTE-RENDU D\'INTERVENTION')) 
+    #     documents = Document.objects.filter( 
+    #         work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
+    #         ) | Document.objects.filter( 
+    #         work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
+    #     ) 
     return render( 
         request, 'rev/home.html', context={ 
             'header': header, 
-            'followed': followed, 
+            'user': user, 
+            'followers': followers, 
             'tickets': tickets, 
+            'reviews': reviews, 
+            # 'followed_list': followed_list, 
         } 
     ) 
     # ---- 
@@ -180,7 +198,6 @@ def create_ticket(request):
         print(request.POST) 
         print(request.FILES) 
         if form.is_valid(): 
-            print(dir(forms.TicketForm)) 
             ticket = form.save(commit=False) 
             ticket.user = request.user 
             ticket.save() 
@@ -192,25 +209,62 @@ def create_ticket(request):
             'header': header, 
             'form': form}) 
 
+
+# TODO: tester si on désigne un ticket déjà existant 
 @login_required 
 def create_review(request): 
-    form = forms.ReviewForm() 
+    ticket_form = forms.TicketForm() 
+    review_form = forms.ReviewForm() 
+    header = "Ecrire une revue" 
     if request.method == 'POST': 
-        form = forms.ReviewForm(request.POST) 
-        print(request.POST) 
-        if form.is_valid(): 
-            # print(dir(forms.ReviewForm)) 
-            review = form.save(commit=False) 
-            # review.ticket = none 
-            review.user = request.user 
-            review.save() 
-            return redirect('home') 
-    else: 
-        header = 'Créer une revue' 
-        form = forms.ReviewForm() 
-        return render(request, 'rev/create_review.html', context={ 
-            'header': header, 
-            'form': form}) 
+        ticket_form = forms.ReviewForm(request.POST) 
+        review_form = forms.TicketForm(request.POST) 
+        if ticket_form.is_valid(): 
+            create_ticket(request) 
+            last_ticket = Ticket.objects.filter().last() 
+            # print(last_ticket.title)  
+            if review_form.is_valid(): 
+                new_review = review_form.save(commit=False) 
+                new_review.ticket = last_ticket 
+                new_review.user = request.user 
+                new_review.save() 
+                return redirect('home') 
+    return render(request, 'rev/create_review.html', context={ 
+        'header': header, 
+        'ticket_form': ticket_form, 
+        'review_form': review_form, 
+        # 'form': form 
+        }) 
+
+    #         review = form.save(commit=False) 
+    #         review.user = request.user 
+    #         # review.ticket = Ticket.objects.filter().last() 
+    #         review.save() 
+    #         return redirect('home') 
+    # return render(request, 'rev/create_review.html', context={ 
+    #         'header': header, 
+    #         'form': form}) 
+
+
+# @login_required 
+# def create_review(request): 
+#     form = forms.ReviewForm() 
+#     if request.method == 'POST': 
+#         form = forms.ReviewForm(request.POST) 
+#         print(request.POST) 
+#         if form.is_valid(): 
+#             # print(dir(forms.ReviewForm)) 
+#             review = form.save(commit=False) 
+#             # review.ticket = none 
+#             review.user = request.user 
+#             review.save() 
+#             return redirect('home') 
+#     else: 
+#         header = 'Créer une revue' 
+#         form = forms.ReviewForm() 
+#         return render(request, 'rev/create_review.html', context={ 
+#             'header': header, 
+#             'form': form}) 
 
 
 # # ======== tuto ModelForm ======== # 

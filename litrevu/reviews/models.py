@@ -42,7 +42,7 @@ class Review(models.Model):
         Ticket, 
         on_delete=models.CASCADE, 
         blank=True, 
-        null=True, 
+        # null=True, 
     ) 
     rating = models.PositiveSmallIntegerField( 
         # max_length=1024, 
