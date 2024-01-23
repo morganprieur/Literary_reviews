@@ -4,20 +4,28 @@
 
     {% block content %} 
 
-    <form method="POST"> 
-        {% csrf_token %} 
-        {{ form.as_p }} 
-        <div class="w3-row">
-            <div class="w3-col m3">&nbsp; </div> 
-            <div class="w3-col m6"> 
-                <button type="submit">Enregistrer</button> 
-            </div> 
+    <div class="cadre"> 
+        <div class="ticket"> 
+            <!-- TODO Username a demandé une critique  --> 
+            <!-- TODO ajouter affichage du ticket d'origine avant le form --> 
         </div> 
-    </form> 
-    <div class="w3-row">
-        <div class="w3-col m3">&nbsp; </div> 
-        <div class="w3-col m6"> 
-            <button onclick="history.back()">Retour</button> 
+        <div class="review"> 
+            <form method="POST"> 
+                {% csrf_token %} 
+                {{ form.as_p }} 
+                <div class="w3-row">
+                    <div class="w3-col m3">&nbsp; </div> 
+                    <div class="w3-col m6"> 
+                        <button type="submit">Enregistrer</button> 
+                    </div> 
+                </div> 
+            </form> 
+            <div class="w3-row">
+                <div class="w3-col m3">&nbsp; </div> 
+                <div class="w3-col m6"> 
+                    <button onclick="history.back()">Retour</button> 
+                </div> 
+            </div> 
         </div> 
     </div> 
 

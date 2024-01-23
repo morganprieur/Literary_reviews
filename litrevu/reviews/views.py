@@ -50,8 +50,6 @@ def home(request):
     header = 'Accueil' 
 
     user = request.user 
-    # followed = UserFollows.objects.filter( 
-    #     user__username=user.username) 
     f_users = helpers.followed_users(user) 
 
     """ ex list of m2m relations 
@@ -60,11 +58,11 @@ def home(request):
         # print(str(request.user) + ' permissions : ' + str(groups_as_list)) 
         # return groups_as_list 
     """ 
-    reviews = helpers.get_users_viewable_reviews(request.user, f_users) 
+    reviews = helpers.get_users_viewable_reviews(user, f_users) 
     reviews = reviews.annotate( 
         content_type=Value('REVIEW', CharField())) 
     # returns queryset of reviews
-    tickets = helpers.get_users_viewable_tickets(request.user, f_users, reviews)
+    tickets = helpers.get_users_viewable_tickets(user, f_users, reviews)
     # returns queryset of tickets
     tickets = tickets.annotate( 
         content_type=Value('TICKET', CharField())) 
@@ -83,22 +81,8 @@ def home(request):
         key=lambda post: post.time_created, 
         reverse=True 
     ) 
-    # posts = [] 
-    # for p in all_posts: 
-    #     if p in all_posts: 
-    #         if p not in posts: 
-    #             posts.append(p) 
-    # print(list(posts)) 
-    # my_list = [1,2,2,3,1,4,5,1,2,6]
-    # myFinallist = []
-    # for i in my_list:
-    #     if i not in myFinallist:
-    # myFinallist.append(i)
-    # print(list(myFinallist))
-    
-    form = forms.Send_ticket_idForm()  # initial={'ticket': ticket} 
-    # print(request) 
-    # print(form) 
+    # form = forms.Send_ticket_idForm() 
+
     return render( 
         request, 'rev/home.html', context={ 
             'header': header, 
@@ -106,14 +90,13 @@ def home(request):
             'followed': f_users, 
             'posts': posts, 
             # 'post': post, 
-            'form': form, 
+            # 'form': form, 
         } 
     ) 
 
 
 @login_required 
 def edit_ticket(request, ticket_id): 
-    # ticket = get_object_or_404(Ticket, pk=ticket_id) 
     ticket = Ticket.objects.get(pk=ticket_id) 
     form = forms.TicketForm(instance=ticket) 
     if request.method == 'POST': 
@@ -344,12 +327,8 @@ def create_new_review(request):
 #TODO à tester (form -> link) 
 @login_required 
 def create_review(request, ticket_id): 
-    # form_title = forms.Send_ticket_idForm(request.POST)  
     form_review = forms.ReviewForm() 
     if request.method == 'POST': 
-        # print('yes 1') 
-        # print(request.POST) 
-        # print(request.POST['ticket']) 
         form_review = forms.ReviewForm(request.POST) 
         if form_review.is_valid(): 
             review = form_review.save(commit=False) 
@@ -358,13 +337,10 @@ def create_review(request, ticket_id):
             review.save() 
             return redirect('home') 
     else: 
-        # print('yes 2') 
-        # print('no 2') 
-        header = 'Enregistrer une revue' 
+        # TODO ajouter l'affichage du ticket avant le form 
+        header = 'Vous êtes en train de poster en réposne à' 
         ticket = Ticket.objects.get(pk=ticket_id) 
-        # ticket = Ticket.objects.get(pk=request.POST['ticket']) 
-        print(ticket.pk) 
-            # form = forms.ReviewForm(ticket=ticket) 
+        # print(ticket.pk) 
         form = forms.ReviewForm(initial={'ticket': ticket}) 
         return render(request, 'rev/create_review.html', context={ 
             'header': header, 
@@ -372,6 +348,45 @@ def create_review(request, ticket_id):
             'form': form, 
         }) 
 
+
+@login_required 
+def activity(request): 
+    header = 'Vos posts' 
+
+    user = request.user 
+    f_users = helpers.followed_users(user) 
+
+    reviews = Review.objects.filter(user=user) 
+    # reviews = helpers.get_users_viewable_reviews(user, f_users) 
+    # returns queryset of reviews
+    reviews = reviews.annotate( 
+        content_type=Value('REVIEW', CharField())) 
+
+    tickets = Ticket.objects.filter(user=user) 
+    # tickets = helpers.get_users_viewable_tickets(user, f_users, reviews)
+    # returns queryset of tickets
+    tickets = tickets.annotate( 
+        content_type=Value('TICKET', CharField())) 
+    tickets = list(tickets) 
+
+    for review in reviews: 
+        for ticket in tickets: 
+            if review.ticket_id == ticket.id: 
+                tickets.pop(tickets.index(ticket)) 
+    print(tickets) 
+
+    # combine and sort the two types of posts 
+    posts = sorted( 
+        chain(reviews, tickets), 
+        key=lambda post: post.time_created, 
+        reverse=True 
+    ) 
+
+    return render(request, 'rev/activity.html', context={ 
+        'header': header, 
+        'user': user, 
+        'posts': posts, 
+    }) 
 
 
 

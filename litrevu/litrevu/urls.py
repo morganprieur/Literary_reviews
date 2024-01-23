@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls), 
 
     path('home/', views.home, name='home'), 
+    path('activity/', views.activity, name='activity'), 
 
     path('create_ticket/', views.create_ticket, name='create-ticket'), 
     # path('create_review/', views.create_review, name='create-review'), 
@@ -41,7 +42,7 @@ urlpatterns = [
     # path("about/", GreetingView.as_view(greeting="G'day")),
     path('create_abo.html/<user_id>/', views.create_abo, name='create-abo'), 
     path('delete_abo/<abonnements_id>/', views.delete_abo, name='delete-abo'), 
-    path('delete_abo/', views.delete_abo, name='delete-abo'), 
+    # path('delete_abo/', views.delete_abo, name='delete-abo'), 
 
     # authentication 
     path('login/', LoginView.as_view( 
