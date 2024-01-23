@@ -2,15 +2,18 @@
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.models import User 
 from django.contrib.auth.decorators import login_required 
+from django.db.models import CharField, Value 
+from itertools import chain 
 from django.shortcuts import redirect, render 
 from django.views.generic import View 
 # from django.views import View as V 
 
 from django.conf import settings 
 from reviews.models import Review, Ticket, UserFollows 
+from reviews.utils import helpers 
+# litrevu\reviews\utils
 from . import forms 
 from django.db.models import Q 
-
 
 # ============ login ============================== # 
 
@@ -20,7 +23,7 @@ class SignupPageView(View):
 
     def get(self, request): 
         form = self.form_class() 
-        print(form.as_p) 
+        # print(form.as_p) 
         # message = '' 
         return render( 
             request, 
@@ -36,67 +39,169 @@ class SignupPageView(View):
             return redirect(settings.LOGIN_REDIRECT_URL) 
 
 
+def logout_user(request):
+    logout(request)
+    return redirect('home') 
+
+
 # TODO: set the content of this page : 
 @login_required 
 def home(request): 
     header = 'Accueil' 
 
     user = request.user 
-    followers = UserFollows.objects.filter( 
-        user__username=user.username) 
-    # list of userFollows.user 
-    print(followers[0].user.username) 
-    for f in followers: 
-        print(f.id) 
-        print(f.user.username) 
+    # followed = UserFollows.objects.filter( 
+    #     user__username=user.username) 
+    f_users = helpers.followed_users(user) 
 
-
-    # ==== # 
-    # users_groups = request.user.groups.values_list('name', flat = True) 
-    # groups_as_list = list(users_groups) 
-    # print(str(request.user) + ' permissions : ' + str(groups_as_list)) 
-    # return groups_as_list 
-    tickets = Ticket.objects.filter(Q(user=user) | Q(user__username=user.username)).order_by('-time_created') 
-    reviews = Review.objects.filter(Q(user=user) | Q(user__username=user.username)).order_by('-time_created') 
-
-    # if user in followers: 
-    #     print('yes') 
-    # else: 
-    #     print('no') 
-
-    # followed_by = UserFollows.objects.filter( 
-    #     Q(followed_user__username=user.username) and Q(user in followers)) 
-    # print(followed_by) 
-
-    # posts = [tickets, reviews] 
-    # followed_posts = 
-    # for followed_posts in reviews: 
-    #     filter(Q(user=request.user) | Q(user=request.user.followed)) 
-    # ==== 
-    # for ot in ots: 
-    #     # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
-    #     # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
-    #           type='COMPTE-RENDU D\'INTERVENTION')) 
-    #     documents = Document.objects.filter( 
-    #         work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
-    #         ) | Document.objects.filter( 
-    #         work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
-    #     ) 
+    """ ex list of m2m relations 
+        # users_groups = request.user.groups.values_list('name', flat = True) 
+        # groups_as_list = list(users_groups) 
+        # print(str(request.user) + ' permissions : ' + str(groups_as_list)) 
+        # return groups_as_list 
+    """ 
+    reviews = helpers.get_users_viewable_reviews(request.user, f_users) 
+    reviews = reviews.annotate( 
+        content_type=Value('REVIEW', CharField())) 
+    # returns queryset of reviews
+    tickets = helpers.get_users_viewable_tickets(request.user, f_users, reviews)
+    # returns queryset of tickets
+    tickets = tickets.annotate( 
+        content_type=Value('TICKET', CharField())) 
+    tickets = list(tickets) 
+    # print(tickets) 
+    for review in reviews: 
+        for ticket in tickets: 
+            # print(review) 
+            # print(ticket) 
+            if review.ticket_id == ticket.id: 
+                tickets.pop(tickets.index(ticket)) 
+    # print(tickets) 
+    # combine and sort the two types of posts 
+    posts = sorted( 
+        chain(reviews, tickets), 
+        key=lambda post: post.time_created, 
+        reverse=True 
+    ) 
+    # posts = [] 
+    # for p in all_posts: 
+    #     if p in all_posts: 
+    #         if p not in posts: 
+    #             posts.append(p) 
+    # print(list(posts)) 
+    # my_list = [1,2,2,3,1,4,5,1,2,6]
+    # myFinallist = []
+    # for i in my_list:
+    #     if i not in myFinallist:
+    # myFinallist.append(i)
+    # print(list(myFinallist))
+    
+    form = forms.Send_ticket_idForm()  # initial={'ticket': ticket} 
+    # print(request) 
+    # print(form) 
     return render( 
         request, 'rev/home.html', context={ 
             'header': header, 
             'user': user, 
-            'followers': followers, 
-            'tickets': tickets, 
-            'reviews': reviews, 
-            # 'followed_list': followed_list, 
+            'followed': f_users, 
+            'posts': posts, 
+            # 'post': post, 
+            'form': form, 
         } 
     ) 
-    # ---- 
-    # "https://api-adresse.data.gouv.fr/search/?q==7+bd+lamarck+bourges&limit=1" 
-    # ---- 
-    # return HttpResponse("Welcome! You are visiting from: {}".format(ip)) 
-    # ---- 
+
+
+@login_required 
+def edit_ticket(request, ticket_id): 
+    # ticket = get_object_or_404(Ticket, pk=ticket_id) 
+    ticket = Ticket.objects.get(pk=ticket_id) 
+    form = forms.TicketForm(instance=ticket) 
+    if request.method == 'POST': 
+        form = forms.TicketForm( 
+            request.POST, request.FILES, instance=ticket) 
+        if form.is_valid(): 
+            edited_ticket = form.save() 
+            return redirect('home') 
+    else: 
+        header = 'Modifier un ticket' 
+        return render(request, 'rev/edit_ticket.html', context={ 
+            'header': header, 
+            'form': form, 
+        }) 
+
+# @login_required
+# # @permission_required('blog.change_blog')
+# def edit_ticket_blog(request, blog_id):
+#     blog = get_object_or_404(models.Blog, id=blog_id)
+#     edit_form = forms.BlogForm(instance=blog)
+#     delete_form = forms.DeleteBlogForm()
+#     if request.method == 'POST':
+#         if 'edit_blog' in request.POST:
+#             edit_form = forms.BlogForm(request.POST, instance=blog)
+#             if edit_form.is_valid():
+#                 edit_form.save()
+#                 return redirect('home')
+#         if 'delete_blog' in request.POST:
+#             delete_form = forms.DeleteBlogForm(request.POST)
+#             if delete_form.is_valid():
+#                 blog.delete()
+#                 return redirect('home')
+#     context = {
+#         'edit_form': edit_form,
+#         'delete_form': delete_form,
+#     }
+#     return render(request, 'blog/edit_blog.html', context=context)
+
+
+    # return render(request, 'rev/home.html') 
+    # return render(request, 'home.html', context={'posts': posts}) 
+
+    # for f in followed: 
+    #     tickets = list(Ticket.objects.filter(Q(user=user) | Q(user__id=f.followed_user_id)).order_by('-time_created')) 
+    #     reviews = list(Review.objects.filter(Q(user=user) | Q(user__username=user.username)).order_by('-time_created')) 
+    # # file deepcode ignore listFromList: <please specify a reason of ignoring this>
+    # list(reviews) 
+    # for review in reviews: 
+    #     for ticket in tickets: 
+    #         # print(review) 
+    #         # print(ticket) 
+    #         if review.ticket_id == ticket.id: 
+    #             tickets.pop(tickets.index(ticket)) 
+    # # print(tickets) 
+    """ ex CDC énoncé 
+        def feed(request):
+            reviews = get_users_viewable_reviews(request.user)
+            # returns queryset of reviews
+            reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+            tickets = get_users_viewable_tickets(request.user)
+            # returns queryset of tickets
+            tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+            # combine and sort the two types of posts
+            posts = sorted(
+                ’ chain(reviews, tickets),
+                key=lambda post: post.time_created,
+                reverse=True
+            ) 
+            return render(request, 'feed.html', context={'posts': posts}) 
+    """ 
+
+
+    """ ex demo_uthd documents 
+        # for ot in ots: 
+        #     # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
+        #     # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
+        #           type='COMPTE-RENDU D\'INTERVENTION')) 
+        #     documents = Document.objects.filter( 
+        #         work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
+        #         ) | Document.objects.filter( 
+        #         work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
+        #     ) 
+    """ 
+
+# @login_required 
+# def review_snippet(request): 
+
+    
 
 """ marche pas : 
     # TypeError: View.__init__() takes 1 positional argument but 2 were given 
@@ -123,6 +228,7 @@ def home(request):
     #         message = 'Identifiants invalides.'
     #         return render(request, self.template_name, context={'form': form, 'message': message})
 """ 
+
 
 @login_required 
 def abonnements(request): 
@@ -195,8 +301,8 @@ def create_ticket(request):
     if request.method == 'POST': 
         form = forms.TicketForm( 
             request.POST, request.FILES) 
-        print(request.POST) 
-        print(request.FILES) 
+        # print(request.POST) 
+        # print(request.FILES) 
         if form.is_valid(): 
             ticket = form.save(commit=False) 
             ticket.user = request.user 
@@ -212,42 +318,97 @@ def create_ticket(request):
 
 # TODO: tester si on désigne un ticket déjà existant 
 @login_required 
-def create_review(request): 
+def create_new_review(request): 
     ticket_form = forms.TicketForm() 
     review_form = forms.ReviewForm() 
-    header = "Ecrire une revue" 
+    header = "Ecrire une revue et un ticket" 
     if request.method == 'POST': 
-        ticket_form = forms.ReviewForm(request.POST) 
-        review_form = forms.TicketForm(request.POST) 
-        if ticket_form.is_valid(): 
-            create_ticket(request) 
-            last_ticket = Ticket.objects.filter().last() 
-            # print(last_ticket.title)  
-            if review_form.is_valid(): 
-                new_review = review_form.save(commit=False) 
-                new_review.ticket = last_ticket 
-                new_review.user = request.user 
-                new_review.save() 
-                return redirect('home') 
-    return render(request, 'rev/create_review.html', context={ 
+        review_form = forms.ReviewForm(request.POST) 
+        create_ticket(request) 
+        last_ticket = Ticket.objects.filter().last() 
+        # print(last_ticket.title) 
+        if review_form.is_valid(): 
+            new_review = review_form.save(commit=False) 
+            new_review.ticket = last_ticket 
+            new_review.user = request.user 
+            new_review.save() 
+            return redirect('home') 
+    return render(request, 'rev/create_new_review.html', context={ 
         'header': header, 
         'ticket_form': ticket_form, 
         'review_form': review_form, 
-        # 'form': form 
         }) 
 
-    #         review = form.save(commit=False) 
-    #         review.user = request.user 
-    #         # review.ticket = Ticket.objects.filter().last() 
-    #         review.save() 
-    #         return redirect('home') 
-    # return render(request, 'rev/create_review.html', context={ 
-    #         'header': header, 
-    #         'form': form}) 
 
+# à corriger (form -> link) 
+@login_required 
+def create_review(request, ticket_id): 
+    form_title = forms.Send_ticket_idForm(request.POST)  
+    print(request.POST) 
+    print(request.POST['ticket']) 
+    form_review = forms.ReviewForm(request.POST) 
+    if request.method == 'POST': 
+        print('yes 1') 
+        if form_review.is_valid(): 
+            review = form_review.save(commit=False) 
+            review.user = request.user 
+            print(review) 
+            review.save() 
+            return redirect('home') 
+        else: 
+            print('yes 2') 
+            print('no 2') 
+            header = 'Enregistrer une revue' 
+            ticket = Ticket.objects.get(pk=request.POST['ticket']) 
+            print(ticket.pk) 
+                # form = forms.ReviewForm(ticket=ticket)  # ticket=ticket  *** 
+            form = forms.ReviewForm(initial={'ticket': ticket})  # ticket=ticket  *** 
+            return render(request, 'rev/create_review.html', context={ 
+                'header': header, 
+                'ticket': ticket, 
+                'form': form, 
+            }) 
+            # form_review = forms.ReviewForm(request.POST) 
+            # if form_review.is_valid(): 
+            
+
+        # if request.method == 'POST': 
+        #     review_form = forms.ReviewForm(request.POST) 
+        #     create_ticket(request) 
+        #     last_ticket = Ticket.objects.filter().last() 
+        #     # print(last_ticket.title) 
+        #     if review_form.is_valid(): 
+        #         new_review = review_form.save(commit=False) 
+        #         new_review.ticket = last_ticket 
+        #         new_review.user = request.user 
+        #         new_review.save() 
+        #         return redirect('home') 
+        #     if 'title' == none: 
+        #         print(request.POST) 
+        #         id_form = forms.Send_ticket_idForm(request.POST) 
+            # print(request.POST) 
+            # print(request.POST['title']) 
+            # header = 'Enregistrer une revue' 
+            # ticket = Ticket.objects.get(title=request.POST['title']) 
+            #     # form = forms.ReviewForm(ticket=ticket)  # ticket=ticket  *** 
+            # form = forms.ReviewForm(initial={'ticket': ticket})  # ticket=ticket  *** 
+            # return render(request, 'rev/create_review.html', context={ 
+            #     'header': header, 
+            #     # 'ticket': ticket, 
+            #     'form': form, 
+            # }) 
+# db.email = Members.objects.get(id__exact=form['full_name'].value()).Email
+# form = RegisterForm(instance=db)
+# # listings/views.py
+# def band_update(request, id):
+#     band = Band.objects.get(id=id)
+#     form = BandForm(instance=band)  # on pré-remplir le formulaire avec un groupe existant
+#     return render(request,
+#         'listings/band_update.html',
+#         {'form': form})
 
 # @login_required 
-# def create_review(request): 
+# def create_new_review(request): 
 #     form = forms.ReviewForm() 
 #     if request.method == 'POST': 
 #         form = forms.ReviewForm(request.POST) 
@@ -262,7 +423,7 @@ def create_review(request):
 #     else: 
 #         header = 'Créer une revue' 
 #         form = forms.ReviewForm() 
-#         return render(request, 'rev/create_review.html', context={ 
+#         return render(request, 'rev/create_new_review.html', context={ 
 #             'header': header, 
 #             'form': form}) 
 
@@ -347,11 +508,7 @@ def create_review(request):
 #                     {'band': band})
 
 
-# reviews/views.py 
-def logout_user(request):
-    logout(request)
-    return redirect('home')
-    # return redirect('login')
+
 
 
 # La classe LoginPageView est remplacée par django.contrib.auth.views.LoginView (urls.py) 
@@ -376,4 +533,38 @@ def logout_user(request):
 #                 return redirect('home')
 #         message = 'Identifiants invalides.'
 #         return render(request, self.template_name, context={'form': form, 'message': message})
+
+""" réponse chatGPT 
+    # views.py
+    from django.shortcuts import render
+    from .models import Ticket
+    from .forms import TicketForm
+
+    def my_view(request):
+        # Supposons que vous récupérez une liste de tickets depuis la base de données
+        tickets = Ticket.objects.all()
+
+        if request.method == 'POST':
+            # Traitement du formulaire si soumis
+            pass
+        else:
+            # Créer une liste de formulaires préremplis avec les données de chaque ticket
+            forms = [TicketForm(initial={'title': ticket.title}) for ticket in tickets]
+
+        return render(request, 'template.html', {'forms': forms})
+
+    {# template.html #}
+    {% for form in forms %}
+        <p>{{ form.instance.title }} (ID: {{ form.instance.id }})</p>
+        <form action="../create_review/" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Créer une revue</button>
+        </form>
+    {% endfor %}
+""" 
+
+
+
+
 

@@ -1,5 +1,6 @@
 :root { 
   --back_color: #5b5650; 
+  --middle_grey_color: #95928f; 
   --text_color: #ddd; 
   --deco_color: #ff4500; 
   --button_color: #ffa07a; 
@@ -45,6 +46,24 @@ table {
   margin-bottom: 1rem; 
 } 
 
+
+/* ======== #ids ======== */ 
+#create_ticket > div > div:nth-child(2) input { 
+  height: 4rem; 
+  width: 30rem; 
+} 
+input#id_image { 
+  color: var(--middle_grey_color); 
+} 
+#logo { 
+  max-width: 100px; 
+  float: left; 
+} 
+#page_title { 
+  padding-top: 1rem; 
+  margin-right: 1rem; 
+} 
+
 /* ======== .classes ======== */ 
 .bold { 
   font-weight: bold; 
@@ -59,19 +78,6 @@ table {
   margin-top: 1rem; 
   margin-bottom: 2rem; 
 } 
-.review { 
-  border: var(--text_color) solid 1px; 
-  border-radius: 10px; 
-  padding: 1rem; 
-  margin-top: 1rem; 
-  margin-bottom: 2rem; 
-} 
-.ticket { 
-  border: var(--text_color) solid 1px; 
-  padding: 1rem; 
-  margin-top: 1rem; 
-  margin-bottom: 2rem; 
-} 
 .clear { 
   clear: both; 
 } 
@@ -80,6 +86,9 @@ table {
   margin: 0 auto; 
   margin-bottom: 20px; 
 } 
+/* .demi_button { 
+  width: 50%; 
+}  */ 
 .div_center { 
     margin: 0 auto; 
 } 
@@ -98,23 +107,19 @@ table {
 .text_center { 
   text-align: center; 
 } 
-
-/* ======== #ids ======== */ 
-#create_ticket > div > div:nth-child(2) input { 
-  height: 4rem; 
-  width: 30rem; 
+.review { 
+  border: var(--text_color) solid 1px; 
+  border-radius: 10px; 
+  padding: 1rem; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
 } 
-#logo { 
-  max-width: 100px; 
-  float: left; 
+.ticket { 
+  border: var(--text_color) solid 1px; 
+  padding: 1rem; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
 } 
-#page_title { 
-  padding-top: 1rem; 
-  margin-right: 1rem; 
-} 
-
-
-
 
 
 

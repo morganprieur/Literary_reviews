@@ -30,7 +30,11 @@ urlpatterns = [
     path('home/', views.home, name='home'), 
 
     path('create_ticket/', views.create_ticket, name='create-ticket'), 
-    path('create_review/', views.create_review, name='create-review'), 
+    # path('create_review/', views.create_review, name='create-review'), 
+    path('create_review/<ticket_title>/', views.create_review, name='create-review'), 
+    # path('create_new_review/', views.create_new_review, name='create-new-review'), 
+
+    path('edit_ticket/<ticket_id>/', views.edit_ticket, name='edit-ticket'), 
 
     # abonnements 
     path('abonnements/', views.abonnements, name='abonnements'), 

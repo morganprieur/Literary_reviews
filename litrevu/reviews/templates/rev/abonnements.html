@@ -3,11 +3,12 @@
 {% extends 'base.html' %}
 
 {% block content %} 
-    <div class="cadre"> 
+    <div class="cadre"> <!-- suivre membres -->
         <h3 class="w3-center">Suivre d'autres membres</h3> 
         <form action="" method="get">
             {% csrf_token %} 
-            <div class="w3-row input_large"> 
+            <div class="w3-row"> 
+                <div class="w3-col m3"> </div> 
                 <div class="w3-col m6"> 
                     {{ form }} 
                 </div>
@@ -32,7 +33,7 @@
         {% endif %} 
     </div> 
 
-    <div class="cadre"> 
+    <div class="cadre"> <!-- abonnements -->
         <h3 class="w3-center">Abonnements</h3> 
 
         <table class="w3-table w3-striped"> 
@@ -47,7 +48,7 @@
         </table> 
     </div> 
 
-    <div class="cadre"> 
+    <div class="cadre"> <!-- abonnés -->
         <h3 class="w3-center">Abonnés</h3> 
         Nombre d'abonnés : {{ followers.all.count }} <br> 
 

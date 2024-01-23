@@ -3,24 +3,23 @@
 
 {% block content %} 
 
-<form id="create_ticket" method="POST" enctype="multipart/form-data">
+<form id="create_review" method="POST" enctype="multipart/form-data">
     {% csrf_token %} 
-    <div class="w3-row">
+    <div class="w3-row"> 
         <div class="w3-col m3">&nbsp; </div> 
         <div class="w3-col m6"> 
-            {{ form.as_p }}  
+            {{ ticket_form.as_p }} 
+            {{ review_form.as_p }} 
             <button type="submit">Enregistrer</button> 
         </div> 
     </div> 
 </form> 
-<div class="w3-row">
+<div class="w3-row"> 
     <div class="w3-col m3">&nbsp; </div> 
-    <div class="w3-col m6"> 
+    <div class="w3-col m6">  
         <button onclick="history.back()">Retour</button> 
     </div> 
 </div> 
-
-
 
 
 {% endblock content %} 

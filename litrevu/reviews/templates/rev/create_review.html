@@ -1,22 +1,28 @@
 
-{% extends 'base.html' %} 
+<!-- blog/templates/auth/home.html --> 
+{% extends 'base.html' %}
 
-{% block content %} 
+    {% block content %} 
 
-<form id="create_review" method="POST" enctype="multipart/form-data">
-    {% csrf_token %} 
-    <div class="input_large"> 
-        {{ ticket_form.as_p }} 
-        {{ review_form.as_p }} 
-        <button type="submit">Enregistrer</button> 
-    </div>
-</form> 
-<button onclick="history.back()">Retour</button> 
+    <form method="POST"> 
+        {% csrf_token %} 
+        {{ form.as_p }} 
+        <div class="w3-row">
+            <div class="w3-col m3">&nbsp; </div> 
+            <div class="w3-col m6"> 
+                <button type="submit">Enregistrer</button> 
+            </div> 
+        </div> 
+    </form> 
+    <div class="w3-row">
+        <div class="w3-col m3">&nbsp; </div> 
+        <div class="w3-col m6"> 
+            <button onclick="history.back()">Retour</button> 
+        </div> 
+    </div> 
 
+    {% endblock content %} 
 
-
-
-{% endblock content %} 
 
 
 

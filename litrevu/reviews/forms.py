@@ -19,6 +19,16 @@ class SignupForm(UserCreationForm):
 class UserForm(forms.Form): 
     username = forms.CharField(label="pseudo ", max_length=150) 
 
+
+# class TicketRevueForm(ModelForm): 
+#     class Meta: 
+#         model = models.Review 
+#         fields = ['id'] 
+#         # widgets = {'id': forms.HiddenInput()} 
+
+
+    # ticket_id = forms.CharField(label="pseudo ", max_length=150) 
+
 # class UserForm(ModelForm): 
 #     class Meta: 
 #         model = get_user_model() 
@@ -35,11 +45,24 @@ class UserForm(forms.Form):
 class TicketForm(ModelForm): 
     class Meta: 
         model = models.Ticket 
-        fields = ('title', 
+        fields = ['title', 
             'description', 
             # 'user', 
             'image' 
-        ) 
+        ] 
+
+class Send_ticket_idForm(ModelForm): 
+    class Meta: 
+        model = models.Ticket 
+        fields = [ 
+            'id', 
+            'title', 
+            'description', 
+            # 'user', 
+            'image', ]
+            # 'time_created' ] 
+        widgets = {'id': forms.HiddenInput()} 
+        widgets = {'time_created': forms.HiddenInput()} 
 
 # class AuthorForm(forms.Form):
 #     name = forms.CharField(max_length=100)

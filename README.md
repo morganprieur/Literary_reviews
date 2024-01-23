@@ -13,6 +13,10 @@ Build an application to request and write books' reviews with Django, and follow
 `docker compose up --build` 
 
 
+Démarrer le serveur Django :     
+`pipenv run python manage.py runserver` 
+
+
 ## En construction 
 A partir d'ici, c'est en travaux, l'ordre et les chemins sont à mettre à jour. Merci de votre compréhension. 
 
@@ -102,7 +106,7 @@ Régler la quantité de détails avec `-v` : `3` = le maximum
 `user.save()`    
 
 *  Vérifier dans l'itf web qu'il est bien créé.||
-
+ 
 
 
 ## Commandes utiles 

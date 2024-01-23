@@ -1,0 +1,31 @@
+
+
+{% for post in posts %} 
+{% if post.content_type == 'REVIEW' %}
+<div class="review"> 
+    <p>test review_snippet </p> 
+    <p>{% if post.user == user %}vous avez {% endif %} 
+        {% for f in followed %} 
+            {% if post.user.username == f.followed_user.username %} {{ f.followed_user.username }} a {% endif %} 
+        {% endfor %} 
+    publié une revue</p>  
+    <p>(ID : {{ post.id }})</p> 
+    <p>{{ post.time_created }} </p> 
+    <p>{{ post.headline }} - {{ post.rating }} - (rating stars to fix) 
+    {% for star in '012345' %}
+        {# { star } #} 
+        {% if star|floatformat:0 < r.rating %}
+            <i class="fa fa-star"></i>
+        {% else %}
+            <i class="fa fa-star-o"></i>
+        {% endif %}
+    {% endfor %} 
+    <p>{{ post.body }} </p> 
+    <!-- <i class="fa fa-star"></i> --> 
+    {% if post.ticket %} 
+    <p>Ticket ID : {{ post.ticket.id }}</p> 
+    {% endif %} 
+</div> 
+{% endif %}
+{% endfor %} 
+
