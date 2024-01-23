@@ -104,11 +104,34 @@ def edit_ticket(request, ticket_id):
             request.POST, request.FILES, instance=ticket) 
         if form.is_valid(): 
             edited_ticket = form.save() 
-            return redirect('home') 
+            return redirect('activity') 
     else: 
         header = 'Modifier un ticket' 
         return render(request, 'rev/edit_ticket.html', context={ 
             'header': header, 
+            'form': form, 
+        }) 
+
+@login_required 
+def edit_review(request, review_id): 
+    review = Review.objects.get(pk=review_id) 
+    ticket_id = review.ticket.id 
+    # print('ticket_id : ', ticket_id) 
+    ticket = Ticket.objects.get(pk=ticket_id) 
+    # print(ticket) 
+    form = forms.ReviewForm(instance=review) 
+
+    if request.method == 'POST': 
+        form = forms.ReviewForm(request.POST, instance=review) 
+        if form.is_valid(): 
+            edited_review = form.save() 
+            return redirect('activity') 
+    else: 
+        header = 'Modifier une revue' 
+        return render(request, 'rev/edit_review.html', context={ 
+            'header': header, 
+            'review': review, 
+            'ticket': ticket, 
             'form': form, 
         }) 
 
@@ -373,7 +396,7 @@ def activity(request):
         for ticket in tickets: 
             if review.ticket_id == ticket.id: 
                 tickets.pop(tickets.index(ticket)) 
-    print(tickets) 
+    # print(tickets) 
 
     # combine and sort the two types of posts 
     posts = sorted( 

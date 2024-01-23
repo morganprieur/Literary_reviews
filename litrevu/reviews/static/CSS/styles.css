@@ -37,6 +37,10 @@ h2 {
 hr { 
   border-top: 2px solid var(--text_color);  
 } 
+img { 
+  display: block; 
+  max-width: 300px; 
+} 
 input, 
 textarea { 
   background-color: #eeeeee; 

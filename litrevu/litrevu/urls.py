@@ -36,6 +36,7 @@ urlpatterns = [
     # path('create_new_review/', views.create_new_review, name='create-new-review'), 
 
     path('edit_ticket/<ticket_id>/', views.edit_ticket, name='edit-ticket'), 
+    path('edit_review/<review_id>/', views.edit_review, name='edit-review'), 
 
     # abonnements 
     path('abonnements/', views.abonnements, name='abonnements'), 

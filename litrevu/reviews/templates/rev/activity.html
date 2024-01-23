@@ -38,10 +38,10 @@
                             <p>{{ post.ticket.title }} (ID : {{ post.ticket.id }})</p> 
                             <p>{{ post.ticket.description }} </p> 
                             <p><img src="../../../reviews/images/{{ post.ticket.image }}" 
-                                alt="Image ticket {{ post.ticket.id }}" height="100px"> </p> 
+                                alt="Image du ticket {{ post.ticket.id }}" height="100px"> </p> 
                         </div> 
                     {% endif %} 
-                    <p><a href="{# % url 'edit-review' review_id=post.id % #}">Modifier la revue</a></p> 
+                    <p><a href="{% url 'edit-review' review_id=post.id %}">Modifier la revue</a></p> 
                 </div> 
             
             {% elif post.content_type == 'TICKET' %} 
