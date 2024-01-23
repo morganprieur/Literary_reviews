@@ -51,6 +51,8 @@ class TicketForm(ModelForm):
             'image' 
         ] 
 
+
+# ne sert pas --> lien au lieu de form (home.html) 
 class Send_ticket_idForm(ModelForm): 
     class Meta: 
         model = models.Ticket 
@@ -80,7 +82,7 @@ class Send_ticket_idForm(ModelForm):
 #             body = forms.TextField() 
 #         ) 
 
-class ReviewForm(ModelForm): 
+class NewReviewForm(ModelForm): 
     class Meta: 
         model = models.Review 
         fields = [ 
@@ -93,6 +95,23 @@ class ReviewForm(ModelForm):
         widgets = { 
             'body': forms.Textarea(attrs={'rows': 4, 'cols': 15}), 
         } 
+
+
+class ReviewForm(ModelForm): 
+    class Meta: 
+        model = models.Review 
+        fields = [ 
+            'ticket', 
+            'rating', 
+            # 'user',  # auto: request.user 
+            'headline', 
+            'body' 
+        ] 
+        widgets = { 
+            'body': forms.Textarea(attrs={'rows': 4, 'cols': 15}), 
+            'ticket': forms.HiddenInput(), 
+        } 
+        # widgets = {'id': forms.HiddenInput()} 
 
 
 # ex form sans utiliser la classe LoginView : 

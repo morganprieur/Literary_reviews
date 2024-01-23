@@ -86,22 +86,24 @@
                     <p>{{ post.description }} </p> 
                     <p><img src="../../../reviews/images/{{ post.image }}" alt="Image ticket {{ t.id }}" height="100px"> </p> 
                     <!-- <p><a href="{# % url 'create-review' ticket_id=t.id % #}">Créer une revue</a> </p>  --> 
-                    <form action="../create_review/" method="POST">
-                        {{ form.title }} 
-                        {% csrf_token %} 
+                    <!-- <form action="../create_review/" method="POST"> -->
+                        {# { form.title } #} 
+                        {# % csrf_token % #} 
                          
-                        <!-- <input type="hidden" value="{# { post.ticket.id } #}">  -->
-                        <div class="w3-row"> 
+                        <!-- <input type="hidden" value="{# { post.ticket.id } #}">  --> 
+                        <!-- <div class="w3-row"> 
                             <div class="w3-col m6">&nbsp;</div>  
                             <div class="w3-col m6 w3-right"> 
                                 <button type="submit">Créer une revue</button> 
                             </div> 
-                        </div> 
-                    <!-- </form> <a href="{# % url 'create-abo' user_id=u.id % #}">S'abonner</a>  -->
-                    <button onclick="window.location.href='{% url create_review ticket_id=post.id %}';"> 
+                        </div>  -->
+                    <!-- </form>  -->
+                    <a href="{% url 'create-review' ticket_id=post.id %}">Créer une revue</a> 
+                    <!-- <a href="{# % url 'create-abo' user_id=u.id % #}">S'abonner</a>  -->
+                    <!-- <button onclick="window.location.href='{# % url create_review ticket_id=post.id % #}';">  -->
                     <!-- <button onclick="window.location.href='https://w3docs.com';"> -->
-                        Click Here
-                    </button>
+                        <!-- Click Here
+                    </button> -->
                 </div> 
                 {# % endfor % #} 
                 {# % include 'ticket_snippet.html' % #} 

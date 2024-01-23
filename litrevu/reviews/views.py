@@ -316,19 +316,20 @@ def create_ticket(request):
             'form': form}) 
 
 
+#TODO à tester (changé nom du form NewReviewForm) 
 # TODO: tester si on désigne un ticket déjà existant 
 @login_required 
 def create_new_review(request): 
     ticket_form = forms.TicketForm() 
-    review_form = forms.ReviewForm() 
+    review_form = forms.NewReviewForm() 
     header = "Ecrire une revue et un ticket" 
     if request.method == 'POST': 
-        review_form = forms.ReviewForm(request.POST) 
+        review_form = forms.NewReviewForm(request.POST) 
         create_ticket(request) 
         last_ticket = Ticket.objects.filter().last() 
         # print(last_ticket.title) 
         if review_form.is_valid(): 
-            new_review = review_form.save(commit=False) 
+            new_review = NewReviewForm.save(commit=False) 
             new_review.ticket = last_ticket 
             new_review.user = request.user 
             new_review.save() 
@@ -340,116 +341,45 @@ def create_new_review(request):
         }) 
 
 
-# à corriger (form -> link) 
+#TODO à tester (form -> link) 
 @login_required 
 def create_review(request, ticket_id): 
-    form_title = forms.Send_ticket_idForm(request.POST)  
-    print(request.POST) 
-    print(request.POST['ticket']) 
-    form_review = forms.ReviewForm(request.POST) 
+    # form_title = forms.Send_ticket_idForm(request.POST)  
+    form_review = forms.ReviewForm() 
     if request.method == 'POST': 
-        print('yes 1') 
+        # print('yes 1') 
+        # print(request.POST) 
+        # print(request.POST['ticket']) 
+        form_review = forms.ReviewForm(request.POST) 
         if form_review.is_valid(): 
             review = form_review.save(commit=False) 
             review.user = request.user 
             print(review) 
             review.save() 
             return redirect('home') 
-        else: 
-            print('yes 2') 
-            print('no 2') 
-            header = 'Enregistrer une revue' 
-            ticket = Ticket.objects.get(pk=request.POST['ticket']) 
-            print(ticket.pk) 
-                # form = forms.ReviewForm(ticket=ticket)  # ticket=ticket  *** 
-            form = forms.ReviewForm(initial={'ticket': ticket})  # ticket=ticket  *** 
-            return render(request, 'rev/create_review.html', context={ 
-                'header': header, 
-                'ticket': ticket, 
-                'form': form, 
-            }) 
-            # form_review = forms.ReviewForm(request.POST) 
-            # if form_review.is_valid(): 
-            
-
-        # if request.method == 'POST': 
-        #     review_form = forms.ReviewForm(request.POST) 
-        #     create_ticket(request) 
-        #     last_ticket = Ticket.objects.filter().last() 
-        #     # print(last_ticket.title) 
-        #     if review_form.is_valid(): 
-        #         new_review = review_form.save(commit=False) 
-        #         new_review.ticket = last_ticket 
-        #         new_review.user = request.user 
-        #         new_review.save() 
-        #         return redirect('home') 
-        #     if 'title' == none: 
-        #         print(request.POST) 
-        #         id_form = forms.Send_ticket_idForm(request.POST) 
-            # print(request.POST) 
-            # print(request.POST['title']) 
-            # header = 'Enregistrer une revue' 
-            # ticket = Ticket.objects.get(title=request.POST['title']) 
-            #     # form = forms.ReviewForm(ticket=ticket)  # ticket=ticket  *** 
-            # form = forms.ReviewForm(initial={'ticket': ticket})  # ticket=ticket  *** 
-            # return render(request, 'rev/create_review.html', context={ 
-            #     'header': header, 
-            #     # 'ticket': ticket, 
-            #     'form': form, 
-            # }) 
-# db.email = Members.objects.get(id__exact=form['full_name'].value()).Email
-# form = RegisterForm(instance=db)
-# # listings/views.py
-# def band_update(request, id):
-#     band = Band.objects.get(id=id)
-#     form = BandForm(instance=band)  # on pré-remplir le formulaire avec un groupe existant
-#     return render(request,
-#         'listings/band_update.html',
-#         {'form': form})
-
-# @login_required 
-# def create_new_review(request): 
-#     form = forms.ReviewForm() 
-#     if request.method == 'POST': 
-#         form = forms.ReviewForm(request.POST) 
-#         print(request.POST) 
-#         if form.is_valid(): 
-#             # print(dir(forms.ReviewForm)) 
-#             review = form.save(commit=False) 
-#             # review.ticket = none 
-#             review.user = request.user 
-#             review.save() 
-#             return redirect('home') 
-#     else: 
-#         header = 'Créer une revue' 
-#         form = forms.ReviewForm() 
-#         return render(request, 'rev/create_new_review.html', context={ 
-#             'header': header, 
-#             'form': form}) 
+    else: 
+        # print('yes 2') 
+        # print('no 2') 
+        header = 'Enregistrer une revue' 
+        ticket = Ticket.objects.get(pk=ticket_id) 
+        # ticket = Ticket.objects.get(pk=request.POST['ticket']) 
+        print(ticket.pk) 
+            # form = forms.ReviewForm(ticket=ticket) 
+        form = forms.ReviewForm(initial={'ticket': ticket}) 
+        return render(request, 'rev/create_review.html', context={ 
+            'header': header, 
+            'ticket': ticket, 
+            'form': form, 
+        }) 
 
 
-# # ======== tuto ModelForm ======== # 
-# blog/views.py
-# from django.shortcuts import redirect, render
-# from . import forms
 
-# @login_required
-# def photo_upload(request):
-#     form = forms.PhotoForm()
-#     if request.method == 'POST':
-#         form = forms.PhotoForm( 
-#             request.POST, request.FILES)
-#         if form.is_valid():
-#             photo = form.save(commit=False)
-#             # set the uploader to the user before saving the model
-#             photo.uploader = request.user
-#             # now we can save
-#             photo.save()
-#             return redirect('home')
-#     return render(request, 'blog/photo_upload.html', context={'form': form})
-# # ======== /tuto ======== # 
 
-# TODO: corriger pour l'utiliser à la place de ModelForm 
+
+
+
+
+
 # ======== forms.Form ======== # 
 # @login_required 
 # def create_ticket(request): 
