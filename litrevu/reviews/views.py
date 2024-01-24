@@ -286,6 +286,31 @@ def delete_abo(request, abonnements_id):
         return redirect('abonnements', ) 
     return render(request, 'rev/delete_abo.html', {'abo': abo}) 
 
+
+@login_required
+def delete_review(request, review_id): 
+    post = Review.objects.get(id=review_id) 
+
+    if request.method == 'POST': 
+        post.delete() 
+        return redirect('activity', ) 
+    return render(request, 'rev/delete_review.html', context={ 
+        'post': post 
+    }) 
+
+
+@login_required
+def delete_ticket(request, ticket_id): 
+    post = Ticket.objects.get(id=ticket_id) 
+
+    if request.method == 'POST': 
+        post.delete() 
+        return redirect('activity', ) 
+    return render(request, 'rev/delete_ticket.html', context={ 
+        'post': post 
+    }) 
+
+
 # # ======== tuto forms.Form // marche pas ======== # 
 # if request.method == "POST":
 #     form = PostcodeForm(request.POST)
@@ -333,7 +358,7 @@ def create_new_review(request):
         last_ticket = Ticket.objects.filter().last() 
         # print(last_ticket.title) 
         if review_form.is_valid(): 
-            new_review = NewReviewForm.save(commit=False) 
+            new_review = review_form.save(commit=False) 
             new_review.ticket = last_ticket 
             new_review.user = request.user 
             new_review.save() 
@@ -348,6 +373,7 @@ def create_new_review(request):
 #TODO à tester (form -> link) 
 @login_required 
 def create_review(request, ticket_id): 
+    ticket = Ticket.objects.get(pk=ticket_id) 
     form_review = forms.ReviewForm() 
     if request.method == 'POST': 
         form_review = forms.ReviewForm(request.POST) 
@@ -358,10 +384,7 @@ def create_review(request, ticket_id):
             review.save() 
             return redirect('home') 
     else: 
-        # TODO ajouter l'affichage du ticket avant le form 
-        header = 'Vous êtes en train de poster en réposne à' 
-        ticket = Ticket.objects.get(pk=ticket_id) 
-        # print(ticket.pk) 
+        header = "Créer une revue" 
         form = forms.ReviewForm(initial={'ticket': ticket}) 
         return render(request, 'rev/create_review.html', context={ 
             'header': header, 
@@ -413,122 +436,6 @@ def activity(request):
 
 
 
-
-
-
-# ======== forms.Form ======== # 
-# @login_required 
-# def create_ticket(request): 
-#     form = forms.TicketForm() 
-#     if request.method == 'POST': 
-#         form = forms.TicketForm( 
-#             request.POST, request.FILES) 
-#         print(request.POST) 
-#         print(request.FILES) 
-#         if form.is_valid(): 
-#             # print(dir(form)) 
-#             # ticket = forms.TicketForm( 
-#             #     title = cd['title'], 
-#             #     description = cd['description'], 
-#             #     image = cd['image'] 
-#             # ) 
-#             # title = form.cleaned_data['title'] 
-#             # description = form.cleaned_data['description'] 
-#             # image = form.cleaned_data['image'] 
-#             # ticket = Ticket.objects.create(form) 
-#             print(dir(forms.TicketForm)) 
-#             cd = form.cleaned_data 
-#             ticket = forms.TicketForm( 
-#                 title = cd['title'], 
-#                 description = cd['description'], 
-#                 image = cd['image'] 
-#             ) 
-#             ticket.user = request.user 
-#             # print(ticket) 
-#             ticket.save() 
-#             # ticket = Ticket.objects.create(**form.cleaned_data) 
-#             return redirect('home') 
-#     else: 
-#         # if request.method == 'GET': 
-#         header = 'Créer un ticket' 
-#         form = forms.TicketForm() 
-#         return render(request, 'rev/create_ticket.html', context={ 
-#             'header': header, 
-#             'form': form}) 
-# ======== forms.Form ======== # 
-
-
-
-# # listings/views.py
-# def band_delete(request, id):
-#     band = Band.objects.get(id=id)  # nécessaire pour GET et pour POST
-
-#     if request.method == 'POST':
-#         # supprimer le groupe de la base de données
-#         band.delete()
-#         # rediriger vers la liste des groupes
-#         return redirect('band_list')
-#     # pas besoin de « else » ici. Si c'est une demande GET, continuez simplement
-#     return render(request,
-#                     'listings/band_delete.html',
-#                     {'band': band})
-
-
-
-
-
-# La classe LoginPageView est remplacée par django.contrib.auth.views.LoginView (urls.py) 
-# class LoginPageView(View):
-#     template_name = 'uthdemo/login.html'
-#     form_class = forms.LoginForm
-
-#     def get(self, request):
-#         form = self.form_class()
-#         message = ''
-#         return render(request, self.template_name, context={'form': form, 'message': message})
-
-#     def post(self, request):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             user = authenticate(
-#                 username=form.cleaned_data['username'],
-#                 password=form.cleaned_data['password'],
-#             )
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect('home')
-#         message = 'Identifiants invalides.'
-#         return render(request, self.template_name, context={'form': form, 'message': message})
-
-""" réponse chatGPT 
-    # views.py
-    from django.shortcuts import render
-    from .models import Ticket
-    from .forms import TicketForm
-
-    def my_view(request):
-        # Supposons que vous récupérez une liste de tickets depuis la base de données
-        tickets = Ticket.objects.all()
-
-        if request.method == 'POST':
-            # Traitement du formulaire si soumis
-            pass
-        else:
-            # Créer une liste de formulaires préremplis avec les données de chaque ticket
-            forms = [TicketForm(initial={'title': ticket.title}) for ticket in tickets]
-
-        return render(request, 'template.html', {'forms': forms})
-
-    {# template.html #}
-    {% for form in forms %}
-        <p>{{ form.instance.title }} (ID: {{ form.instance.id }})</p>
-        <form action="../create_review/" method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Créer une revue</button>
-        </form>
-    {% endfor %}
-""" 
 
 
 

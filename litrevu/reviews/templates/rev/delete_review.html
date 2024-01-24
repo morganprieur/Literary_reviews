@@ -1,0 +1,28 @@
+
+<!-- reviews/templates/rev/delete_review.html --> 
+{% extends 'base.html' %}
+
+{% block content %} 
+
+        <div class="delete"> 
+            <h1>Supprimer une revue</h1>
+
+            <p> 
+                Etes-vous sûr de vouloir supprimer la revue {{ post.id }} qui a pour titre : "{{ post.headline }}" ? 
+            </p> 
+            <div class="review"> 
+                {% include 'rev/review_snippet.html' %} 
+            </div> 
+
+            <form action="" method="post">
+                {% csrf_token %} 
+                <button type="submit">Supprimer</button> 
+            </form>
+            <button onclick="history.back()">Retour</button> 
+
+        </div> 
+
+{% endblock content %} 
+
+
+

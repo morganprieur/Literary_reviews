@@ -1,38 +1,23 @@
 
-<!-- blog/templates/auth/home.html --> 
-{% extends 'base.html' %}
+<!-- reviews/templates/rev/delete_abo.html --> 
+{% extends 'base.html' %} 
 
 {% block content %} 
-    <div> 
-        <h1>Se désabonner</h1>
 
-        <p>Etes-vous sûr de vouloir supprimer l'abonnement {{ abo.id }} : {{ abo.followed_user }} ?</p> 
+        <div class="delete"> 
+            <h1>Se désabonner</h1>
 
-        <form action="" method="post">
-            {% csrf_token %} 
-            <button type="submit">se désabonner</button> 
-        </form>
-        <button onclick="history.back()">Retour</button> 
+            <p>Etes-vous sûr de vouloir supprimer l'abonnement {{ abo.id }} : {{ abo.followed_user }} ?</p> 
 
-    </div>
+            <form action="" method="post">
+                {% csrf_token %} 
+                <button type="submit">se désabonner</button> 
+            </form>
+            <button onclick="history.back()">Retour</button> 
+
+        </div> 
 
 {% endblock content %} 
 
 
-{% comment %}
-{% block content %} 
-<div> 
-    <h5> 
-        L'abonnement a bien été supprimé. <br> 
-        <a href="{% url 'abonnements' %}">Abonnements</a>
-    </h5>
-    
-    <!-- <a href="{# % url 'ebp_detail' ebp_id=ebp.id % #}">  --> 
-        <!-- <img src="../../uthdemo/{# { ebp.qrcode } #}" alt="Accès doc" height="100px">  -->
-        <!-- </a>  -->
-        
-</div>
-    
-{% endblock content %} 
-{% endcomment %}
 

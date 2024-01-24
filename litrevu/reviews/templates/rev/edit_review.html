@@ -1,79 +1,40 @@
 
+<!-- reviews/templates/rev/edit_review.html --> 
 {% extends 'base.html' %} 
 
 {% block content %} 
 
-<div class="w3-row"> 
-    <div class="w3-col m3">&nbsp; </div> 
-    <div class="cadre w3-col m6"> 
-        <h5>Vous êtes en train de poster en réponse à </h5>
-        <div class="ticket"> 
-            <p><div class="w3-row">
-                <span class="w3-col m8">
-                    ({{ ticket.id }})
-                </span> 
-                <span class="w3-col m4">
-                    {{ ticket.time_created }} 
-                </span>
-            </div></p>
-            <p>{{ ticket.title }}</p>  
-            <p>{{ ticket.description }} </p> 
-            <p><img src="../../../reviews/images/{{ ticket.image }}" 
-                alt="Image du ticket"> </p> 
+<div class="cadre edit"> 
+    <h5>Vous êtes en train de poster en réponse à </h5>
+    <div class="review"> 
+        <div class="w3-row"> 
+            <p class="bold w3-col m10">
+                {% if ticket.user == user %} 
+                Vous avez 
+                {% endif %} 
+                {% for f in followed %} 
+                    {% if ticket.user.username == f.followed_user.username %} 
+                        {{ ticket.user.username }} a 
+                    {% endif %}
+                {% endfor %} 
+                demandé une revue (ID : {{ ticket.id }}) 
+            </p> 
+            <p class="w3-col m2">{{ ticket.time_created }} </p> 
         </div> 
-<!-- if instance.has_review == False --> 
-<!-- paginator = Paginator(tickets_and_reviews, 6)
-    page = request.GET.get('page')
-    page_obj = paginator.get_page(page)
-
-    context = {
-        'page_obj': page_obj
-    } --> 
-    <!-- from django.template import Library
-register = Library()
-
-
-@register.filter
-def model_type(value):
-    return type(value).__name__
-
-
-@register.filter(name='range')
-def filter_range(start, end: int | str):
-    if isinstance(end, str):
-        end_nb = int(end)
-    else:
-        end_nb = end
-    return range(start, end_nb) -->
-
-        <form id="create_review" class="input_large" method="POST" enctype="multipart/form-data">
-            {% csrf_token %} 
-            {{ form.as_p }} 
-            <button type="submit">Enregistrer</button> 
-        </form> 
-        <br> 
-        <button onclick="history.back()">Retour</button> 
+        <p>{{ ticket.title }}</p>  
+        <p>{{ ticket.description }} </p> 
+        <p><img src="../../../reviews/images/{{ ticket.image }}" 
+            alt="Image du ticket"> </p> 
     </div> 
+
+    <form class="input_large" method="POST" enctype="multipart/form-data">
+        {% csrf_token %} 
+        {{ form.as_p }} 
+        <button type="submit">Enregistrer</button> 
+    </form> 
+    <br> 
+    <button onclick="history.back()">Retour</button> 
 </div> 
-
 {% endblock content %} 
-
-
-- Titre : "Modifier une critique" 
-    + Cadre 1 (pas form) : 
-        - Titre cadre 1 : "Vous êtes en train de poster en réponse à " 
-        + Sous-cadre : 
-            - "Username a demandé une critique" (left) 
-            - Date - heure (right) 
-            - Titre - Auteur 
-            - Description 
-            - image 
-    + Cadre 2 : 
-        - Titre : "Critique" 
-        + Form : 
-            - Titre 
-            - Note : radio [0 - 5] *** corriger modèle *** 
-            - Commentaire 
-            - Bouton : "Envoyer" 
 
 

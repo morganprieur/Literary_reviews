@@ -31,9 +31,11 @@ urlpatterns = [
     path('activity/', views.activity, name='activity'), 
 
     path('create_ticket/', views.create_ticket, name='create-ticket'), 
+    path('delete_ticket/<ticket_id>/', views.delete_ticket, name='delete-ticket'), 
     # path('create_review/', views.create_review, name='create-review'), 
+    path('create_new_review/', views.create_new_review, name='create-new-review'), 
     path('create_review/<ticket_id>/', views.create_review, name='create-review'), 
-    # path('create_new_review/', views.create_new_review, name='create-new-review'), 
+    path('delete_review/<review_id>/', views.delete_review, name='delete-review'), 
 
     path('edit_ticket/<ticket_id>/', views.edit_ticket, name='edit-ticket'), 
     path('edit_review/<review_id>/', views.edit_review, name='edit-review'), 

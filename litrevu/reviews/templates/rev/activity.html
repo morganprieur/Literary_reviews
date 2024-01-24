@@ -1,27 +1,41 @@
 
-<!-- blog/templates/auth/home.html --> 
+<!-- reviews/templates/rev/activity.html --> 
 {% extends 'base.html' %}
 
 {% block content %} 
 
-    <!-- TODO contenu de la page (ça c'est home) -->
-    <!-- Section boutons nouveaux --> 
-
     <div class="cadre"> <!-- reviews --> 
 
         {% for post in posts %} 
-        <!-- <strong>USER : {# {user} #}</strong> -->
 
             {% if post.content_type == 'REVIEW' %} 
                 <hr> 
                 <div class="review"> 
-                    {% include 'rev/review_snippet.html' %} 
                     <div class="w3-row"> 
-                        <div class="w3-col m10"> 
+                        <p class="bold w3-col m10">
+                            {% if post.user == user %} 
+                            Vous avez 
+                            {% endif %} 
+                                {% for f in followed %} 
+                                    {% if post.user.username == f.followed_user.username %} 
+                                        {{ f.followed_user.username }} a 
+                                    {% endif %} 
+                                {% endfor %} 
+                            publié une revue (ID : {{ post.id }}) 
+                        </p> 
+                        <p class="w3-col m2">{{ post.time_created }} </p> 
+                    </div>
+                    {% include 'rev/review_snippet.html' %} 
+
+                    <div class="w3-row"> 
+                        <div class="w3-col m8"> 
                             &nbsp; 
                         </div>
                         <a class="w3-col m2 text_center" href="{% url 'edit-review' review_id=post.id %}"> 
                             Modifier la revue 
+                        </a> 
+                        <a class="w3-col m2 text_center" href="{% url 'delete-review' review_id=post.id %}"> 
+                            Supprimer la revue 
                         </a> 
                     </div> 
 
@@ -29,17 +43,35 @@
             
             {% elif post.content_type == 'TICKET' %} 
                 <div class="ticket"> 
+                    <div class="w3-row"> 
+                        <p class="bold w3-col m10">
+                            {% if post.user == user %} 
+                            Vous avez 
+                            {% endif %} 
+                            {% for f in followed %} 
+                                {% if post.user.username == f.followed_user.username %} 
+                                    {{ post.user.username }} a 
+                                {% endif %}
+                            {% endfor %} 
+                            publié un ticket (ID : {{ post.id }}) 
+                        </p> 
+                        <p class="w3-col m2">{{ post.time_created }} </p> 
+                    </div> 
                     {% include 'rev/ticket_snippet.html' %} 
+
                     <div class="w3-row"> 
                         <div class="w3-col m2"> 
                             <img src="../../../reviews/images/{{ post.image }}" 
                                 alt="Image ticket {{ t.id }}" height="100px"> 
                         </div> 
-                        <div class="w3-col m8"> 
+                        <div class="w3-col m6"> 
                             &nbsp; 
                         </div>
-                        <a class="w3-col m2 text_center" href="{% url 'create-review' ticket_id=post.id %}"> 
-                            Créer une revue 
+                        <a class="w3-col m2 text_center" href="{% url 'edit-ticket' ticket_id=post.id %}"> 
+                            Modifier le ticket 
+                        </a> 
+                        <a class="w3-col m2 text_center" href="{% url 'delete-ticket' ticket_id=post.id %}"> 
+                            Supprimer le ticket 
                         </a> 
                     </div> 
                 </div> 
@@ -48,21 +80,5 @@
     </div>
 {% endblock content %} 
 
-<!-- - Titre : "Vos posts" 
-+ 1 cadre par revue : 
-    - Titre : "Vous avez publié une revue" (left) 
-    - date - heure (right) 
-    - note 
-    - Commentaire 
-    + Sous-cadre : 
-        - "Ticket username" 
-        - Titre - auteur 
-        - image  --> 
 
-<!-- + 1 cadre par ticket : 
-    - Titre "Vous avez pblié un ticket" (left) 
-    - date - heure (right) 
-    - Titre - auteur 
-    - Description 
-    - Image  -->
 

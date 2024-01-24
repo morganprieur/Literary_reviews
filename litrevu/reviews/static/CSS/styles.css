@@ -19,10 +19,6 @@ a {
 a:hover {
   color: var(--button_hover); 
 } 
-a.menu_link { 
-  background-color: var(--button_color); 
-  color: var(--back_color); 
-} 
 button { 
   display: block; 
   width: 100%; 
@@ -64,18 +60,22 @@ table {
   height: 4rem; 
   width: 30rem; 
 } 
+#header div.w3-row { 
+  max-height: 100px; 
+} 
 input#id_image { 
   color: var(--middle_grey_color); 
 } 
 #logo { 
-  /* max-width: 100px;  */ 
-  height: 150px; 
+  max-height: 150px; 
   float: left; 
 } 
 #menu { 
   display: flex; 
   flex-wrap: nowrap; 
-  /* background-color: DodgerBlue;  */
+  padding-top: 1rem; 
+  margin-right: 1rem; 
+  margin-top: 1rem; 
 } 
 #menu > div {
   background-color: var(--button_color); 
@@ -88,21 +88,17 @@ input#id_image {
 } 
 #menu > .menu_link {
   background-color: var(--back_color); 
-  /* border: 1px solid black;  */
   width: 200px; 
   margin: 10px; 
   text-align: center; 
   line-height: 1.5rem; 
   font-size: 20px; 
-  /* color: var(--back_color);  */
 } 
 #menu > .menu_no_link { 
   background-color: var(--back_color); 
+  color: var(--text_color); 
   border: none; 
-} 
-#page_title { 
-  padding-top: 1rem; 
-  margin-right: 1rem; 
+  margin-right: 100px; 
 } 
 
 
@@ -128,9 +124,6 @@ input#id_image {
   margin: 0 auto; 
   margin-bottom: 20px; 
 } 
-/* .demi_button { 
-  width: 50%; 
-}  */ 
 .div_center { 
     margin: 0 auto; 
 } 
@@ -142,6 +135,9 @@ input#id_image {
   width: 95%; 
   display: block; 
 } 
+.create 
+.delete, 
+.edit, 
 .login, 
 .signup { 
   width: 70%; 
