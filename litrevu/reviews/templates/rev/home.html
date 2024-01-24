@@ -1,9 +1,8 @@
 
-<!-- blog/templates/auth/home.html --> 
+<!-- reviews/templates/rev/home.html --> 
 {% extends 'base.html' %}
 
     {% block content %} 
-    {# % include 'rev/review_snippet.html' % #}
 
     <!-- Section boutons nouveaux --> 
     <section class="w3-row"> 
@@ -23,232 +22,26 @@
 
 
     <div class="cadre"> <!-- reviews --> 
-        <h5 class="w3-center">Flux</h5> 
+        <h5 class="w3-center bold">Votre flux</h5> 
 
         {% for post in posts %} 
-        <strong>USER : {{user}}</strong>
-
+        
             {% if post.content_type == 'REVIEW' %} 
                 <hr> 
                 <div class="review"> 
-                    {% if post.user == user %}vous avez {% endif %} 
-                        {% for f in followed %} 
-                            {% if post.user.username == f.followed_user.username %} 
-                                {{ f.followed_user.username }} a 
-                            {% endif %} 
-                        {% endfor %} 
-                    publié une revue 
-                    <p>(ID : {{ post.id }})</p> 
-                    <p>{{ post.time_created }} </p> 
-                    <p>{{ post.headline }} - {{ post.rating }} - (rating stars to fix) 
-                    {% for star in '012345' %}
-                        {# { star } #} 
-                        {% if star|floatformat:0 < r.rating %}
-                            <i class="fa fa-star"></i>
-                        {% else %}
-                            <i class="fa fa-star-o"></i>
-                        {% endif %}
-                    {% endfor %} 
-                    <p>{{ post.body }} </p> 
-                    <!-- <i class="fa fa-star"></i> --> 
-                    {% if post.ticket %} 
-                        <div class="ticket"> 
-                            <!-- <strong>ticket</strong> -->
-                            <!-- <p>Ticket ID : {# { post.ticket.id } #}</p> 
-                            <p>Ticket user : {# { post.ticket.user } #}</p>  -->
-                            <p>{% if post.ticket.user.username == user.username %}
-                                    Vous avez 
-                                {% else %} 
-                                    {{ post.ticket.user.username }} a 
-                                {% endif %}
-                            publié un ticket</p> 
-                            <p>{{ post.ticket.title }} (ID : {{ post.ticket.id }})</p> 
-                            <p>{{ post.ticket.time_created }} </p> 
-                            <p>{{ post.ticket.description }} </p> 
-                            <p><img src="../../../reviews/images/{{ post.ticket.image }}" 
-                                alt="Image ticket {{ post.ticket.id }}" height="100px"> </p> 
-    
-                        {% endif %} 
-                    </div> 
+                    {% include 'rev/review_snippet.html' %} 
                 </div> 
             
             {% elif post.content_type == 'TICKET' %} 
-                {# % for t in tickets % #}
                 <div class="ticket"> 
-                    <!-- <strong>{# { t.user } #}</strong><br>  --> 
-                    <p>{% if post.user == user %}vous avez {% endif %} 
-                        {% for f in followed %} 
-                            {% if post.user.username == f.followed_user.username %} {{ post.user.username }} a {% endif %}
-                        {% endfor %} 
-                    publié un ticket</p> 
-                    <p>{{ post.title }} (ID : {{ post.id }})</p> 
-                    <p>{{ post.time_created }} </p> 
-                    <p>{{ post.description }} </p> 
-                    <p><img src="../../../reviews/images/{{ post.image }}" alt="Image ticket {{ t.id }}" height="100px"> </p> 
-                    <!-- <p><a href="{# % url 'create-review' ticket_id=t.id % #}">Créer une revue</a> </p>  --> 
-                    <!-- <form action="../create_review/" method="POST"> -->
-                        {# { form.title } #} 
-                        {# % csrf_token % #} 
-                         
-                        <!-- <input type="hidden" value="{# { post.ticket.id } #}">  --> 
-                        <!-- <div class="w3-row"> 
-                            <div class="w3-col m6">&nbsp;</div>  
-                            <div class="w3-col m6 w3-right"> 
-                                <button type="submit">Créer une revue</button> 
-                            </div> 
-                        </div>  -->
-                    <!-- </form>  -->
-                    <a href="{% url 'create-review' ticket_id=post.id %}">Créer une revue</a> 
-                    <!-- <a href="{# % url 'create-abo' user_id=u.id % #}">S'abonner</a>  -->
-                    <!-- <button onclick="window.location.href='{# % url create_review ticket_id=post.id % #}';">  -->
-                    <!-- <button onclick="window.location.href='https://w3docs.com';"> -->
-                        <!-- Click Here
-                    </button> -->
+                    {% include 'rev/ticket_snippet.html' %} 
                 </div> 
                 {# % endfor % #} 
-                {# % include 'ticket_snippet.html' % #} 
             {% endif %} 
             
         {% endfor %}
     </div>
 
-
-
-
-
-
-{% comment %} 
-        {% for r in reviews %} 
-            <hr> 
-            <div class="review"> 
-                {% if r.user == user %}vous avez {% endif %} 
-                    {% for f in followed %} 
-                        {% if r.user.username == f.followed_user.username %} {{ f.followed_user.username }} a {% endif %} 
-                    {% endfor %} 
-                publié une revue 
-                <p>(ID : {{ r.id }})</p> 
-                <p>{{ r.time_created }} </p> 
-                <p>{{ r.headline }} - {% for i in range(5) %}
-                    {% if i < r.rating %}
-                        <i class="fa fa-star"></i>
-                    {% else %}
-                        <i class="fa fa-star-o"></i>
-                    {% endif %}
-                {% endfor %}</p> 
-                {% comment %} 
-                <p>{{ r.headline }} - {# { r.rating } #} {% if r.rating == 0 %} <i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>{% endif %} 
-                    {% if r.rating == 1 %} <i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>{% endif %} 
-                    {% if r.rating == 2 %} <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>{% endif %} 
-                    {% if r.rating == 3 %} <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>{% endif %} 
-                    {% if r.rating == 4 %} <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i>{% endif %} 
-                    {% if r.rating == 5 %} <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>{% endif %} </p> 
-                    {# % endcomment % #} 
-                <p>{{ r.body }} </p> 
-                    {% if r.ticket.user == user %} 
-                        <p><a href="{# % url 'edit-review' review_id=t.id % #}">Modifier</a> </p> 
-                        <!-- <form action="" method="POST"> 
-                            <input type="hidden" value="{{ r.id }}"> 
-                            <div class="w3-row"> 
-                                <div class="w3-col m6"> 
-                                    <button type="submit">Modifier</button> 
-                                </div> 
-                            </div> 
-                        </form>  -->
-                        {% endif %} 
-
-                <div class="ticket"> 
-                    <!-- <strong>{# { r.ticket.user } #}</strong><br>  -->
-                    {% if r.ticket.user == user %}vous avez {% endif %} 
-                        {% for f in followed %} 
-                            {% if r.ticket.user == f.followed_user %}{{ r.ticket.user }} a {% endif %}
-                        {% endfor %}                          
-                    publié un ticket 
-                    <p>{{ r.ticket.title }} (ID : {{ r.ticket.id }})</p> 
-                    <p>{{ r.ticket.time_created }} </p> 
-                    <p>{{ r.ticket.description }} </p> 
-                    <p><img src="../../../reviews/images/{{ r.ticket.image }}" alt="Image ticket {{ r.ticket.id }}" height="100px"> </p> 
-                    <!-- <p><a href="{# % url 'edit-ticket' ticket_id=t.id % #}">Modifier</a> </p>  --> 
-                    <div class="w3-row"> 
-                        {% if r.ticket.user == user %} 
-                        <form method="GET"> 
-                        <!-- <form action="edit_ticket" method="POST">  -->
-                            <input type="hidden" value="{{ r.ticket.id }}"> 
-                            <div class="w3-col m6"> 
-                                <button type="submit">Modifier</button> 
-                            </div> 
-                        </form> 
-                        {% endif %} 
-                    </div> 
-                </div>
-            </div> 
-        {% empty %} 
-            <!-- <p>Il n'y a pas de revue </p>  -->
-        {% endfor %} 
-    </div> 
-
-    <div class="cadre"> <!-- tickets -->
-        {% for t in tickets %}
-        <div class="ticket"> 
-            <!-- <strong>{# { t.user } #}</strong><br>  -->
-            {% if t.user == user %}vous avez {% endif %} 
-                {% for f in followed %} 
-                    {% if t.user.username == f.followed_user.username %} {{ t.user.username }} a {% endif %}
-                {% endfor %}                          
-            publié un ticket 
-            <p>{{ t.title }} (ID : {{ t.id }})</p> 
-            <p>{{ t.time_created }} </p> 
-            <p>{{ t.description }} </p> 
-            <p><img src="../../../reviews/images/{{ t.image }}" alt="Image ticket {{ t.id }}" height="100px"> </p> 
-            {% if t.user == user %} 
-                <p><a href="{# % url 'edit-ticket' ticket_id=t.id % #}">Modifier</a> </p> 
-            {% endif %} 
-            <p><a href="{% url 'create-review' ticket_id=t.id %}">Créer une revue</a> </p> 
-            
-            <!-- <form action="../create_review" method="GET">  create_revue --> 
-                <!-- <form action="../create_review/" method="GET"> ticket_id={# { r.ticket.id } #}  -->
-                    <!-- {% csrf_token %} 
-                    {{ form.as_p }}  -->
-                    <!-- <input type="hidden" value="{# { r.ticket.id } #}">  -->
-                    <!-- <div class="w3-col m6 w3-right"> 
-                        <button type="submit">Créer une revue</button> 
-                    </div> 
-                </form>  -->
-        </div> 
-        {% empty %} 
-            <p>Il n'y a pas de ticket </p> 
-        {% endfor %} 
-    </div> 
-{% endcomment %} 
-
 {% endblock content %} 
-
-
-
-{% comment %} 
-    {% for ot in ots %} 
-    <!-- {{ ot.id }}  -->
-    {% if '023' not in ot.id and '045' not in ot.id %} <!-- if doc.document_url|slice:":7" == 'images/' /  --> 
-    <div class="one_ot">
-        <h3>
-            <a href="{% url 'work_order_detail' work_order_id=ot.id %}" class="list-group-item list-group-item-action gap-3 py-3" aria-current="true">
-                {{ ot.racine }}{{ ot.id }} - {{ ot.label }}  
-            </a> 
-        </p> 
-        <p>{{ ot.address.number }} {{ ot.address.street_name }}<br>  
-            {{ ot.address.zip_code }} {{ ot.address.city }}<br>
-            <br> 
-            <span class="mb-0 opacity-75">Localisation : 
-                <a class="no-block" target="_blank" href="https://www.openstreetmap.org/#map=16/{{ ot.address.lng }}/{{ ot.address.lat }}">
-                    Open Street Map
-                </a>
-            </span> 
-        </p> 
-        <div id="map"></div>
-    </div> 
-    <hr> 
-    {% endif %} 
-    {% endfor %} 
-{% endcomment %}
-
 
 

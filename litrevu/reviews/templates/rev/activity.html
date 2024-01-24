@@ -15,47 +15,33 @@
             {% if post.content_type == 'REVIEW' %} 
                 <hr> 
                 <div class="review"> 
+                    {% include 'rev/review_snippet.html' %} 
                     <div class="w3-row"> 
-                        <p><span class="w3-col m10">Vous avez publié une revue </span><span class="w3-col m2">{{ post.time_created }} </span></p> 
+                        <div class="w3-col m10"> 
+                            &nbsp; 
+                        </div>
+                        <a class="w3-col m2 text_center" href="{% url 'edit-review' review_id=post.id %}"> 
+                            Modifier la revue 
+                        </a> 
                     </div> 
-                    <p>(Review ID : {{ post.id }})</p> 
-                    <p>{{ post.headline }} - {{ post.rating }} - (rating stars to fix) 
-                    {% for star in '012345' %}
-                        {# { star } #} 
-                        {% if star|floatformat:0 < r.rating %}
-                            <i class="fa fa-star"></i>
-                        {% else %}
-                            <i class="fa fa-star-o"></i>
-                        {% endif %}
-                    {% endfor %} 
-                    <p>{{ post.body }} </p> 
-                    <!-- <i class="fa fa-star"></i> --> 
-                    {% if post.ticket %} 
-                        <div class="ticket"> 
-                            <div class="w3-row"> 
-                                <p><span class="w3-col m10">{{ post.ticket.user.username }} </span><span class="w3-col m2">{{ post.ticket.time_created }} </span></p> 
-                            </div> 
-                            <p>{{ post.ticket.title }} (ID : {{ post.ticket.id }})</p> 
-                            <p>{{ post.ticket.description }} </p> 
-                            <p><img src="../../../reviews/images/{{ post.ticket.image }}" 
-                                alt="Image du ticket {{ post.ticket.id }}" height="100px"> </p> 
-                        </div> 
-                    {% endif %} 
-                    <p><a href="{% url 'edit-review' review_id=post.id %}">Modifier la revue</a></p> 
+
                 </div> 
             
             {% elif post.content_type == 'TICKET' %} 
                 <div class="ticket"> 
-                    <!-- <strong> Ticket ID : {# { post.id } #}, user : {# { post.user.username } #}</strong>  -->
+                    {% include 'rev/ticket_snippet.html' %} 
                     <div class="w3-row"> 
-                        <p><span class="w3-col m10">Vous avez pblié un ticket </span><span class="w3-col m2">{{ post.ticket.time_created }} </span></p> 
+                        <div class="w3-col m2"> 
+                            <img src="../../../reviews/images/{{ post.image }}" 
+                                alt="Image ticket {{ t.id }}" height="100px"> 
+                        </div> 
+                        <div class="w3-col m8"> 
+                            &nbsp; 
+                        </div>
+                        <a class="w3-col m2 text_center" href="{% url 'create-review' ticket_id=post.id %}"> 
+                            Créer une revue 
+                        </a> 
                     </div> 
-                    <p>{{ post.title }} (ID : {{ post.id }})</p> 
-                    <p>{{ post.description }} </p> 
-                    <p><img src="../../../reviews/images/{{ post.image }}" 
-                        alt="Image ticket {{ post.id }}" height="100px"> </p> 
-                        <p><a href="{% url 'edit-ticket' ticket_id=post.id %}">Modifier le ticket </a></p> 
-                        <!-- <a href="{# % url 'create-abo' user_id=u.id % #}">S'abonner</a> -->
                 </div> 
             {% endif %} 
         {% endfor %}

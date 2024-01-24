@@ -1,0 +1,32 @@
+
+<div class="w3-row"> 
+    <p class="bold w3-col m10">
+        {% if post.user == user %} 
+        Vous avez 
+        {% endif %} 
+        {% for f in followed %} 
+            {% if post.user.username == f.followed_user.username %} 
+                {{ post.user.username }} a 
+            {% endif %}
+        {% endfor %} 
+        publié un ticket (ID : {{ post.id }}) 
+    </p> 
+    <p class="w3-col m2">{{ post.time_created }} </p> 
+</div> 
+<p>{{ post.title }} </p> 
+<p>{{ post.description }} </p> 
+{% comment %} 
+<div class="w3-row"> 
+    <div class="w3-col m2"> 
+        <img src="../../../reviews/images/{{ post.image }}" 
+            alt="Image ticket {{ t.id }}" height="100px"> 
+    </div> 
+    <div class="w3-col m8"> 
+        &nbsp; 
+    </div>
+    <a class="w3-col m2 text_center" href="{% url 'create-review' ticket_id=post.id %}"> 
+        Créer une revue 
+    </a> 
+</div> 
+{% endcomment %} 
+

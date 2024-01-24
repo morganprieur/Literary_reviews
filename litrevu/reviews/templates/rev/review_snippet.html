@@ -1,31 +1,60 @@
 
+<div class="w3-row"> 
+    <p class="bold w3-col m10">
+        {% if post.user == user %} 
+        Vous avez 
+        {% endif %} 
+            {% for f in followed %} 
+                {% if post.user.username == f.followed_user.username %} 
+                    {{ f.followed_user.username }} a 
+                {% endif %} 
+            {% endfor %} 
+        publié une revue (ID : {{ post.id }}) 
+    </p> 
+    <p class="w3-col m2">{{ post.time_created }} </p> 
+</div>
+<p>{{ post.headline }} - {# { post.rating } #} 
+{% if post.rating == 0 %} 
+<i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </p> 
+{% elif post.rating == 1 %} 
+    <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </p> 
+{% elif post.rating == 2 %} 
+    <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </p> 
+{% elif post.rating == 3 %} 
+    <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </p> 
+{% elif post.rating == 4 %} 
+    <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> </p> 
+{% elif post.rating == 5 %} 
+    <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </p> 
+{% endif %} 
 
-{% for post in posts %} 
-{% if post.content_type == 'REVIEW' %}
-<div class="review"> 
-    <p>test review_snippet </p> 
-    <p>{% if post.user == user %}vous avez {% endif %} 
-        {% for f in followed %} 
-            {% if post.user.username == f.followed_user.username %} {{ f.followed_user.username }} a {% endif %} 
-        {% endfor %} 
-    publié une revue</p>  
-    <p>(ID : {{ post.id }})</p> 
-    <p>{{ post.time_created }} </p> 
-    <p>{{ post.headline }} - {{ post.rating }} - (rating stars to fix) 
-    {% for star in '012345' %}
-        {# { star } #} 
-        {% if star|floatformat:0 < r.rating %}
-            <i class="fa fa-star"></i>
-        {% else %}
-            <i class="fa fa-star-o"></i>
-        {% endif %}
-    {% endfor %} 
-    <p>{{ post.body }} </p> 
-    <!-- <i class="fa fa-star"></i> --> 
-    {% if post.ticket %} 
-    <p>Ticket ID : {{ post.ticket.id }}</p> 
-    {% endif %} 
-</div> 
-{% endif %}
-{% endfor %} 
+<p>{{ post.body }} </p> 
+{% if post.ticket %} 
+    <div class="ticket"> 
+        <div class="w3-row"> 
+            <p class="bold w3-col m10">{% if post.ticket.user.username == user.username %}
+                    Vous avez 
+                {% else %} 
+                    {{ post.ticket.user.username }} a 
+                {% endif %}
+                publié un ticket (ID : {{ post.ticket.id }}) 
+            </p> 
+            <p class="w3-col m2">{{ post.ticket.time_created }} </p> 
+        </div> 
+        <p>{{ post.ticket.title }} </p> 
+        <p>{{ post.ticket.description }} </p> 
+        <div class="w3-row"> 
+            <div class="w3-col m2"> 
+                <img src="../../../reviews/images/{{ post.ticket.image }}" 
+            alt="Image ticket {{ post.ticket.id }}" height="100px"> 
+            </div> 
+            <div class="w3-col m10"> 
+                &nbsp; 
+            </div> 
+        </div> 
+
+    </div> 
+{% endif %} 
+
+
 

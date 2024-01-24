@@ -20,28 +20,39 @@
             <p>{{ ticket.description }} </p> 
             <p><img src="../../../reviews/images/{{ ticket.image }}" 
                 alt="Image du ticket"> </p> 
-            <!-- <p><img src="../../../reviews/images/{# { post.ticket.image } #}" 
-                alt="Image ticket {{ post.ticket.id }}" height="100px"> </p>  -->
         </div> 
+<!-- if instance.has_review == False --> 
+<!-- paginator = Paginator(tickets_and_reviews, 6)
+    page = request.GET.get('page')
+    page_obj = paginator.get_page(page)
 
-    </div> 
+    context = {
+        'page_obj': page_obj
+    } --> 
+    <!-- from django.template import Library
+register = Library()
 
 
-    <form id="create_review" method="POST" enctype="multipart/form-data">
-        {% csrf_token %} 
-        <div class="w3-row"> 
-            <div class="w3-col m3">&nbsp; </div> 
-            <div class="w3-col m6"> 
-                {{ form.as_p }} 
-                <button type="submit">Enregistrer</button> 
-            </div> 
-        </div> 
-    </form> 
-    <div class="w3-row"> 
-        <div class="w3-col m3">&nbsp; </div> 
-        <div class="w3-col m6">  
-            <button onclick="history.back()">Retour</button> 
-        </div> 
+@register.filter
+def model_type(value):
+    return type(value).__name__
+
+
+@register.filter(name='range')
+def filter_range(start, end: int | str):
+    if isinstance(end, str):
+        end_nb = int(end)
+    else:
+        end_nb = end
+    return range(start, end_nb) -->
+
+        <form id="create_review" class="input_large" method="POST" enctype="multipart/form-data">
+            {% csrf_token %} 
+            {{ form.as_p }} 
+            <button type="submit">Enregistrer</button> 
+        </form> 
+        <br> 
+        <button onclick="history.back()">Retour</button> 
     </div> 
 </div> 
 

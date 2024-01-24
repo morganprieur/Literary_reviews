@@ -59,29 +59,25 @@ def home(request):
         # return groups_as_list 
     """ 
     reviews = helpers.get_users_viewable_reviews(user, f_users) 
+    # returns queryset of reviews
     reviews = reviews.annotate( 
         content_type=Value('REVIEW', CharField())) 
-    # returns queryset of reviews
     tickets = helpers.get_users_viewable_tickets(user, f_users, reviews)
     # returns queryset of tickets
     tickets = tickets.annotate( 
         content_type=Value('TICKET', CharField())) 
     tickets = list(tickets) 
-    # print(tickets) 
     for review in reviews: 
         for ticket in tickets: 
-            # print(review) 
-            # print(ticket) 
             if review.ticket_id == ticket.id: 
                 tickets.pop(tickets.index(ticket)) 
-    # print(tickets) 
+
     # combine and sort the two types of posts 
     posts = sorted( 
         chain(reviews, tickets), 
         key=lambda post: post.time_created, 
         reverse=True 
     ) 
-    # form = forms.Send_ticket_idForm() 
 
     return render( 
         request, 'rev/home.html', context={ 
@@ -91,6 +87,8 @@ def home(request):
             'posts': posts, 
             # 'post': post, 
             # 'form': form, 
+            'iterateover': range(5), 
+            # 'iterateover': range(x), 
         } 
     ) 
 
