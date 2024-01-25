@@ -4,7 +4,12 @@
 
 ## Followed threads 
 
-1. The VSCode "Extensions" tab (found into the VSCode dashboard) 
+1. (Centre gouvernemental de veille, d'alerte et de réponse aux attaques informatiques)[https://www.cert.ssi.gouv.fr/] 
+*  Interests: 
+    - No comment. 
+
+
+2. The VSCode "Extensions" tab (found into the VSCode dashboard) 
 *  Interests: 
     - It offers suitable tools for working on VSCode. 
     - The extensions are always up to date. 
@@ -15,7 +20,7 @@
 This thread doesn't be enough, but this is a easy way to find a first list of tools. 
 
 
-2. (Daily.dev)[https://daily.dev/] 
+3. (Daily.dev)[https://daily.dev/] 
 *  Interests: 
     - As an Firefox extension, it is easy to use and to find. 
     - It is in english then I make progress in reading this language. 
@@ -26,18 +31,18 @@ A good technology is as light as possible, in LTS release, without useless decor
 Daily.dev isn't probably the best, but it's close. 
 
 
-3. (Green IT)[https://www.greenit.fr/]  
+4. (Green IT)[https://www.greenit.fr/]  
 *  Interests: 
     - The reference about eco conception web! 
 
 
-4. (Dveloppez.com)[https://www.developpez.com/]
+5. (Dveloppez.com)[https://www.developpez.com/]
 *  Interests: 
     - In french, because be sure of having everything understood is interesting.  
     - IT news, included business model of large platforms, surveys, and comments associated with the articles. 
 
 
-5. (Alex so yes)[https://alexsoyes.com/]
+6. (Alex so yes)[https://alexsoyes.com/]
 *  Interests: 
     - In french.  
     - This blog and newsletter gives other blogs and newsletters, by languages or technologies. 
@@ -45,17 +50,17 @@ Daily.dev isn't probably the best, but it's close.
     - He's testing "code with AI". 
 
 
-6. (Journal du hacker)[https://www.journalduhacker.net/] 
+7. (Journal du hacker)[https://www.journalduhacker.net/] 
 *  Interests: 
     - Francophone news about opensource and "logiciels libres" tools and technologies. 
 
 
-7. (The "partage" part of the linuxfr website)[https://linuxfr.org/liens] 
+8. (The "partage" part of the linuxfr website)[https://linuxfr.org/liens] 
 *  Interests: 
     - News about Linux environment. 
 
 
-8. (The Django subreddit)[https://www.reddit.com/r/django/] 
+9. (The Django subreddit)[https://www.reddit.com/r/django/] 
 *  Interests: 
     - Q/A about Django. 
 
@@ -96,6 +101,7 @@ Daily.dev isn't probably the best, but it's close.
     - I never have been used another versionning software. 
     - My work and side repos are on GitHub and GitLab, then I prefer work with these both websites. 
     Following my preference of "logiciels libres", I will make a repo on Framagit too, in order to search a job after this apprenticeship. 
+    The versionning platforms make theirselves a security watch and inform us in cas of vulnerability into one of our repos. 
 
 
 ### Django LoginView class 

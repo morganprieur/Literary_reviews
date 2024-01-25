@@ -1,17 +1,7 @@
 
 # tools for local work 
-.env
 snyk.exe
 .dcignore
 roadmap.md
 questions.md
-
-# storage 
-db.sqlite3
-
-# draft
-litrevu/reviews/templates/rev/draft-conf_abo_delete.html
-
-# For Docker (Not initialized for now) 
-volumes
 

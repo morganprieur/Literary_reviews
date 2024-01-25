@@ -13,19 +13,17 @@ Développer une application (MVP) pour demander et écrire des revues d'articles
 3. Configurer l'environnement virtuel : `pipenv install` 
 4. Lancer l'environnement virtuel : `pipenv shell` 
 5. Démarrer le serveur Django : `pipenv run python manage.py runserver` 
-6. Effectuer les migrations :    
-    Depuis le terminal, dans le dossier du projet 'litrevu', appeler la commande `commands/createsuperusermigrate_pipenv` 
 
-7. Créer un superutilisateur :    
-    71. Depuis le terminal, dans le dossier du projet 'litrevu', appeler la commande `commands/createsuperuser` 
-    72. Répondre aux questions :    
+6. Créer un superutilisateur :    
+    61. Depuis le terminal, dans le dossier du projet 'litrevu', appeler la commande `commands/createsuperuser` 
+    62. Répondre aux questions :    
         * Username 
         * Mail (facultatif) 
         * Mot de passe 
         * Confirmation du mot de passe 
-    73. Visiter l'adresse http://localhost:8000/admin/ pour tester l'interface d'administration, avec les informations de connexion du superutilisateur créé. 
+    63. Visiter l'adresse http://localhost:8000/admin/ pour tester l'interface d'administration, avec les informations de connexion du superutilisateur créé. 
 
-8. Visiter l'adresse http://localhost:8000/home/ pour tester l'application côté utilisateurs. 
+7. Visiter l'adresse http://localhost:8000/home/ pour tester l'application côté utilisateurs. 
 
 
 ## Autres 
