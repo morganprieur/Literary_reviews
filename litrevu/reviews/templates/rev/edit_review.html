@@ -1,0 +1,40 @@
+
+<!-- reviews/templates/rev/edit_review.html --> 
+{% extends 'base.html' %} 
+
+{% block content %} 
+
+<div class="cadre edit"> 
+    <h5>Vous êtes en train de poster en réponse à </h5>
+    <div class="review"> 
+        <div class="w3-row"> 
+            <p class="bold w3-col m10">
+                {% if ticket.user == user %} 
+                Vous avez 
+                {% endif %} 
+                {% for f in followed %} 
+                    {% if ticket.user.username == f.followed_user.username %} 
+                        {{ ticket.user.username }} a 
+                    {% endif %}
+                {% endfor %} 
+                demandé une revue (ID : {{ ticket.id }}) 
+            </p> 
+            <p class="w3-col m2">{{ ticket.time_created }} </p> 
+        </div> 
+        <p>{{ ticket.title }}</p>  
+        <p>{{ ticket.description }} </p> 
+        <p><img src="../../../reviews/images/{{ ticket.image }}" 
+            alt="Image du ticket"> </p> 
+    </div> 
+
+    <form class="input_large" method="POST" enctype="multipart/form-data">
+        {% csrf_token %} 
+        {{ form.as_p }} 
+        <button type="submit">Enregistrer</button> 
+    </form> 
+    <br> 
+    <button onclick="history.back()">Retour</button> 
+</div> 
+{% endblock content %} 
+
+

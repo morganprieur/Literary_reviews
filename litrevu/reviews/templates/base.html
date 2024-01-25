@@ -1,35 +1,61 @@
 
-<!-- templates/base.html --> 
+<!-- reviews/templates/base.html --> 
 {% load static %} 
 <!DOCTYPE html>
-    <html>
-        <head>
-            <title>Litrevu</title>
-            <link rel="stylesheet" href="{% static 'CSS/w3.css' %}" > 
-            <link rel="stylesheet" media="screen" viewport="screen" href="{% static 'CSS/styles.css' %}" rel="stylesheet">
-        </head>
-        <body>
-            <div id="home" class="container div_"> 
-                
-                <div id="header"> 
-                    <div class="w3-row"> 
-                        <div id="logo" class="w3-col m1">  
+<html>
+    <head>
+        <title>Litrevu</title>
+        <link rel="stylesheet" href="{% static 'CSS/w3.css' %}" > 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+        <link rel="stylesheet" media="screen" viewport="screen" href="{% static 'CSS/styles.css' %}" rel="stylesheet"> 
+    </head> 
+
+    <body>
+        <div id="home" class="container div_"> 
+            
+            <div id="header"> 
+                <div class="w3-row"> 
+                    <a class="w3-col m2" title="Accueil" href="{% url 'home' %}">
+                        <div id="logo">  
                             <img src="../../../reviews/images/logo_gris.png" alt="Alt logo" height="100px"> 
                         </div> 
-                        <div id="page_title" class="w3-col m10"> 
-                            <h2 class="text_center green">{{ header }}</h2> 
+                    </a> 
+                    <div id="menu" class="w3-col m9"> 
+                        <div class="menu_no_link"> 
+                            {%  if user.is_authenticated %} 
+                                {{ user.username }} 
+                            {%  endif %}  
                         </div> 
-                    </div>
-                    <!-- <div class="clear"></div> -->
+                        <div class="menu_link"> 
+                            <a href="{% url 'activity' %}"> 
+                                Posts 
+                            </a> 
+                            </div> 
+                        <div class="menu_link"> 
+                            <a href="{% url 'abonnements' %}"> 
+                                Abonnements 
+                            </a> 
+                        </div> 
+                        <div class="menu_link"> 
+                            <a href="{% url 'logout' %}"> 
+                                se déconnecter 
+                            </a>
+                        </div> 
+                    </div> 
                 </div> 
                 <hr> 
+                <h2 class="text_center">{{ header }}</h2> 
+            </div> 
 
-                {% block content %}{% endblock content %} 
-    
+            
+            
+
+            {% block content %}{% endblock content %} 
+
             <hr> 
             <div id="footer"> 
                 <p>
-                {%  if user.is_authenticated %}
+                {%  if user.is_authenticated %} 
                     Vous êtes connecté en tant que {{ request.user }} | 
                     <a href="{% url 'logout' %}">Se déconnecter</a> | {% endif %} <a href="{% url 'home' %}">Accueil</a> 
                     <!-- <a class="w3-text-deep-orange" href="{# % url 'logout' % #}">Se déconnecter</a> | {# % endif % #} <a href="{# % url 'home' % #}">Accueil</a>  -->

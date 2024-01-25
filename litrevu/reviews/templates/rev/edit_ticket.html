@@ -1,0 +1,29 @@
+
+<!-- reviews/templates/rev/edit_ticket.html --> 
+{% extends 'base.html' %} 
+
+{% block content %} 
+
+<div class="cadre"> <!-- ticket --> 
+    <div class="ticket edit"> 
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %} 
+                <div> 
+                    {{ form.as_p }} 
+                    {# {form.title} #}
+                    <button type="submit">Modifier</button> 
+                </div> 
+        </form> 
+        <br> 
+        <div> 
+            <button onclick="history.back()">Retour</button> 
+        </div> 
+    </div> 
+</div> 
+
+
+
+{% endblock content %} 
+
+
+

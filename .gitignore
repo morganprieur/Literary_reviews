@@ -4,10 +4,13 @@
 snyk.exe
 .dcignore
 roadmap.md
+questions.md
 
 # storage 
 db.sqlite3
-litrevu/authentication/images/
+
+# draft
+litrevu/reviews/templates/rev/draft-conf_abo_delete.html
 
 # For Docker (Not initialized for now) 
 volumes

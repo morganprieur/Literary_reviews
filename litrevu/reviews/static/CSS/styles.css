@@ -1,5 +1,6 @@
 :root { 
   --back_color: #5b5650; 
+  --middle_grey_color: #95928f; 
   --text_color: #ddd; 
   --deco_color: #ff4500; 
   --button_color: #ffa07a; 
@@ -10,77 +11,178 @@ body {
   background-color: var(--back_color); 
   color: var(--text_color); 
 } 
+
 a { 
   text-decoration: none; 
-  /* color:#82b827;  */ 
   color: var(--button_color);   
 } 
 a:hover {
   color: var(--button_hover); 
-} 
-hr { 
-  border-top: 2px solid var(--text_color);  
-} 
-input { 
-  background-color: #eeeeee; 
 } 
 button { 
   display: block; 
   width: 100%; 
   background-color: var(--button_color); 
   border: var(--back_color) solid 1px; 
+  border-radius: 5px; 
 } 
 button:hover { 
   background-color: var(--button_hover); 
   border: var(--back_color) solid 1px; 
 } 
-/* img { 
-  margin: 5px 0; 
-}  */
+form label { 
+  display: block; 
+  width: 200px; 
+} 
+h2 { 
+  font-weight: 600; 
+  color: var(--button_hover); 
+} 
+hr { 
+  border-top: 2px solid var(--text_color);  
+} 
+img { 
+  display: block; 
+  max-width: 300px; 
+  margin: 0 auto; 
+} 
+input, 
+textarea { 
+  background-color: #eeeeee; 
+} 
+table { 
+  margin-top: 1rem; 
+  margin-bottom: 1rem; 
+} 
 
+
+/* ======== #ids ======== */ 
+#create_ticket > div > div:nth-child(2) input { 
+  height: 4rem; 
+  width: 30rem; 
+} 
+#header div.w3-row { 
+  max-height: 100px; 
+} 
+input#id_image { 
+  color: var(--middle_grey_color); 
+} 
+#logo { 
+  max-height: 150px; 
+  float: left; 
+} 
+#menu { 
+  display: flex; 
+  flex-wrap: nowrap; 
+  padding-top: 1rem; 
+  margin-right: 1rem; 
+  margin-top: 1rem; 
+} 
+#menu > div {
+  background-color: var(--button_color); 
+  color: var(--back_color); 
+  width: 200px; 
+  margin: 10px; 
+  text-align: center; 
+  line-height: 2rem; 
+  font-size: 20px; 
+} 
+#menu > .menu_link {
+  background-color: var(--back_color); 
+  width: 200px; 
+  margin: 10px; 
+  text-align: center; 
+  line-height: 1.5rem; 
+  font-size: 20px; 
+} 
+#menu > .menu_no_link { 
+  background-color: var(--back_color); 
+  color: var(--text_color); 
+  border: none; 
+  margin-right: 100px; 
+} 
+
+
+/* ======== .classes ======== */ 
 .bold { 
   font-weight: bold; 
 } 
-.div_center { 
-    margin: 0 auto; 
-} 
-.clear { 
-  clear: both; 
-} 
-.text_center { 
-  text-align: center; 
-} 
-.input_large input { 
-  width: 85%; 
-} 
-
-.container { 
-  width: 90%; 
-  margin: 0 auto; 
-  margin-bottom: 20px; 
-} 
-#logo { 
-  max-width: 100px; 
-  float: left; 
-} 
-#page_title { 
-  padding-top: 1rem; 
-  margin-right: 1rem; 
+.border_draft { 
+  border: white solid 1px; 
 } 
 .cadre { 
   border: var(--deco_color) solid 1px; 
   border-radius: 10px; 
   padding: 1rem; 
+  padding-top: 0; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
+} 
+.clear { 
+  clear: both; 
+} 
+.container { 
+  width: 90%; 
+  margin: 0 auto; 
   margin-bottom: 20px; 
+} 
+.create 
+.delete, 
+.edit, 
+.login, 
+.signup { 
+  width: 70%; 
+  margin: 0 auto; 
+} 
+.div_center { 
+  margin: 0 auto; 
+} 
+.input_large input, 
+.input_large textarea { 
+  width: 85%; 
 } 
 .login a { 
   width: 95%; 
   display: block; 
 } 
-.signup, .login { 
-  width: 70%; 
-  margin: 0 auto; 
+.text_center { 
+  text-align: center; 
 } 
+.new_buttons, 
+.review { 
+  border: var(--text_color) solid 1px; 
+  border-radius: 10px; 
+  padding: 1rem; 
+  padding-top: 0; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
+} 
+.pagination { 
+  border: var(--text_color) solid 1px; 
+  border-radius: 10px; 
+  padding: 1rem; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
+} 
+.pagination h5 { 
+  margin: 0; 
+} 
+.serach_button { 
+  margin-top: 4rem; ;
+} 
+.ticket { 
+  border: var(--text_color) solid 1px; 
+  padding: 1rem; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
+} 
+.cadre h5, 
+.new_buttons h5, 
+.review h5 { 
+  margin-bottom: 1rem; ;
+} 
+
+
 
 /* @media only screen and (max-width: 500px) {
   .pdf_doc { 
@@ -93,25 +195,4 @@ button:hover {
     width: 350px; 
   } 
 }  */
-
-/* @media only screen and (min-width: 501px) {
-  #home { 
-    width: 45%; 
-    margin: 0 auto; 
-  }  */ 
-
-  /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */  
-  /* #map { 
-    height:300px;
-  }  */
-  /* .pdf_doc { 
-    margin: 10px auto; 
-    width: 400px; 
-    height: 400px; 
-  } 
-}  */
-
-
-
-
 

@@ -1,0 +1,26 @@
+
+{% extends 'base.html' %} 
+
+{% block content %} 
+<div class="cadre edit"> 
+
+    <form class="input_large" id="create_review" method="POST" enctype="multipart/form-data">
+        {% csrf_token %} 
+        <div> 
+                {{ ticket_form.as_p }} 
+                {{ review_form.as_p }} 
+                <button type="submit">Enregistrer</button> 
+        </div> 
+    </form> 
+    <br> 
+    <div>   
+        <button onclick="history.back()">Retour</button>  
+    </div> 
+
+</div> 
+
+
+{% endblock content %} 
+
+
+

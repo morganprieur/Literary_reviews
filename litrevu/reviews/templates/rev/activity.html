@@ -1,38 +1,18 @@
 
-<!-- reviews/templates/rev/home.html --> 
+<!-- reviews/templates/rev/activity.html --> 
 {% extends 'base.html' %}
 
-    {% block content %} 
+{% block content %} 
 
-    {% include 'rev/includes/pagination.html' %} 
+{% include 'rev/includes/pagination.html' %}
 
-    <!-- Section boutons nouveaux --> 
-    
-    <section class="w3-row new_buttons"> 
-        <h5 class="text_center bold">Nouveaux</h5> 
-
-        <div class="w3-col m6"> 
-            <form action="../create_ticket" method="GET"> 
-                {% csrf_token %} 
-                <button type="submit">Créer un ticket</button> 
-            </form> 
-        </div>
-        <div class="w3-col m6"> 
-            <form action="../create_new_review" method="GET"> 
-                {% csrf_token %} 
-                <button type="submit">Créer une revue</button> 
-            </form> 
-        </div>
-    </section> 
-
-    <!-- <hr>  -->
-    
     <div class="cadre"> <!-- reviews --> 
-        <h5 class="w3-center bold">Votre flux</h5> 
-        
+
+        {# % for post in posts % #} 
         {% for post in page_obj %} 
-        
+
             {% if post.content_type == 'REVIEW' %} 
+                <hr> 
                 <div class="review"> 
                     <div class="w3-row"> 
                         <p class="bold w3-col m10">
@@ -49,6 +29,19 @@
                         <p class="w3-col m2">{{ post.time_created }} </p> 
                     </div>
                     {% include 'rev/review_snippet.html' %} 
+
+                    <div class="w3-row"> 
+                        <div class="w3-col m8"> 
+                            &nbsp; 
+                        </div>
+                        <a class="w3-col m2 text_center" href="{% url 'edit-review' review_id=post.id %}"> 
+                            Modifier la revue 
+                        </a> 
+                        <a class="w3-col m2 text_center" href="{% url 'delete-review' review_id=post.id %}"> 
+                            Supprimer la revue 
+                        </a> 
+                    </div> 
+
                 </div> 
             
             {% elif post.content_type == 'TICKET' %} 
@@ -68,24 +61,27 @@
                         <p class="w3-col m2">{{ post.time_created }} </p> 
                     </div> 
                     {% include 'rev/ticket_snippet.html' %} 
+
                     <div class="w3-row"> 
                         <div class="w3-col m2"> 
                             <img src="../../../reviews/images/{{ post.image }}" 
-                                alt="Image ticket {{ post.id }}" height="100px"> 
+                                alt="Image ticket {{ t.id }}" height="100px"> 
                         </div> 
-                        <div class="w3-col m8"> 
+                        <div class="w3-col m6"> 
                             &nbsp; 
                         </div>
-                        <a class="w3-col m2 text_center" href="{% url 'create-review' ticket_id=post.id %}"> 
-                            Créer une revue 
+                        <a class="w3-col m2 text_center" href="{% url 'edit-ticket' ticket_id=post.id %}"> 
+                            Modifier le ticket 
+                        </a> 
+                        <a class="w3-col m2 text_center" href="{% url 'delete-ticket' ticket_id=post.id %}"> 
+                            Supprimer le ticket 
                         </a> 
                     </div> 
                 </div> 
             {% endif %} 
-            
         {% endfor %}
     </div>
-
 {% endblock content %} 
+
 
 

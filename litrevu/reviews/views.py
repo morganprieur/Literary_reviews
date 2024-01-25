@@ -2,14 +2,18 @@
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.models import User 
 from django.contrib.auth.decorators import login_required 
+from django.core.paginator import Paginator 
+from django.db.models import CharField, Value 
+from itertools import chain 
 from django.shortcuts import redirect, render 
 from django.views.generic import View 
-# from django.views import View as V 
-
+# litrevu/reviews 
 from django.conf import settings 
 from reviews.models import Review, Ticket, UserFollows 
+from reviews.utils import helpers 
+# litrevu/reviews utils 
 from . import forms 
-
+from django.db.models import Q 
 
 # ============ login ============================== # 
 
@@ -19,8 +23,6 @@ class SignupPageView(View):
 
     def get(self, request): 
         form = self.form_class() 
-        print(form.as_p) 
-        # message = '' 
         return render( 
             request, 
             self.template_name, 
@@ -35,82 +37,84 @@ class SignupPageView(View):
             return redirect(settings.LOGIN_REDIRECT_URL) 
 
 
-# TODO: set the content of this page : 
+def logout_user(request):
+    logout(request)
+    return redirect('home') 
+
+
 @login_required 
 def home(request): 
-    # print(f'dir(request) : {dir(request)}') 
-    # print(f'request : {request}') 
+    header = 'Accueil' 
 
-    header = 'home' 
-    # test = 'Hello home' 
+    user = request.user 
+    f_users = helpers.followed_users(user) 
 
-    followed = UserFollows.objects.filter( 
-        user__username=request.user.username) 
+    reviews = helpers.get_users_viewable_reviews(user) 
+    reviews = reviews.annotate( 
+        content_type=Value("REVIEW", CharField())) 
 
-    # ots = Work_order.objects.all() 
-    # ots_count = ots.count 
-    # for ot in ots: 
-    #     # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
-    #     # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
-    #           type='COMPTE-RENDU D\'INTERVENTION')) 
-    #     documents = Document.objects.filter( 
-    #         work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
-    #         ) | Document.objects.filter( 
-    #         work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
-    #     ) 
-    #     docs_count = documents.count 
-    # ---- 
-    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    # if x_forwarded_for:
-    #     ip = x_forwarded_for.split(',')[0]
-    # # ip = '90.51.91.219' 
-    # else:
-    #     ip = request.META.get('REMOTE_ADDR') 
-    # ---- 
+    tickets = helpers.get_users_viewable_tickets(user, reviews) 
+    tickets = tickets.annotate(content_type=Value("TICKET", CharField())) 
+
+    # combine and sort the two types of posts 
+    posts = sorted( 
+        chain(reviews, tickets), 
+        key=lambda post: post.time_created, 
+        reverse=True 
+    ) 
+
+    paginator = Paginator(posts, 4) 
+    page = request.GET.get("page") 
+    page_obj = paginator.get_page(page) 
+
     return render( 
         request, 'rev/home.html', context={ 
             'header': header, 
-            # 'test': test, 
-            'followed': followed, 
-            # 'ots': ots, 
-            # 'ots_count': ots_count, 
-            # 'documents': documents, 
-            # 'docs_count': docs_count, 
-            # 'ip': ip, 
-            # 'location': location 
+            'user': user, 
+            'followed': f_users, 
+            'posts': posts, 
+            "page_obj": page_obj, 
         } 
     ) 
-    # ---- 
-    # "https://api-adresse.data.gouv.fr/search/?q==7+bd+lamarck+bourges&limit=1" 
-    # ---- 
-    # return HttpResponse("Welcome! You are visiting from: {}".format(ip)) 
-    # ---- 
+
+@login_required 
+def edit_ticket(request, ticket_id): 
+    ticket = Ticket.objects.get(pk=ticket_id) 
+    form = forms.TicketForm(instance=ticket) 
+    if request.method == 'POST': 
+        form = forms.TicketForm( 
+            request.POST, request.FILES, instance=ticket) 
+        if form.is_valid(): 
+            edited_ticket = form.save() 
+            return redirect('activity') 
+    else: 
+        header = 'Modifier un ticket' 
+        return render(request, 'rev/edit_ticket.html', context={ 
+            'header': header, 
+            'form': form, 
+        }) 
 
 
-# marche pas : 
-# TypeError: View.__init__() takes 1 positional argument but 2 were given 
-# try with class LoginView(V): 
-# class LoginPageView(V):
-#     template_name = 'authentication/login.html'
-#     form_class = forms.LoginForm
+@login_required 
+def edit_review(request, review_id): 
+    review = Review.objects.get(pk=review_id) 
+    ticket_id = review.ticket.id 
+    ticket = Ticket.objects.get(pk=ticket_id) 
+    form = forms.ReviewForm(instance=review) 
 
-#     def get(self, request):
-#         form = self.form_class()
-#         message = ''
-#         return render(request, self.template_name, context={'form': form, 'message': message})
-        
-#     def post(self, request):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             user = authenticate(
-#                 username=form.cleaned_data['username'],
-#                 password=form.cleaned_data['password'],
-#             )
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect('home')
-#         message = 'Identifiants invalides.'
-#         return render(request, self.template_name, context={'form': form, 'message': message})
+    if request.method == 'POST': 
+        form = forms.ReviewForm(request.POST, instance=review) 
+        if form.is_valid(): 
+            edited_review = form.save() 
+            return redirect('activity') 
+    else: 
+        header = 'Modifier une revue' 
+        return render(request, 'rev/edit_review.html', context={ 
+            'header': header, 
+            'review': review, 
+            'ticket': ticket, 
+            'form': form, 
+        }) 
 
 
 @login_required 
@@ -124,7 +128,7 @@ def abonnements(request):
     followers = UserFollows.objects.filter( 
         followed_user__username=request.user.username) 
 
-    if form.is_valid():
+    if form.is_valid(): 
         username = form.cleaned_data['username'] 
         users = User.objects.filter(username__icontains=username) 
 
@@ -140,20 +144,13 @@ def abonnements(request):
 
 @login_required 
 def create_abo(request, user_id): 
-    # print(user_id) 
-    # print(request.user.id) 
     user = User.objects.get(id=user_id) 
-    # print(user) 
 
     if request.method == 'POST': 
         abo = UserFollows.objects.create(followed_user=user, user=request.user) 
-        print('abo.followed_user : ', abo.followed_user, 'abo.user : ', abo.user) 
         header = 'Abonnements' 
         abo.save() 
-        # return redirect('band_list') 
-        return redirect('abonnements',)  # context={ 
-        #     'header': header, 
-        # }) 
+        return redirect('abonnements',) 
     else: 
         header = 'S\'abonner' 
         return render(request, 'rev/create_abo.html', context={ 
@@ -161,96 +158,134 @@ def create_abo(request, user_id):
             'user': user}) 
 
 
-
-    # def post(self, request): 
-    #     form = self.form_class(request.POST) 
-    #     if form.is_valid(): 
-    #         user = form.save()
-    #         # auto-login user: 
-    #         login(request, user)
-    #         return redirect(settings.LOGIN_REDIRECT_URL) 
-
-
-
 @login_required
 def delete_abo(request, abonnements_id): 
     abo = UserFollows.objects.get(id=abonnements_id) 
-    # print('abo.id : ', abo.id, 'abo.followed_user : ', abo.followed_user) 
 
     if request.method == 'POST': 
-        # abo = UserFollows.objects.get(id=abonnements_id) 
         header = 'Abonnements' 
         abo.delete() 
-        # return redirect('band_list') 
         return redirect('abonnements', ) 
     return render(request, 'rev/delete_abo.html', {'abo': abo}) 
-        # 'header': header, 
 
 
-# # ======== tuto ======== # 
-# from .forms import NameForm
-# def get_name(request):
-#     # if this is a POST request we need to process the form data
-#     if request.method == "POST":
-#         # create a form instance and populate it with data from the request:
-#         form = NameForm(request.POST)
-#         # check whether it's valid:
-#         if form.is_valid():
-#             # process the data in form.cleaned_data as required
-#             # ...
-#             # redirect to a new URL:
-#             return HttpResponseRedirect("/thanks/")
+@login_required
+def delete_review(request, review_id): 
+    post = Review.objects.get(id=review_id) 
 
-#     # if a GET (or any other method) we'll create a blank form
-#     else:
-#         form = NameForm()
-
-#     return render(request, "name.html", {"form": form})
-# # ======== /tuto ======== # 
+    if request.method == 'POST': 
+        post.delete() 
+        return redirect('activity', ) 
+    return render(request, 'rev/delete_review.html', context={ 
+        'post': post 
+    }) 
 
 
-# # listings/views.py
-# def band_delete(request, id):
-#     band = Band.objects.get(id=id)  # nécessaire pour GET et pour POST
+@login_required
+def delete_ticket(request, ticket_id): 
+    post = Ticket.objects.get(id=ticket_id) 
 
-#     if request.method == 'POST':
-#         # supprimer le groupe de la base de données
-#         band.delete()
-#         # rediriger vers la liste des groupes
-#         return redirect('band_list')
-#     # pas besoin de « else » ici. Si c'est une demande GET, continuez simplement
-#     return render(request,
-#                     'listings/band_delete.html',
-#                     {'band': band})
+    if request.method == 'POST': 
+        post.delete() 
+        return redirect('activity', ) 
+    return render(request, 'rev/delete_ticket.html', context={ 
+        'post': post 
+    }) 
 
 
-# reviews/views.py 
-def logout_user(request):
-    logout(request)
-    return redirect('home')
-    # return redirect('login')
+@login_required 
+def create_ticket(request): 
+    form = forms.TicketForm() 
+    if request.method == 'POST': 
+        form = forms.TicketForm( 
+            request.POST, request.FILES) 
+        if form.is_valid(): 
+            ticket = form.save(commit=False) 
+            ticket.user = request.user 
+            ticket.save() 
+            return redirect('home') 
+    else: 
+        header = 'Créer un ticket' 
+        form = forms.TicketForm() 
+        return render(request, 'rev/create_ticket.html', context={ 
+            'header': header, 
+            'form': form}) 
 
 
-# La classe LoginPageView est remplacée par django.contrib.auth.views.LoginView (urls.py) 
-# class LoginPageView(View):
-#     template_name = 'uthdemo/login.html'
-#     form_class = forms.LoginForm
+@login_required 
+def create_new_review(request): 
+    ticket_form = forms.TicketForm() 
+    review_form = forms.NewReviewForm() 
+    header = "Ecrire une revue et un ticket" 
+    if request.method == 'POST': 
+        review_form = forms.NewReviewForm(request.POST) 
+        create_ticket(request) 
+        last_ticket = Ticket.objects.filter().last() 
+        if review_form.is_valid(): 
+            new_review = review_form.save(commit=False) 
+            new_review.ticket = last_ticket 
+            new_review.user = request.user 
+            new_review.save() 
+            return redirect('home') 
+    return render(request, 'rev/create_new_review.html', context={ 
+        'header': header, 
+        'ticket_form': ticket_form, 
+        'review_form': review_form, 
+        }) 
 
-#     def get(self, request):
-#         form = self.form_class()
-#         message = ''
-#         return render(request, self.template_name, context={'form': form, 'message': message})
 
-#     def post(self, request):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             user = authenticate(
-#                 username=form.cleaned_data['username'],
-#                 password=form.cleaned_data['password'],
-#             )
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect('home')
-#         message = 'Identifiants invalides.'
-#         return render(request, self.template_name, context={'form': form, 'message': message})
+@login_required 
+def create_review(request, ticket_id): 
+    ticket = Ticket.objects.get(pk=ticket_id) 
+    form_review = forms.ReviewForm() 
+    if request.method == 'POST': 
+        form_review = forms.ReviewForm(request.POST) 
+        if form_review.is_valid(): 
+            review = form_review.save(commit=False) 
+            review.user = request.user 
+            print(review) 
+            review.save() 
+            return redirect('home') 
+    else: 
+        header = "Créer une revue" 
+        form = forms.ReviewForm(initial={'ticket': ticket}) 
+        return render(request, 'rev/create_review.html', context={ 
+            'header': header, 
+            'ticket': ticket, 
+            'form': form, 
+        }) 
+
+
+@login_required 
+def activity(request): 
+    header = 'Vos posts' 
+
+    user = request.user 
+    f_users = helpers.followed_users(user) 
+
+    reviews = helpers.get_users_viewable_reviews(user) 
+    reviews = reviews.annotate( 
+        content_type=Value('REVIEW', CharField())) 
+
+    tickets = helpers.get_users_viewable_tickets(user, reviews) 
+    tickets = tickets.annotate( 
+        content_type=Value('TICKET', CharField())) 
+    tickets = list(tickets) 
+
+    posts = sorted( 
+        chain(reviews, tickets), 
+        key=lambda post: post.time_created, 
+        reverse=True 
+    ) 
+
+    paginator = Paginator(posts, 4) 
+    page = request.GET.get("page") 
+    page_obj = paginator.get_page(page) 
+
+    return render(request, 'rev/activity.html', context={ 
+        'header': header, 
+        'user': user, 
+        'posts': posts, 
+        "page_obj": page_obj, 
+    }) 
 
