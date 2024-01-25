@@ -36,6 +36,7 @@ form label {
 } 
 h2 { 
   font-weight: 600; 
+  color: var(--button_hover); 
 } 
 hr { 
   border-top: 2px solid var(--text_color);  
@@ -113,6 +114,7 @@ input#id_image {
   border: var(--deco_color) solid 1px; 
   border-radius: 10px; 
   padding: 1rem; 
+  padding-top: 0; 
   margin-top: 1rem; 
   margin-bottom: 2rem; 
 } 
@@ -124,8 +126,16 @@ input#id_image {
   margin: 0 auto; 
   margin-bottom: 20px; 
 } 
+.create 
+.delete, 
+.edit, 
+.login, 
+.signup { 
+  width: 70%; 
+  margin: 0 auto; 
+} 
 .div_center { 
-    margin: 0 auto; 
+  margin: 0 auto; 
 } 
 .input_large input, 
 .input_large textarea { 
@@ -135,29 +145,41 @@ input#id_image {
   width: 95%; 
   display: block; 
 } 
-.create 
-.delete, 
-.edit, 
-.login, 
-.signup { 
-  width: 70%; 
-  margin: 0 auto; 
-} 
 .text_center { 
   text-align: center; 
 } 
+.new_buttons, 
 .review { 
+  border: var(--text_color) solid 1px; 
+  border-radius: 10px; 
+  padding: 1rem; 
+  padding-top: 0; 
+  margin-top: 1rem; 
+  margin-bottom: 2rem; 
+} 
+.pagination { 
   border: var(--text_color) solid 1px; 
   border-radius: 10px; 
   padding: 1rem; 
   margin-top: 1rem; 
   margin-bottom: 2rem; 
 } 
+.pagination h5 { 
+  margin: 0; 
+} 
+.serach_button { 
+  margin-top: 4rem; ;
+} 
 .ticket { 
   border: var(--text_color) solid 1px; 
   padding: 1rem; 
   margin-top: 1rem; 
   margin-bottom: 2rem; 
+} 
+.cadre h5, 
+.new_buttons h5, 
+.review h5 { 
+  margin-bottom: 1rem; ;
 } 
 
 
@@ -173,25 +195,4 @@ input#id_image {
     width: 350px; 
   } 
 }  */
-
-/* @media only screen and (min-width: 501px) {
-  #home { 
-    width: 45%; 
-    margin: 0 auto; 
-  }  */ 
-
-  /* la carte DOIT avoir une hauteur sinon elle n'apparaît pas */  
-  /* #map { 
-    height:300px;
-  }  */
-  /* .pdf_doc { 
-    margin: 10px auto; 
-    width: 400px; 
-    height: 400px; 
-  } 
-}  */
-
-
-
-
 

@@ -4,9 +4,12 @@
 
 {% block content %} 
 
+{% include 'rev/includes/pagination.html' %}
+
     <div class="cadre"> <!-- reviews --> 
 
-        {% for post in posts %} 
+        {# % for post in posts % #} 
+        {% for post in page_obj %} 
 
             {% if post.content_type == 'REVIEW' %} 
                 <hr> 

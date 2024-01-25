@@ -2,16 +2,16 @@
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.models import User 
 from django.contrib.auth.decorators import login_required 
+from django.core.paginator import Paginator 
 from django.db.models import CharField, Value 
 from itertools import chain 
 from django.shortcuts import redirect, render 
 from django.views.generic import View 
-# from django.views import View as V 
-
+# litrevu/reviews 
 from django.conf import settings 
 from reviews.models import Review, Ticket, UserFollows 
 from reviews.utils import helpers 
-# litrevu\reviews\utils
+# litrevu/reviews utils 
 from . import forms 
 from django.db.models import Q 
 
@@ -23,8 +23,6 @@ class SignupPageView(View):
 
     def get(self, request): 
         form = self.form_class() 
-        # print(form.as_p) 
-        # message = '' 
         return render( 
             request, 
             self.template_name, 
@@ -44,7 +42,6 @@ def logout_user(request):
     return redirect('home') 
 
 
-# TODO: set the content of this page : 
 @login_required 
 def home(request): 
     header = 'Accueil' 
@@ -52,25 +49,12 @@ def home(request):
     user = request.user 
     f_users = helpers.followed_users(user) 
 
-    """ ex list of m2m relations 
-        # users_groups = request.user.groups.values_list('name', flat = True) 
-        # groups_as_list = list(users_groups) 
-        # print(str(request.user) + ' permissions : ' + str(groups_as_list)) 
-        # return groups_as_list 
-    """ 
-    reviews = helpers.get_users_viewable_reviews(user, f_users) 
-    # returns queryset of reviews
+    reviews = helpers.get_users_viewable_reviews(user) 
     reviews = reviews.annotate( 
-        content_type=Value('REVIEW', CharField())) 
-    tickets = helpers.get_users_viewable_tickets(user, f_users, reviews)
-    # returns queryset of tickets
-    tickets = tickets.annotate( 
-        content_type=Value('TICKET', CharField())) 
-    tickets = list(tickets) 
-    for review in reviews: 
-        for ticket in tickets: 
-            if review.ticket_id == ticket.id: 
-                tickets.pop(tickets.index(ticket)) 
+        content_type=Value("REVIEW", CharField())) 
+
+    tickets = helpers.get_users_viewable_tickets(user, reviews) 
+    tickets = tickets.annotate(content_type=Value("TICKET", CharField())) 
 
     # combine and sort the two types of posts 
     posts = sorted( 
@@ -79,19 +63,19 @@ def home(request):
         reverse=True 
     ) 
 
+    paginator = Paginator(posts, 4) 
+    page = request.GET.get("page") 
+    page_obj = paginator.get_page(page) 
+
     return render( 
         request, 'rev/home.html', context={ 
             'header': header, 
             'user': user, 
             'followed': f_users, 
             'posts': posts, 
-            # 'post': post, 
-            # 'form': form, 
-            'iterateover': range(5), 
-            # 'iterateover': range(x), 
+            "page_obj": page_obj, 
         } 
     ) 
-
 
 @login_required 
 def edit_ticket(request, ticket_id): 
@@ -110,13 +94,12 @@ def edit_ticket(request, ticket_id):
             'form': form, 
         }) 
 
+
 @login_required 
 def edit_review(request, review_id): 
     review = Review.objects.get(pk=review_id) 
     ticket_id = review.ticket.id 
-    # print('ticket_id : ', ticket_id) 
     ticket = Ticket.objects.get(pk=ticket_id) 
-    # print(ticket) 
     form = forms.ReviewForm(instance=review) 
 
     if request.method == 'POST': 
@@ -132,106 +115,6 @@ def edit_review(request, review_id):
             'ticket': ticket, 
             'form': form, 
         }) 
-
-# @login_required
-# # @permission_required('blog.change_blog')
-# def edit_ticket_blog(request, blog_id):
-#     blog = get_object_or_404(models.Blog, id=blog_id)
-#     edit_form = forms.BlogForm(instance=blog)
-#     delete_form = forms.DeleteBlogForm()
-#     if request.method == 'POST':
-#         if 'edit_blog' in request.POST:
-#             edit_form = forms.BlogForm(request.POST, instance=blog)
-#             if edit_form.is_valid():
-#                 edit_form.save()
-#                 return redirect('home')
-#         if 'delete_blog' in request.POST:
-#             delete_form = forms.DeleteBlogForm(request.POST)
-#             if delete_form.is_valid():
-#                 blog.delete()
-#                 return redirect('home')
-#     context = {
-#         'edit_form': edit_form,
-#         'delete_form': delete_form,
-#     }
-#     return render(request, 'blog/edit_blog.html', context=context)
-
-
-    # return render(request, 'rev/home.html') 
-    # return render(request, 'home.html', context={'posts': posts}) 
-
-    # for f in followed: 
-    #     tickets = list(Ticket.objects.filter(Q(user=user) | Q(user__id=f.followed_user_id)).order_by('-time_created')) 
-    #     reviews = list(Review.objects.filter(Q(user=user) | Q(user__username=user.username)).order_by('-time_created')) 
-    # # file deepcode ignore listFromList: <please specify a reason of ignoring this>
-    # list(reviews) 
-    # for review in reviews: 
-    #     for ticket in tickets: 
-    #         # print(review) 
-    #         # print(ticket) 
-    #         if review.ticket_id == ticket.id: 
-    #             tickets.pop(tickets.index(ticket)) 
-    # # print(tickets) 
-    """ ex CDC énoncé 
-        def feed(request):
-            reviews = get_users_viewable_reviews(request.user)
-            # returns queryset of reviews
-            reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
-            tickets = get_users_viewable_tickets(request.user)
-            # returns queryset of tickets
-            tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
-            # combine and sort the two types of posts
-            posts = sorted(
-                ’ chain(reviews, tickets),
-                key=lambda post: post.time_created,
-                reverse=True
-            ) 
-            return render(request, 'feed.html', context={'posts': posts}) 
-    """ 
-
-
-    """ ex demo_uthd documents 
-        # for ot in ots: 
-        #     # filter(Q(firstname='Emil') | Q(firstname='Tobias'))
-        #     # documents = Document.objects.filter(work_order__id=ot.id, Q(type='ORDRE DE TRAVAUX') | Q( 
-        #           type='COMPTE-RENDU D\'INTERVENTION')) 
-        #     documents = Document.objects.filter( 
-        #         work_order__id=ot.id, type='ORDRE DE TRAVAUX' 
-        #         ) | Document.objects.filter( 
-        #         work_order__id=ot.id, type='COMPTE-RENDU D\'INTERVENTION' 
-        #     ) 
-    """ 
-
-# @login_required 
-# def review_snippet(request): 
-
-    
-
-""" marche pas : 
-    # TypeError: View.__init__() takes 1 positional argument but 2 were given 
-    # try with class LoginView(V): 
-    # class LoginPageView(V):
-    #     template_name = 'authentication/login.html'
-    #     form_class = forms.LoginForm
-
-    #     def get(self, request):
-    #         form = self.form_class()
-    #         message = ''
-    #         return render(request, self.template_name, context={'form': form, 'message': message})
-            
-    #     def post(self, request):
-    #         form = self.form_class(request.POST)
-    #         if form.is_valid():
-    #             user = authenticate(
-    #                 username=form.cleaned_data['username'],
-    #                 password=form.cleaned_data['password'],
-    #             )
-    #             if user is not None:
-    #                 login(request, user)
-    #                 return redirect('home')
-    #         message = 'Identifiants invalides.'
-    #         return render(request, self.template_name, context={'form': form, 'message': message})
-""" 
 
 
 @login_required 
@@ -265,7 +148,6 @@ def create_abo(request, user_id):
 
     if request.method == 'POST': 
         abo = UserFollows.objects.create(followed_user=user, user=request.user) 
-        # print('abo.followed_user : ', abo.followed_user, 'abo.user : ', abo.user) 
         header = 'Abonnements' 
         abo.save() 
         return redirect('abonnements',) 
@@ -311,27 +193,12 @@ def delete_ticket(request, ticket_id):
     }) 
 
 
-# # ======== tuto forms.Form // marche pas ======== # 
-# if request.method == "POST":
-#     form = PostcodeForm(request.POST)
-#     if form.is_valid():
-#         cd = form.cleaned_data
-#         pc = Postcode(
-#             start_postcode = cd['start_postcode'], <-- unexpected attribut 'title' (['title]) 
-#             end_postcode = cd['end_postcode'],
-#             result_measurement_unit = cd['distance_unit']
-#         )
-#         pc.save()
-# # ======== /tuto ======== # 
-
 @login_required 
 def create_ticket(request): 
     form = forms.TicketForm() 
     if request.method == 'POST': 
         form = forms.TicketForm( 
             request.POST, request.FILES) 
-        # print(request.POST) 
-        # print(request.FILES) 
         if form.is_valid(): 
             ticket = form.save(commit=False) 
             ticket.user = request.user 
@@ -345,8 +212,6 @@ def create_ticket(request):
             'form': form}) 
 
 
-#TODO à tester (changé nom du form NewReviewForm) 
-# TODO: tester si on désigne un ticket déjà existant 
 @login_required 
 def create_new_review(request): 
     ticket_form = forms.TicketForm() 
@@ -356,7 +221,6 @@ def create_new_review(request):
         review_form = forms.NewReviewForm(request.POST) 
         create_ticket(request) 
         last_ticket = Ticket.objects.filter().last() 
-        # print(last_ticket.title) 
         if review_form.is_valid(): 
             new_review = review_form.save(commit=False) 
             new_review.ticket = last_ticket 
@@ -370,7 +234,6 @@ def create_new_review(request):
         }) 
 
 
-#TODO à tester (form -> link) 
 @login_required 
 def create_review(request, ticket_id): 
     ticket = Ticket.objects.get(pk=ticket_id) 
@@ -400,44 +263,29 @@ def activity(request):
     user = request.user 
     f_users = helpers.followed_users(user) 
 
-    reviews = Review.objects.filter(user=user) 
-    # reviews = helpers.get_users_viewable_reviews(user, f_users) 
-    # returns queryset of reviews
+    reviews = helpers.get_users_viewable_reviews(user) 
     reviews = reviews.annotate( 
         content_type=Value('REVIEW', CharField())) 
 
-    tickets = Ticket.objects.filter(user=user) 
-    # tickets = helpers.get_users_viewable_tickets(user, f_users, reviews)
-    # returns queryset of tickets
+    tickets = helpers.get_users_viewable_tickets(user, reviews) 
     tickets = tickets.annotate( 
         content_type=Value('TICKET', CharField())) 
     tickets = list(tickets) 
 
-    for review in reviews: 
-        for ticket in tickets: 
-            if review.ticket_id == ticket.id: 
-                tickets.pop(tickets.index(ticket)) 
-    # print(tickets) 
-
-    # combine and sort the two types of posts 
     posts = sorted( 
         chain(reviews, tickets), 
         key=lambda post: post.time_created, 
         reverse=True 
     ) 
 
+    paginator = Paginator(posts, 4) 
+    page = request.GET.get("page") 
+    page_obj = paginator.get_page(page) 
+
     return render(request, 'rev/activity.html', context={ 
         'header': header, 
         'user': user, 
         'posts': posts, 
+        "page_obj": page_obj, 
     }) 
-
-
-
-
-
-
-
-
-
 

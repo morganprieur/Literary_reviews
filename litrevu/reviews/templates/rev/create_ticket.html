@@ -3,19 +3,14 @@
 
 {% block content %} 
 
-<form id="create_ticket" method="POST" enctype="multipart/form-data">
-    {% csrf_token %} 
-    <div class="w3-row">
-        <div class="w3-col m3">&nbsp; </div> 
-        <div class="w3-col m6"> 
-            {{ form.as_p }}  
-            <button type="submit">Enregistrer</button> 
-        </div> 
-    </div> 
-</form> 
-<div class="w3-row">
-    <div class="w3-col m3">&nbsp; </div> 
-    <div class="w3-col m6"> 
+<div class="cadre edit"> 
+    <form id="create_ticket" method="POST" enctype="multipart/form-data">
+        {% csrf_token %} 
+        {{ form.as_p }}  
+        <button type="submit">Enregistrer</button> 
+    </form> 
+    <br> 
+    <div> 
         <button onclick="history.back()">Retour</button> 
     </div> 
 </div> 

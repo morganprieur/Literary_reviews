@@ -1,19 +1,8 @@
 from django.db import models
 
-# User - django.contrib.auth.models.User 
 from django.contrib.auth.models import User 
 from django.conf import settings 
 from django.core.validators import MaxValueValidator, MinValueValidator
-
-
-# class CustomUser(AbstractUser): 
-#     email = models.EmailField( 
-#         # _("email address"), 
-#         unique=True 
-#     ) 
-
-#     USERNAME_FIELD = "email" 
-#     REQUIRED_FIELDS = [] 
 
 
 class Ticket(models.Model): 

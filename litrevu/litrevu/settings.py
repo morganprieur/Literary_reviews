@@ -118,24 +118,16 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home' 
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-# STATIC_URL = 'static/' 
-
-# chemin des fichiers à utiliser 
+# chemin des fichiers statiques à utiliser 
 STATIC_URL = 'reviews/static/' 
-# chemin où enregistrer les fichiers 
+# chemin où enregistrer les fichiers statiques 
 STATIC_ROOT = BASE_DIR.joinpath("reviews/static/") 
 
-# fotoblog/settings.py 
-# chemin des fichiers à afficher 
+# chemin des fichiers media à afficher 
 MEDIA_URL = 'reviews/images/' 
 # chemin où enregistrer les fichiers media 
 MEDIA_ROOT = BASE_DIR.joinpath('reviews/images/') 
 
-
-# AUTH_USER_MODEL = 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

@@ -1,12 +1,10 @@
 
-# reviews/forms.py
 from django import forms 
 from django.contrib.auth import get_user_model 
-# from django.contrib.auth.models import User 
 from django.contrib.auth.forms import UserCreationForm 
 from django.forms import ModelForm 
 
-# blog/forms.py
+# reviews/forms.py
 from . import models
 
 
@@ -20,67 +18,14 @@ class UserForm(forms.Form):
     username = forms.CharField(label="pseudo ", max_length=150) 
 
 
-# class TicketRevueForm(ModelForm): 
-#     class Meta: 
-#         model = models.Review 
-#         fields = ['id'] 
-#         # widgets = {'id': forms.HiddenInput()} 
-
-
-    # ticket_id = forms.CharField(label="pseudo ", max_length=150) 
-
-# class UserForm(ModelForm): 
-#     class Meta: 
-#         model = get_user_model() 
-#         fields = ['username'] 
-
-
-# class TicketForm(forms.Form): 
-#     title = forms.CharField(label="Titre ") 
-#     description = forms.CharField(label="Description ") 
-#     # user = forms.CharField(label="Utilisateur ") 
-#     image = forms.FileField(label="Télécharger un fichier ") 
-
-
 class TicketForm(ModelForm): 
     class Meta: 
         model = models.Ticket 
         fields = ['title', 
             'description', 
-            # 'user', 
             'image' 
         ] 
 
-
-# ne sert pas --> lien au lieu de form (home.html) 
-class Send_ticket_idForm(ModelForm): 
-    class Meta: 
-        model = models.Ticket 
-        fields = [ 
-            'id', 
-            'title', 
-            'description', 
-            # 'user', 
-            'image', ]
-            # 'time_created' ] 
-        widgets = {'id': forms.HiddenInput()} 
-        widgets = {'time_created': forms.HiddenInput()} 
-
-# class AuthorForm(forms.Form):
-#     name = forms.CharField(max_length=100)
-#     title = forms.CharField(
-#         max_length=3,
-#         widget=forms.Select(choices=TITLE_CHOICES),
-#     )
-#     birth_date = forms.DateField(required=False)
-
-# class ReviewForm(forms.Form): 
-#             ticket = forms.ForeignKey() 
-#             rating = forms.PositiveSmallIntegerField(MinValueValidator(0), MaxValueValidator(5)) 
-#             # 'user', 
-#             headline =  forms.CharField(max_length=128)
-#             body = forms.TextField() 
-#         ) 
 
 class NewReviewForm(ModelForm): 
     class Meta: 
@@ -88,7 +33,6 @@ class NewReviewForm(ModelForm):
         fields = [ 
             'ticket', 
             'rating', 
-            # 'user',  # auto: request.user 
             'headline', 
             'body' 
         ] 
@@ -103,7 +47,6 @@ class ReviewForm(ModelForm):
         fields = [ 
             'ticket', 
             'rating', 
-            # 'user',  # auto: request.user 
             'headline', 
             'body' 
         ] 
@@ -111,18 +54,4 @@ class ReviewForm(ModelForm):
             'body': forms.Textarea(attrs={'rows': 4, 'cols': 15}), 
             'ticket': forms.HiddenInput(), 
         } 
-        # widgets = {'id': forms.HiddenInput()} 
-
-
-# ex form sans utiliser la classe LoginView : 
-# class LoginForm(forms.Form):
-#     username = forms.CharField( 
-#         max_length=63, 
-#         label='Nom d’utilisateur' 
-#     ) 
-#     password = forms.CharField( 
-#         max_length=63, 
-#         widget=forms.PasswordInput, 
-#         label='Mot de passe' 
-#     ) 
 

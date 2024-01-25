@@ -4,8 +4,13 @@
 
     {% block content %} 
 
+    {% include 'rev/includes/pagination.html' %} 
+
     <!-- Section boutons nouveaux --> 
-    <section class="w3-row"> 
+    
+    <section class="w3-row new_buttons"> 
+        <h5 class="text_center bold">Nouveaux</h5> 
+
         <div class="w3-col m6"> 
             <form action="../create_ticket" method="GET"> 
                 {% csrf_token %} 
@@ -20,14 +25,14 @@
         </div>
     </section> 
 
-
+    <!-- <hr>  -->
+    
     <div class="cadre"> <!-- reviews --> 
         <h5 class="w3-center bold">Votre flux</h5> 
-
-        {% for post in posts %} 
+        
+        {% for post in page_obj %} 
         
             {% if post.content_type == 'REVIEW' %} 
-                <hr> 
                 <div class="review"> 
                     <div class="w3-row"> 
                         <p class="bold w3-col m10">
