@@ -4,7 +4,8 @@
 
 {% block content %} 
 
-{% include 'rev/includes/pagination.html' %}
+{% include 'rev/includes/pagination.html' %} 
+
 
     <div class="cadre"> <!-- reviews --> 
 
@@ -28,7 +29,7 @@
                         </p> 
                         <p class="w3-col m2">{{ post.time_created }} </p> 
                     </div>
-                    {% include 'rev/review_snippet.html' %} 
+                    {% include 'rev/includes/review_snippet.html' %} 
 
                     <div class="w3-row"> 
                         <div class="w3-col m8"> 
@@ -60,7 +61,7 @@
                         </p> 
                         <p class="w3-col m2">{{ post.time_created }} </p> 
                     </div> 
-                    {% include 'rev/ticket_snippet.html' %} 
+                    {% include 'rev/includes/ticket_snippet.html' %} 
 
                     <div class="w3-row"> 
                         <div class="w3-col m2"> 
@@ -80,7 +81,10 @@
                 </div> 
             {% endif %} 
         {% endfor %}
-    </div>
+    </div> 
+
+{% include 'rev/includes/pagination.html' %} 
+
 {% endblock content %} 
 
 
