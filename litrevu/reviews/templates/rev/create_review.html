@@ -22,8 +22,10 @@
                     </p> 
                     <p class="w3-col m2">{{ ticket.time_created }} </p> 
                 </div> 
-                {% include 'rev/includes/ticket_snippet.html' %} 
+                {# % include 'rev/includes/ticket_snippet.html' % #} 
 
+                <p>{{ post.title }} </p> 
+                <p>{{ post.description }} </p> 
                 <p>{{ ticket.title }}</p>  
                 <p>{{ ticket.description }} </p> 
                 <p><img src="../../../reviews/images/{{ ticket.image }}" 

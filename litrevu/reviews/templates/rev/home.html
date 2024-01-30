@@ -44,11 +44,12 @@
                                         {{ f.followed_user.username }} a 
                                     {% endif %} 
                                 {% endfor %} 
-                            publié une revue (ID : {{ post.id }}) 
+                             publié une revue (ID : {{ post.id }}) 
                         </p> 
                         <p class="w3-col m2">{{ post.time_created }} </p> 
                     </div>
                     {% include 'rev/includes/review_snippet.html' %} 
+
                 </div> 
             
             {% elif post.content_type == 'TICKET' %} 
@@ -67,7 +68,9 @@
                         </p> 
                         <p class="w3-col m2">{{ post.time_created }} </p> 
                     </div> 
-                    {% include 'rev/includes/ticket_snippet.html' %} 
+                    <p>{{ post.title }} </p> 
+                    <p>{{ post.description }} </p> 
+                    {# % include 'rev/includes/ticket_snippet.html' % #} 
                     <div class="w3-row"> 
                         <div class="w3-col m2"> 
                             <img src="../../../reviews/images/{{ post.image }}" 

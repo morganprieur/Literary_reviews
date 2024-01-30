@@ -5,6 +5,19 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
+class BlockedUsers(models.Model): 
+    user = models.ForeignKey( 
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='blocker' 
+    ) 
+    blocked_user = models.ForeignKey( 
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='blocked_user' 
+    ) 
+
+
 class Ticket(models.Model): 
     title = models.CharField( 
         max_length=128, 

@@ -150,6 +150,13 @@ input#id_image {
 .text_center { 
   text-align: center; 
 } 
+.link_text_dark { 
+  color: var(--back_color); 
+  font-weight: bold; 
+} 
+.link_text_dark:hover { 
+  color: var(--back_color); 
+} 
 .new_buttons, 
 .review { 
   border: var(--text_color) solid 1px; 

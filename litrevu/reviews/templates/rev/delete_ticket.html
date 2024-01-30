@@ -11,13 +11,25 @@
                 Etes-vous sûr de vouloir supprimer le ticket {{ post.id }} qui a pour titre : "{{ post.title }}" ? 
             </p> 
             <div class="ticket"> 
-                {% include 'rev/includes/ticket_snippet.html' %} 
+                <p>{{ post.title }} </p> 
+                <p>{{ post.description }} </p> 
+                <div class="w3-row"> 
+                    <div class="w3-col m2"> 
+                        <img src="../../../reviews/images/{{ post.image }}" 
+                            alt="Image ticket {{ t.id }}" height="100px"> 
+                    </div> 
+                    <div class="w3-col m10"> 
+                        &nbsp; 
+                    </div>
+                </div> 
+                {# % include 'rev/includes/ticket_snippet.html' % #} 
             </div> 
 
             <form action="" method="post">
                 {% csrf_token %} 
                 <button type="submit">Supprimer</button> 
-            </form>
+            </form> 
+            <br> 
             <button onclick="history.back()">Retour</button> 
 
         </div> 

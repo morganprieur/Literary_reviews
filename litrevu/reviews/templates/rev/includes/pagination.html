@@ -12,10 +12,10 @@
             {% endif %} 
         </div>
         <div class="w3-col m4 text_center"> 
-            <h5 class="bold">Pages</h5>
-            <!-- <span class="current">
-                Page {# { page_obj.number } #} of {# { page_obj.paginator.num_pages } #}.
-            </span> -->
+            <!-- <h5 class="bold">Pages</h5> -->
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
         </div> 
         <div class="w3-col m4 text_center"> 
             {% if page_obj.has_next %}

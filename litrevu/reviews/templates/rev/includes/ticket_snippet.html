@@ -3,18 +3,4 @@
 <p>{{ post.title }} </p> 
 <p>{{ post.description }} </p> 
 
-{% comment %} 
-<div class="w3-row"> 
-    <div class="w3-col m2"> 
-        <img src="../../../reviews/images/{{ post.image }}" 
-            alt="Image ticket {{ t.id }}" height="100px"> 
-    </div> 
-    <div class="w3-col m8"> 
-        &nbsp; 
-    </div>
-    <a class="w3-col m2 text_center" href="{% url 'create-review' ticket_id=post.id %}"> 
-        Créer une revue 
-    </a> 
-</div> 
-{% endcomment %} 
 
