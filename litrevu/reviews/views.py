@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from django.views.generic import View 
 # litrevu/reviews 
 from django.conf import settings 
-from reviews.models import Review, Ticket, UserFollows 
+from reviews.models import Review, Ticket, BlockedUsers, UserFollows 
 from reviews.utils import helpers 
 # litrevu/reviews utils 
 from . import forms 
@@ -120,6 +120,7 @@ def edit_review(request, review_id):
 @login_required 
 def abonnements(request): 
     header = 'Abonnements' 
+    user = request.user 
     users = [] 
     form = forms.UserForm(request.GET) 
 
@@ -127,6 +128,9 @@ def abonnements(request):
         user__username=request.user.username) 
     followers = UserFollows.objects.filter( 
         followed_user__username=request.user.username) 
+    for fr in followers: 
+        print(fr.followed_user.id, fr.followed_user.username) 
+        print(fr.user.id, fr.user.username) 
 
     if form.is_valid(): 
         username = form.cleaned_data['username'] 
@@ -136,6 +140,7 @@ def abonnements(request):
             'header': header, 
             'followed': followed, 
             'followers': followers, 
+            'user': user, 
             'users': users, 
             'form': form, 
         } 
@@ -145,12 +150,26 @@ def abonnements(request):
 @login_required 
 def create_abo(request, user_id): 
     user = User.objects.get(id=user_id) 
+    blocked_users = BlockedUsers.objects.all() 
+    print(type(blocked_users)) 
 
     if request.method == 'POST': 
-        abo = UserFollows.objects.create(followed_user=user, user=request.user) 
-        header = 'Abonnements' 
-        abo.save() 
-        return redirect('abonnements',) 
+        # file deepcode ignore IdentityCheckOnNewObj: local project , file deepcode ignore new~object~identity: <please specify a reason of ignoring this>
+        if blocked_users and isinstance(blocked_users[0], QuerySet): 
+            print('yes') 
+            print(blocked_users) 
+            # if blocked_users[0].id == user.id: 
+            header = 'Opération impossible' 
+            return redirect('impossible_abo', context={ 
+                'header': header, 
+                'user': user, 
+            }) 
+        else: 
+            print('no') 
+            abo = UserFollows.objects.create( 
+                followed_user=user, user=request.user) 
+            abo.save() 
+            return redirect('abonnements',) 
     else: 
         header = 'S\'abonner' 
         return render(request, 'rev/create_abo.html', context={ 
@@ -159,11 +178,42 @@ def create_abo(request, user_id):
 
 
 @login_required
+def block_user(request, block_user_id, user_id): 
+
+    follow = UserFollows.objects.get( 
+        user__pk=block_user_id, 
+        followed_user__pk=user_id) 
+    print(follow)
+    print(follow.user, follow.followed_user) 
+
+    user = User.objects.get(pk=user_id) 
+    blocked_user = User.objects.get(pk=block_user_id) 
+
+    print('blocked_user id : ', blocked_user.id) 
+    print('blocked_user username : ', blocked_user.username) 
+
+    if request.method == 'POST': 
+        print('post') 
+        follow.delete() 
+        
+        block = BlockedUsers.objects.create( 
+            user=user, blocked_user=blocked_user) 
+        block.save() 
+
+        return redirect('abonnements', ) 
+    else: 
+        header = 'Confirmation de blocage d\'un utilisateur' 
+        return render(request, 'rev/block_user.html', context={ 
+            'header': header, 
+            'blocked_user': blocked_user, 
+        }) 
+
+
+@login_required
 def delete_abo(request, abonnements_id): 
     abo = UserFollows.objects.get(id=abonnements_id) 
 
     if request.method == 'POST': 
-        header = 'Abonnements' 
         abo.delete() 
         return redirect('abonnements', ) 
     return render(request, 'rev/delete_abo.html', {'abo': abo}) 
@@ -254,6 +304,9 @@ def create_review(request, ticket_id):
             'ticket': ticket, 
             'form': form, 
         }) 
+
+
+
 
 
 @login_required 

@@ -1,0 +1,26 @@
+
+<!-- review/templates/rev/block_user.html --> 
+{% extends 'base.html' %}
+
+{% block content %} 
+
+        <div class="delete"> 
+            <h1>Bloquer un utilisateur</h1> 
+
+            <p> 
+                Etes-vous sûr de vouloir bloquer cet utilisateur {{ blocked_user.id }} qui a pour pseudo : "{{ blocked_user.username }}" ? 
+            </p> 
+
+            <form action="" method="post">
+                {% csrf_token %} 
+                <button type="submit">Bloquer</button> 
+            </form> 
+            <br> 
+            <button onclick="history.back()">Retour</button> 
+
+        </div> 
+
+{% endblock content %} 
+
+
+

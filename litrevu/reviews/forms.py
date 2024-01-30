@@ -17,6 +17,14 @@ class SignupForm(UserCreationForm):
 class UserForm(forms.Form): 
     username = forms.CharField(label="pseudo ", max_length=150) 
 
+class UserBlocking(ModelForm): 
+    class Meta: 
+        model = models.BlockedUsers 
+        fields = [ 
+            'user', 
+            'blocked_user'  
+        ] 
+
 
 class TicketForm(ModelForm): 
     class Meta: 

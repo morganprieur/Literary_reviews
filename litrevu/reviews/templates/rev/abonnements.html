@@ -39,7 +39,7 @@
             {% for f in followed %} 
             <tr> 
                 <td>{{ f.followed_user }} (abonnement ID : {{ f.id }}) </td>
-                <td><a href="{% url 'delete-abo' abonnements_id=f.id %}">Se désabonner</a> </td>
+                <td><a href="{% url 'delete-abo' abonnements_id=f.id %}">Se désabonner</a> </td> 
             </tr>
             {% empty %} 
                 <p>Il n'y a pas d'abonnement </p> 
@@ -53,8 +53,12 @@
 
         <table class="w3-table w3-striped"> 
             {% for fr in followers %} 
+            {{fr.id}} - {{fr.followed_user.id}} - {{fr.followed_user.username}} <br> 
+            {{fr.id}} - {{fr.user.id}} - {{fr.user.username}} 
             <tr> 
                 <td>{{ fr.user }} </td> 
+                <td><a href="{% url 'block-user' block_user_id=fr.user.id user_id=fr.followed_user.id %}">Bloquer l'utilisateur</a> </td> 
+                            <!-- "{# % url 'projects' projectid=project.id stepno=step.step_no % #}"  -->
             </tr> 
             {% empty %} 
             <p>Il n'y a pas d'abonnés </p> 

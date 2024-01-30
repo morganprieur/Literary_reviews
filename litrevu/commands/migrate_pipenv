@@ -1,2 +1,2 @@
-python manage.py makemigrations reviews
-python manage.py migrate
+python litrevu/manage.py makemigrations reviews
+python litrevu/manage.py migrate
