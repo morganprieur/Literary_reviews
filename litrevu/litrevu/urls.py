@@ -38,7 +38,7 @@ urlpatterns = [
 
     path('block_user/<block_user_id>/<user_id>', views.block_user, name='block-user'), 
     # block-user' with keyword arguments '{'blocked_user_id': 19, 'user_id': 7}' not found. 1 pattern(s) tried: ['block_user/block_user_id/user_id\\Z 
-    path('impossible_abo/', views.create_abo, name='create-abo'), 
+    path('impossible_abo/<user_id>', views.reject_abo, name='impossible-abo'), 
 
     path('delete_abo/<abonnements_id>/', views.delete_abo, name='delete-abo'), 
     path('delete_review/<review_id>/', views.delete_review, name='delete-review'), 

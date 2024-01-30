@@ -8,10 +8,14 @@
             <h1>Opération impossible</h1>
 
             <p> 
-                Impossible de vous aobnner à cet utilisateur {{ user.id }} qui a pour pseudo : "{{ blocked_user.username }}" ? 
+                Impossible de vous abonner à cet utilisateur {{ user.id }} qui a pour pseudo : "{{ blocked_user.username }}". 
             </p> 
 
-            <button onclick="history.back()">Retour</button> 
+            <button value="Retour abonnements"> 
+                <a class="link_text_dark bold" href="{% url 'abonnements' %}"> 
+                    Retour abonnements 
+                </a> 
+            </button> 
 
         </div> 
 

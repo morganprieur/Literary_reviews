@@ -149,21 +149,19 @@ def abonnements(request):
 
 @login_required 
 def create_abo(request, user_id): 
+
     user = User.objects.get(id=user_id) 
     blocked_users = BlockedUsers.objects.all() 
-    print(type(blocked_users)) 
+
+    print('blocked_users[0].id', blocked_users[0].blocked_user.id) 
 
     if request.method == 'POST': 
         # file deepcode ignore IdentityCheckOnNewObj: local project , file deepcode ignore new~object~identity: <please specify a reason of ignoring this>
-        if blocked_users and isinstance(blocked_users[0], QuerySet): 
+        if blocked_users and (blocked_users[0].blocked_user==user): 
             print('yes') 
             print(blocked_users) 
-            # if blocked_users[0].id == user.id: 
-            header = 'Opération impossible' 
-            return redirect('impossible_abo', context={ 
-                'header': header, 
-                'user': user, 
-            }) 
+            # header = 'Opération impossible' 
+            return redirect('impossible-abo', user_id) 
         else: 
             print('no') 
             abo = UserFollows.objects.create( 
@@ -178,22 +176,32 @@ def create_abo(request, user_id):
 
 
 @login_required
+def reject_abo(request, user_id): 
+    user = User.objects.get(pk=user_id) 
+    header = 'Opération impossible' 
+    return render(request, 'rev/impossible_abo.html', context={ 
+        'header': header, 
+        'user': user, 
+    }) 
+
+
+
+@login_required
 def block_user(request, block_user_id, user_id): 
 
     follow = UserFollows.objects.get( 
         user__pk=block_user_id, 
         followed_user__pk=user_id) 
-    print(follow)
-    print(follow.user, follow.followed_user) 
+    # print(follow)
+    # print(follow.user, follow.followed_user) 
 
     user = User.objects.get(pk=user_id) 
     blocked_user = User.objects.get(pk=block_user_id) 
 
-    print('blocked_user id : ', blocked_user.id) 
-    print('blocked_user username : ', blocked_user.username) 
+    # print('blocked_user id : ', blocked_user.id) 
+    # print('blocked_user username : ', blocked_user.username) 
 
     if request.method == 'POST': 
-        print('post') 
         follow.delete() 
         
         block = BlockedUsers.objects.create( 
