@@ -2,7 +2,7 @@
 
 <p>{{ post.headline }} - {# { post.rating } #} 
 {% if post.rating == 0 %} 
-<i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </p> 
+    <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </p> 
 {% elif post.rating == 1 %} 
     <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </p> 
 {% elif post.rating == 2 %} 
@@ -16,32 +16,5 @@
 {% endif %} 
 
 <p>{{ post.body }} </p> 
-{% if post.ticket %} 
-    <div class="ticket"> 
-        <div class="w3-row"> 
-            <p class="bold w3-col m10">{% if post.ticket.user.username == user.username %}
-                    Vous avez 
-                {% else %} 
-                    {{ post.ticket.user.username }} a 
-                {% endif %}
-                publié un ticket (ID : {{ post.ticket.id }}) 
-            </p> 
-            <p class="w3-col m2">{{ post.ticket.time_created }} </p> 
-        </div> 
-        <p>{{ post.ticket.title }} </p> 
-        <p>{{ post.ticket.description }} </p> 
-        <div class="w3-row"> 
-            <div class="w3-col m2"> 
-                <img src="../../../reviews/images/{{ post.ticket.image }}" 
-            alt="Image ticket {{ post.ticket.id }}" height="100px"> 
-            </div> 
-            <div class="w3-col m10"> 
-                &nbsp; 
-            </div> 
-        </div> 
-
-    </div> 
-{% endif %} 
-
 
 
