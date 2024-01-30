@@ -5,25 +5,33 @@ Projet d'apprentissage.
 Développer une application (MVP) pour demander et écrire des revues d'articles et blivres avec Django, et suivre d'autres utilisateurs. 
 
 
+## Environnemnet virtuel Pipenv 
+[Doc de Pipenv](https://post-it.pycolore.fr/post-it/python/pipenv) 
+
+*  Créer un projet : `pipenv --python 3.11` -> créer Pipfile 
+*  Installer les dépendances du projet : `pipenv install` (ajouter des dépndances, comme "dev" par exemple : `--dev`) 
+*  Activer l'environnement virtuel : `pipenv shell` 
+    --> Le message "Launching subshell in virtual environment..." est afifché dans la console  
+    --> le nom du termianl devient "pipenv" 
+*  Lancer des commandes à l'intérieur de l'env virtuel : `pipenv run <command>` 
+*  Lancer le serveur : `pipenv run python litrevu/manage.py runserver` 
+
+
 ## Installation 
 
 1. Télécharger le dossier .zip 
 2. Extraire les fichiers dans un dossier local dédié au projet 
 
-3. Configurer l'environnement virtuel : `pipenv install` 
-4. Lancer l'environnement virtuel : `pipenv shell` 
-5. Démarrer le serveur Django : `pipenv run python manage.py runserver` 
-
-6. Créer un superutilisateur :    
-    61. Depuis le terminal, dans le dossier du projet 'litrevu', appeler la commande `commands/createsuperuser` 
-    62. Répondre aux questions :    
+3. Créer un superutilisateur :    
+    31. Depuis le terminal, dans le dossier du projet 'litrevu', appeler la commande `commands/createsuperuser` 
+    32. Répondre aux questions :    
         * Username 
         * Mail (facultatif) 
         * Mot de passe 
         * Confirmation du mot de passe 
-    63. Visiter l'adresse http://localhost:8000/admin/ pour tester l'interface d'administration, avec les informations de connexion du superutilisateur créé. 
+    33. Visiter l'adresse http://localhost:8000/admin/ pour tester l'interface d'administration, avec les informations de connexion du superutilisateur créé. 
 
-7. Visiter l'adresse http://localhost:8000/home/ pour tester l'application côté utilisateurs. 
+4. Visiter l'adresse http://localhost:8000/home/ pour tester l'application côté utilisateurs. 
 
 
 ## Autres 
