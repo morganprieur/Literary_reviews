@@ -31,7 +31,11 @@
                             {% csrf_token %} 
                             <button type="submit" >S’inscrire</button> 
                         </form> 
-                        <button onclick="history.back()">Retour</button> 
+                        <button value="Retour abonnements"> 
+                            <a class="link_text_dark" href="{% url 'home' %}"> 
+                                Retour accueil 
+                            </a> 
+                        </button> 
                     </div> 
                 </div> 
             </div> 

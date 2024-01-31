@@ -17,8 +17,8 @@
             </div>
         </form> 
 
-        {% if users %} 
         <h2>Résultats de la recherche :</h2> 
+        {% if users %} 
         <table class="w3-table w3-striped"> 
             {% for u in users %} 
             <tr> 
@@ -29,20 +29,28 @@
                 <p>Aucun membre n'a ce pseudo </p> 
             {% endfor %} 
         </table> 
+        {% else %} 
+        <p> 
+            Aucun utilisateur n'a ce pseudo. Essayez avec une autre orthographe. 
+        </p> 
         {% endif %} 
     </div> 
 
     <div class="cadre"> <!-- abonnements -->
         <h3 class="w3-center">Abonnements</h3> 
 
-        <table class="w3-table w3-striped"> 
+        <table class="w3-table w3-striped subscriptions"> 
             {% for f in followed %} 
             <tr> 
-                <td>{{ f.followed_user }} (abonnement ID : {{ f.id }}) </td>
+                <td>{{ f.followed_user }} </td>
                 <td><a href="{% url 'delete-abo' abonnements_id=f.id %}">Se désabonner</a> </td> 
             </tr>
             {% empty %} 
-                <p>Il n'y a pas d'abonnement </p> 
+            <tr> 
+                <td>
+                    <p>Vous n'avez pas d'abonnement </p> 
+                </td> 
+            </tr> 
             {% endfor %} 
         </table> 
     </div> 
@@ -51,14 +59,20 @@
         <h3 class="w3-center">Abonnés</h3> 
         Nombre d'abonnés : {{ followers.all.count }} <br> 
 
-        <table class="w3-table w3-striped"> 
+        <table class="w3-table w3-striped subscriptions"> 
             {% for fr in followers %} 
             <tr> 
                 <td>{{ fr.user }} </td> 
-                <td><a href="{% url 'block-user' block_user_id=fr.user.id user_id=fr.followed_user.id %}">Bloquer l'utilisateur</a> </td> 
+                <td><a href="{% url 'block-user' block_user_id=fr.user.id user_id=fr.followed_user.id %}"> 
+                    Bloquer l'utilisateur 
+                </a> </td> 
             </tr> 
             {% empty %} 
-            <p>Il n'y a pas d'abonnés </p> 
+            <tr> 
+                <td>
+                    <p>Vous n'avez pas d'abonné </p> 
+                </td> 
+            </tr> 
             {% endfor %} 
         </table> 
     </div> 

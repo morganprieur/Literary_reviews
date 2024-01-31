@@ -10,11 +10,14 @@ body {
   font-family: sans-serif; 
   background-color: var(--back_color); 
   color: var(--text_color); 
+  font-size: 18px; ;
 } 
 
 a { 
   text-decoration: none; 
-  color: var(--button_color);   
+  color: var(--button_color); 
+  text-shadow: var(--back_color); 
+  font-weight: bold; 
 } 
 a:hover {
   color: var(--button_hover); 
@@ -25,6 +28,7 @@ button {
   background-color: var(--button_color); 
   border: var(--back_color) solid 1px; 
   border-radius: 5px; 
+  font-weight: bold; 
 } 
 button:hover { 
   background-color: var(--button_hover); 
@@ -178,6 +182,9 @@ input#id_image {
 } 
 .serach_button { 
   margin-top: 4rem; ;
+} 
+.subscriptions td { 
+  width: 70%; 
 } 
 .ticket { 
   border: var(--text_color) solid 1px; 
