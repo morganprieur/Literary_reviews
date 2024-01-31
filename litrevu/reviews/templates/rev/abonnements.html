@@ -38,6 +38,7 @@
 
     <div class="cadre"> <!-- abonnements -->
         <h3 class="w3-center">Abonnements</h3> 
+        Nombre d'abonnés : {{ followed.all.count }} <br> 
 
         <table class="w3-table w3-striped subscriptions"> 
             {% for f in followed %} 

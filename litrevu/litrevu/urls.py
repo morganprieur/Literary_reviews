@@ -27,33 +27,36 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls), 
 
-    # authentication 
+    # Authentication 
     path('signup/', views.SignupPageView.as_view(), name='signup'), 
     path('login/', LoginView.as_view(template_name='rev/login.html', 
         redirect_authenticated_user=False), 
         name='login'), 
     path('logout/', views.logout_user, name='logout'), 
 
+    # Pages 
     path('home/', views.home, name='home'), 
     path('activity/', views.activity, name='activity'), 
     path('abonnements/', views.abonnements, name='abonnements'), 
 
+    # Creations 
     path('create_abo.html/<user_id>/', views.create_abo, name='create-abo'), 
     path('create_new_review/', views.create_new_review, name='create-new-review'), 
     path('create_review/<ticket_id>/', views.create_review, name='create-review'), 
     path('create_ticket/', views.create_ticket, name='create-ticket'), 
 
+    # Blocked users 
     path('block_user/<block_user_id>/<user_id>', views.block_user, name='block-user'), 
-    # block-user' with keyword arguments '{'blocked_user_id': 19, 'user_id': 7}' not found. 1 pattern(s) tried: ['block_user/block_user_id/user_id\\Z 
     path('impossible_abo/<user_id>', views.reject_abo, name='impossible-abo'), 
 
-    path('delete_abo/<abonnements_id>/', views.delete_abo, name='delete-abo'), 
-    path('delete_review/<review_id>/', views.delete_review, name='delete-review'), 
-    path('delete_ticket/<ticket_id>/', views.delete_ticket, name='delete-ticket'), 
-
+    # Edit posts 
     path('edit_review/<review_id>/', views.edit_review, name='edit-review'), 
     path('edit_ticket/<ticket_id>/', views.edit_ticket, name='edit-ticket'), 
 
+    # Delete posts 
+    path('delete_abo/<abonnements_id>/', views.delete_abo, name='delete-abo'), 
+    path('delete_review/<review_id>/', views.delete_review, name='delete-review'), 
+    path('delete_ticket/<ticket_id>/', views.delete_ticket, name='delete-ticket'), 
 
 ] 
 
