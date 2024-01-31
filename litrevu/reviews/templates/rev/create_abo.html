@@ -6,14 +6,20 @@
     <div> 
         <h1>S'abonner à un utilisateur</h1>
 
-        <p class="w3-center">Etes-vous sûr de vouloir vous abonner à : <span class="bold">{{ user.username }}</span> ?</p> 
+            <p>{{message}}</p> 
 
-        <form action="" method="post">
-            {% csrf_token %} 
-            <button type="submit">s'abonner</button>  
-        </form> 
-        <br> 
-        <button onclick="history.back()">Retour</button> 
+        {% if message %} 
+            <button onclick="history.back()">Retour</button> 
+        {% else %} 
+                <p class="w3-center">Etes-vous sûr de vouloir vous abonner à : <span class="bold">{{ user.username }}</span> ?</p> 
+
+            <form action="" method="post">
+                {% csrf_token %} 
+                <button type="submit">s'abonner</button>  
+            </form> 
+            <br> 
+            <button onclick="history.back()">Retour</button> 
+        {% endif %} 
 
     </div>
 

@@ -49,6 +49,30 @@
                         <p class="w3-col m2">{{ post.time_created }} </p> 
                     </div>
                     {% include 'rev/includes/review_snippet.html' %} 
+                    <div class="ticket"> 
+                        <div class="w3-row"> 
+                            <p class="bold w3-col m10">{% if post.ticket.user.username == user.username %}
+                                    Vous avez 
+                                {% else %} 
+                                    {{ post.ticket.user.username }} a 
+                                {% endif %}
+                                publié un ticket (ID : {{ post.ticket.id }}) 
+                            </p> 
+                            <p class="w3-col m2">{{ post.ticket.time_created }} </p> 
+                        </div> 
+                        <p>{{ post.ticket.title }} </p> 
+                        <p>{{ post.ticket.description }} </p> 
+
+                        <div class="w3-row"> 
+                            <div class="w3-col m2"> 
+                                <img src="../../../reviews/images/{{ post.ticket.image }}" 
+                                    alt="Image ticket {{ t.ticket.id }}" height="100px"> 
+                            </div> 
+                            <div class="w3-col m10"> 
+                                &nbsp; 
+                            </div> 
+                        </div> 
+                    </div> 
 
                 </div> 
             
