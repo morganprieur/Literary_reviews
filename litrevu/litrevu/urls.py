@@ -27,6 +27,13 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls), 
 
+    # authentication 
+    path('signup/', views.SignupPageView.as_view(), name='signup'), 
+    path('login/', LoginView.as_view(template_name='rev/login.html', 
+        redirect_authenticated_user=False), 
+        name='login'), 
+    path('logout/', views.logout_user, name='logout'), 
+
     path('home/', views.home, name='home'), 
     path('activity/', views.activity, name='activity'), 
     path('abonnements/', views.abonnements, name='abonnements'), 
@@ -47,13 +54,6 @@ urlpatterns = [
     path('edit_review/<review_id>/', views.edit_review, name='edit-review'), 
     path('edit_ticket/<ticket_id>/', views.edit_ticket, name='edit-ticket'), 
 
-    # authentication 
-    path('login/', LoginView.as_view( 
-        template_name='rev/login.html', 
-        redirect_authenticated_user=False), 
-        name='login'), 
-    path('logout/', views.logout_user, name='logout'), 
-    path('signup/', views.SignupPageView.as_view(), name='signup'), 
 
 ] 
 

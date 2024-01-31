@@ -17,6 +17,9 @@ class BlockedUsers(models.Model):
         related_name='blocked_user' 
     ) 
 
+    class Meta: 
+        verbose_name_plural = 'Blocked users' 
+
 
 class Ticket(models.Model): 
     title = models.CharField( 
@@ -83,5 +86,5 @@ class UserFollows(models.Model):
 
     class Meta: 
         unique_together = ('user', 'followed_user', ) 
-        verbose_name_plural = 'User Follows'
+        verbose_name_plural = 'User Follows' 
 

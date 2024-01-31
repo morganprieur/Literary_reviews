@@ -11,11 +11,17 @@ from . import models
 class SignupForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = ('username', 'email', 'first_name', 'last_name')  # , 'role' 
+        fields = ( 
+            'username', 
+            'email', 
+            'first_name', 
+            'last_name' 
+        ) 
 
 
 class UserForm(forms.Form): 
     username = forms.CharField(label="pseudo ", max_length=150) 
+
 
 class UserBlocking(ModelForm): 
     class Meta: 

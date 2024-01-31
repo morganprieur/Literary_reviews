@@ -35,6 +35,11 @@ class SignupPageView(View):
             # auto-login user: 
             login(request, user)
             return redirect(settings.LOGIN_REDIRECT_URL) 
+        else: 
+            message = 'Veuillez suivre les instructions' 
+            return render(request, self.template_name, context={ 
+                'form': form, 
+            }) 
 
 
 def logout_user(request):
@@ -76,6 +81,7 @@ def home(request):
             "page_obj": page_obj, 
         } 
     ) 
+
 
 @login_required 
 def edit_ticket(request, ticket_id): 
@@ -160,7 +166,6 @@ def create_abo(request, user_id):
         if blocked_users and (blocked_users[0].blocked_user==user): 
             print('yes') 
             print(blocked_users) 
-            # header = 'Opération impossible' 
             return redirect('impossible-abo', user_id) 
         else: 
             print('no') 
