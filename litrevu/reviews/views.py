@@ -120,7 +120,8 @@ def home(request):
 
 @login_required 
 def activity(request): 
-    """ Displays the user's activity page. 
+    """ Displays the user's activity page, included if related 
+        to the activity of another user. 
         Args: 
             request (django.core.handlers.wsgi.WSGIRequest): 
                 The infos passed while calling and loading the page. 
@@ -130,23 +131,27 @@ def activity(request):
     """ 
     header = 'Vos posts' 
     user = request.user 
+    followed = helpers.followed_users(user) 
 
     " The users' reviews with the belonging tickets. " 
-    reviews = Review.objects.select_related("ticket").filter( 
-        user=user 
+    reviews_qs = Review.objects.select_related("ticket").filter( 
+        Q(user__in=UserFollows.objects.filter(user=user)\
+            .values("followed_user")) | Q(user=user) 
     ) 
-    reviews = reviews.annotate( 
+    reviews_qs = reviews_qs.annotate( 
         content_type=Value('REVIEW', CharField())) 
-
+    tickets = Ticket.objects.filter( 
+        user=user 
+    ).exclude(id__in=reviews_qs.values("ticket_id")) 
+    reviews = [] 
+    for review in reviews_qs: 
+        if (not(review.ticket.user == review.user)) | (review.user==user): 
+            reviews.append(review) 
     """ The users' tickets with the belonging reviews, 
         excluding the tickets already stored with a review. 
     """ 
-    tickets = Ticket.objects.filter( 
-        user=user 
-    ).exclude(id__in=reviews.values("ticket_id")) 
     tickets = tickets.annotate( 
         content_type=Value('TICKET', CharField())) 
-    tickets = list(tickets) 
 
     " combine and sort the two types of posts. " 
     posts = sorted( 
@@ -164,7 +169,8 @@ def activity(request):
         'header': header, 
         'user': user, 
         'posts': posts, 
-        "page_obj": page_obj, 
+        'page_obj': page_obj, 
+        'followed': followed, 
     }) 
 
 
@@ -222,41 +228,34 @@ def create_abo(request, user_id):
     """ 
     user_follow = User.objects.get(id=user_id) 
     message = '' 
-
     """ Check if the user has been blocked by the User instance 
         with ID == user_id. 
     """ 
-    blocked_users = BlockedUsers.objects.filter(user=user_follow, blocked_user=request.user) 
-
+    blocked_users = BlockedUsers.objects.filter( 
+        user=user_follow, 
+        blocked_user=request.user) 
     """ Check if the followed user has been already followed 
         by this user. 
     """ 
     follow_binomials = UserFollows.objects.filter( 
         user=request.user, 
-        followed_user=user_follow 
-    ) 
-
+        followed_user=user_follow) 
     if follow_binomials: 
         message = 'Vous êtes déjà abonné à cet utilisateur.' 
-        return render(request, 'rev/create_abo.html', context={ 
-            'message': message, 
-        }) 
+        return render(request, 'rev/create_abo.html', context={'message': message}) 
     elif blocked_users: 
         message = f'''Impossible de vous abonner à cet utilisateur 
             {user_follow.username}.''' 
-        return render(request, 'rev/create_abo.html', context={ 
-            'message': message, 
-        }) 
-    if request.method == 'POST': 
-        " Else " 
+        return render(request, 'rev/create_abo.html', context={'message': message}) 
+    elif request.method == 'POST': 
+        " If the subscription can be set " 
         abo = UserFollows.objects.create( 
             followed_user=user_follow, user=request.user) 
         abo.save() 
         return redirect('abonnements',) 
     else: 
         header = 'S\'abonner' 
-        return render(request, 'rev/create_abo.html', context={ 
-            'header': header, 
+        return render(request, 'rev/create_abo.html', context={'header': header, 
             'user': user_follow}) 
 
 
@@ -300,7 +299,8 @@ def create_ticket(request):
 
 @login_required 
 def create_new_review(request): 
-    """ Displays the empty ReviewForm and TicketForm or sends the filled forms in the same action. 
+    """ Displays the empty ReviewForm and TicketForm or sends the filled forms in the 
+        same action. 
         The ticketForm is treated by the create_ticket fuction. 
         If the ReviewForm has been sent and is valide: 
             - Creates a new Review instance with the last registered 
@@ -326,7 +326,9 @@ def create_new_review(request):
         " Call to the create_ticket function to treat the TicketForm. " 
         create_ticket(request) 
         last_ticket = Ticket.objects.filter().last() 
-        " Register the new Review instance with the last registered Ticket instance as a ticket. " 
+        """ Register the new Review instance 
+            with the last registered Ticket instance as a ticket. 
+        """ 
         if review_form.is_valid(): 
             new_review = review_form.save(commit=False) 
             new_review.ticket = last_ticket 
@@ -415,25 +417,6 @@ def block_user(request, block_user_id, user_id):
             'header': header, 
             'blocked_user': blocked_user, 
         }) 
-
-
-@login_required
-def reject_abo(request, user_id): 
-    """ When the logged-in user want to follow a user who has blocked him, 
-        the subscription is refused and he is redirected on this page: 
-        Args:
-            request (django.core.handlers.wsgi.WSGIRequest): 
-                The infos passed while calling and loading the page. 
-            user_id (int): The logged-in user. 
-        Returns:
-            HttpResponse: "render" and "redirect" are shortcuts for HttpResponse. 
-    """ 
-    user = User.objects.get(pk=user_id) 
-    header = 'Opération impossible' 
-    return render(request, 'rev/impossible_abo.html', context={ 
-        'header': header, 
-        'user': user, 
-    }) 
 
 
 @login_required 
@@ -586,13 +569,18 @@ def delete_ticket(request, ticket_id):
         Returns: 
             HttpResponse: "render" and "redirect" are shortcuts for HttpResponse. 
     """ 
-    post = Ticket.objects.get(id=ticket_id) 
+    f_users = helpers.followed_users(request.user) 
+
+    ticket = Ticket.objects.get(id=ticket_id) 
+    post = Review.objects.get(ticket=ticket) 
 
     if request.method == 'POST': 
+        ticket.delete() 
         post.delete() 
         return redirect('activity', ) 
     return render(request, 'rev/delete_ticket.html', context={ 
-        'post': post 
+        'post': post, 
+        'followed': f_users, 
     }) 
 
 

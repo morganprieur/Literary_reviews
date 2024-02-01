@@ -6,9 +6,9 @@
     <div> 
         <h1>S'abonner à un utilisateur</h1>
 
-            <p>{{message}}</p> 
-
         {% if message %} 
+            <p>{{message}}</p> 
+            <br> 
             <button onclick="history.back()">Retour</button> 
         {% else %} 
                 <p class="w3-center">Etes-vous sûr de vouloir vous abonner à : <span class="bold">{{ user.username }}</span> ?</p> 

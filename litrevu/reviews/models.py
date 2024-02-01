@@ -6,8 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class BlockedUsers(models.Model): 
-    """ Intermediary table for storage of the user / blocked_user 
-        binomials. 
+    """ Intermediary table for storage of the user / blocked_user binomials. 
         Args:
             models (Models instance): Parent-class extended. 
     """ 
@@ -52,7 +51,6 @@ class Review(models.Model):
         Ticket, 
         on_delete=models.CASCADE, 
         blank=True, 
-        # null=True, 
     ) 
     rating = models.PositiveSmallIntegerField( 
         validators=[ 

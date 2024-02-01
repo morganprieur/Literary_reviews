@@ -45,9 +45,8 @@ urlpatterns = [
     path('create_review/<ticket_id>/', views.create_review, name='create-review'), 
     path('create_ticket/', views.create_ticket, name='create-ticket'), 
 
-    # Blocked users 
+    # Blocked user 
     path('block_user/<block_user_id>/<user_id>', views.block_user, name='block-user'), 
-    path('impossible_abo/<user_id>', views.reject_abo, name='impossible-abo'), 
 
     # Edit posts 
     path('edit_review/<review_id>/', views.edit_review, name='edit-review'), 
