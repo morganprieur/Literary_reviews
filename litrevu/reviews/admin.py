@@ -12,13 +12,19 @@ from django.contrib.auth.models import User
 
 class UserAdmin(BaseUserAdmin): 
     list_display = ( 
-        'id', 'username', 'email', 'first_name', 'last_name', 'is_staff' 
+        'id', 
+        'username', 
+        'email', 
+        'first_name', 
+        'last_name', 
+        'is_staff' 
     ) 
 admin.site.unregister(User) 
 admin.site.register(User, UserAdmin) 
 
 class TicketAdmin(admin.ModelAdmin): 
     list_display = ( 
+        'id', 
         'title', 
         'description', 
         'user', 
@@ -29,6 +35,7 @@ admin.site.register(Ticket, TicketAdmin)
 
 class ReviewAdmin(admin.ModelAdmin): 
     list_display = ( 
+        'id', 
         'ticket', 
         'user', 
         'headline', 
@@ -39,6 +46,7 @@ admin.site.register(Review, ReviewAdmin)
 
 class UserFollowsAdmin(admin.ModelAdmin): 
     list_display = ( 
+        'id', 
         'user', 
         'followed_user',  
     ) 
@@ -47,6 +55,7 @@ admin.site.register(UserFollows, UserFollowsAdmin)
 
 class BlockedUsersAdmin(admin.ModelAdmin): 
     list_display = ( 
+        'id', 
         'user', 
         'blocked_user',  
     ) 

@@ -8,21 +8,47 @@
             <h1>Supprimer un ticket</h1>
 
             <p> 
-                Etes-vous sûr de vouloir supprimer le ticket {{ post.id }} qui a pour titre : "{{ post.title }}" ? 
+                Etes-vous sûr de vouloir supprimer ce ticket et la revue associée ?  
             </p> 
-            <div class="ticket"> 
-                <p>{{ post.title }} </p> 
-                <p>{{ post.description }} </p> 
+            <div class="review"> 
                 <div class="w3-row"> 
-                    <div class="w3-col m2"> 
-                        <img src="../../../reviews/images/{{ post.image }}" 
-                            alt="Image ticket {{ t.id }}" height="100px"> 
-                    </div> 
-                    <div class="w3-col m10"> 
-                        &nbsp; 
-                    </div>
+                    <p class="bold w3-col m10">
+                        {% if post.user == user %} 
+                        Vous avez 
+                        {% endif %} 
+                            {% for f in followed %} 
+                                {% if post.user == f.followed_user %} 
+                                    {{ f.followed_user }} a 
+                                {% endif %} 
+                            {% endfor %} 
+                        publié une revue (ID : {{ post.id }}) 
+                    </p> 
+                    <p class="w3-col m2">{{ post.time_created }} </p> 
                 </div> 
-                {# % include 'rev/includes/ticket_snippet.html' % #} 
+                {% include 'rev/includes/review_snippet.html' %}  
+                <div class="ticket"> 
+                    <div class="w3-row"> 
+                        <p class="bold w3-col m10">{% if post.ticket.user.username == user.username %}
+                                Vous avez 
+                            {% else %} 
+                                {{ post.ticket.user.username }} a 
+                            {% endif %}
+                            publié un ticket (ID : {{ post.ticket.id }}) 
+                        </p> 
+                        <p class="w3-col m2">{{ post.ticket.time_created }} </p> 
+                    </div> 
+                    <p>{{ post.ticket.title }} </p> 
+                    <p>{{ post.ticket.description }} </p> 
+                    <div class="w3-row"> 
+                        <div class="w3-col m2"> 
+                            <img src="../../reviews/images/{{ post.ticket.image }}" 
+                                alt="Image ticket {{ t.id }}" height="100px"> 
+                        </div> 
+                        <div class="w3-col m10"> 
+                            &nbsp; 
+                        </div>
+                    </div> 
+                </div> 
             </div> 
 
             <form action="" method="post">
