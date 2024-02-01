@@ -22,6 +22,7 @@ class BlockedUsers(models.Model):
     ) 
 
     class Meta: 
+        unique_together = ('user', 'blocked_user', ) 
         verbose_name_plural = 'Blocked users' 
 
 

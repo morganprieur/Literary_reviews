@@ -2,7 +2,8 @@
 # P9 - LitRevu Project 
 
 Projet d'apprentissage. 
-Développer une application (MVP) pour demander et écrire des revues d'articles et blivres avec Django, et suivre d'autres utilisateurs. 
+Développer une application pour demander et écrire des revues d'articles et livres avec Django, 
+et suivre d'autres utilisateurs. 
 
 
 ## Environnemnet virtuel Pipenv 
@@ -21,22 +22,25 @@ Développer une application (MVP) pour demander et écrire des revues d'articles
 
 1. Télécharger le dossier .zip 
 2. Extraire les fichiers dans un dossier local dédié au projet 
-
-3. Créer un superutilisateur :    
-    31. Depuis le terminal, dans le dossier du projet 'litrevu', appeler la commande `commands/createsuperuser` 
-    32. Répondre aux questions :    
-        * Username 
-        * Mail (facultatif) 
-        * Mot de passe 
-        * Confirmation du mot de passe 
-    33. Visiter l'adresse http://localhost:8000/admin/ pour tester l'interface d'administration, avec les informations de connexion du superutilisateur créé. 
-
-4. Visiter l'adresse http://localhost:8000/home/ pour tester l'application côté utilisateurs. 
+3. installer et lancer l'environnement virtuel 
+4. Visiter l'adresse http://localhost:8000/admin/ pour utiliser l'interface admin avec les identifiants d'un super_utilisateur 
+5. Visiter l'adresse http://localhost:8000/home/ pour utiliser l'application en tant qu'utilisateur. 
 
 
 ## Autres 
 
-### Créer un utilisateur depuis la console 
+### Créer un super_utilisateur depuis la console 
+
+1. Depuis le terminal, dans le dossier du projet 'litrevu', appeler la commande `commands/createsuperuser` 
+2. Répondre aux questions :    
+    * Username 
+    * Mail (facultatif) 
+    * Mot de passe 
+    * Confirmation du mot de passe 
+3. Visiter l'adresse http://localhost:8000/admin/ pour utiliser l'interface d'administration, avec les informations de connexion du superutilisateur créé. 
+
+
+### Créer un utilisateur (normal) depuis la console 
 
 1.  Ouvrir une console python :    
 `python manage.py shell`    
@@ -59,4 +63,12 @@ Lancer une commande à partir du dossier `litrevu`.
 `./commands/migrate_pipenv` ou `./commands/migrate_docker` pour effectuer les migrations et mettre à jour la BDD. 
 `./commands/install` (pour installer un package ou module Python) 
 `./commands/startapp` (pour installer une application Django) 
+
+
+## Visuel 
+
+Utilisation du framework (W3CSS)[https://www.w3schools.com/w3css/] principalement pour l'utilisation des grilles CSS. 
+
+Contraste élevé pour répondre aux recommandations WCAG du W3C. 
+Tests de contraste : https://web-color.aliasdmc.fr/contraste-couleur-text-fond-wcag.php
 

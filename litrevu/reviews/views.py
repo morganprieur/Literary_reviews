@@ -405,7 +405,7 @@ def block_user(request, block_user_id, user_id):
 
     if request.method == 'POST': 
         subscription.delete() 
-        
+
         block = BlockedUsers.objects.create( 
             user=user, blocked_user=blocked_user) 
         block.save() 
