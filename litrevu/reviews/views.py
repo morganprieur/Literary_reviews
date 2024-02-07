@@ -238,15 +238,16 @@ def create_abo(request, user_id):
         by this user. 
     """ 
     follow_binomials = UserFollows.objects.filter( 
-        user=request.user, 
-        followed_user=user_follow) 
+        user=request.user, followed_user=user_follow) 
     if follow_binomials: 
         message = 'Vous êtes déjà abonné à cet utilisateur.' 
-        return render(request, 'rev/create_abo.html', context={'message': message}) 
+        return render(request, 'rev/create_abo.html', context={ 
+            'message': message}) 
     elif blocked_users: 
         message = f'''Impossible de vous abonner à cet utilisateur 
             {user_follow.username}.''' 
-        return render(request, 'rev/create_abo.html', context={'message': message}) 
+        return render(request, 'rev/create_abo.html', context={ 
+            'message': message}) 
     elif request.method == 'POST': 
         " If the subscription can be set " 
         abo = UserFollows.objects.create( 
@@ -255,8 +256,10 @@ def create_abo(request, user_id):
         return redirect('abonnements',) 
     else: 
         header = 'S\'abonner' 
-        return render(request, 'rev/create_abo.html', context={'header': header, 
-            'user': user_follow}) 
+        return render(request, 'rev/create_abo.html', context={ 
+            'header': header, 
+            'user': user_follow 
+        }) 
 
 
 @login_required 
