@@ -26,7 +26,8 @@ class UserForm(forms.Form):
 class TicketForm(ModelForm): 
     class Meta: 
         model = models.Ticket 
-        fields = ['title', 
+        fields = [ 
+            'title', 
             'description', 
             'image' 
         ] 
@@ -41,6 +42,9 @@ class NewReviewForm(ModelForm):
             'headline', 
             'body' 
         ] 
+        labels = { 
+            'rating': 'Rating (de 0 à 5)', 
+        } 
         widgets = { 
             'body': forms.Textarea(attrs={'rows': 4, 'cols': 15}), 
         } 
@@ -55,6 +59,9 @@ class ReviewForm(ModelForm):
             'headline', 
             'body' 
         ] 
+        labels = { 
+            'rating': 'Rating (de 0 à 5)', 
+        } 
         widgets = { 
             'body': forms.Textarea(attrs={'rows': 4, 'cols': 15}), 
             'ticket': forms.HiddenInput(), 
