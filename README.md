@@ -2,6 +2,14 @@
 # Literary Reviews 
 Application Django, de forme "réseau social", permettant de demander et écrire des revues d'articles et de livres. Une fonctionnalité permet de suivre d'autres utilisateurs ou de les bloquer. 
 
+Les utilisateurs connectés peuvent suivre d'autres utilisateurs, ou les bloquer. Ils voient les posts des utilisateurs suivis, et leurs propres posts. 
+Ils peuvent aussi : 
+- écrire des tickets pour demander une revue sur un article ou un livre,
+- écrire une revue en répondant à un ticket,
+- écrire une revue et un ticket en même temps. 
+
+
+
 ## Environnement virtuel Pipenv 
 [Doc de Pipenv](https://post-it.pycolore.fr/post-it/python/pipenv) 
 
