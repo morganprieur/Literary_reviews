@@ -1,10 +1,6 @@
 
-# P9 - LitRevu Project 
-
-Projet d'apprentissage. 
-Développer une application pour demander et écrire des revues d'articles et livres avec Django, 
-et suivre d'autres utilisateurs. 
-
+# Literary Reviews 
+Application Django, de forme "réseau social", permettant de demander et écrire des revues d'aritcles et de livres. Une fonctionnalité permet de suivre d'autres utilisateurs ou de les bloquer. 
 
 ## Environnemnet virtuel Pipenv 
 [Doc de Pipenv](https://post-it.pycolore.fr/post-it/python/pipenv) 
