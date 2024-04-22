@@ -72,8 +72,8 @@ Lancer une commande à partir du dossier `litrevu`.
 
 ## Visuel 
 
-Utilisation du framework (W3CSS)[https://www.w3schools.com/w3css/] principalement pour l'utilisation des grilles CSS. 
+Utilisation du framework [W3CSS](https://www.w3schools.com/w3css/) principalement pour l'utilisation des grilles CSS. 
 
 Contraste élevé pour répondre aux recommandations WCAG du W3C. 
-Tests de contraste : https://web-color.aliasdmc.fr/contraste-couleur-text-fond-wcag.php
+[Tests de contraste](https://web-color.aliasdmc.fr/contraste-couleur-text-fond-wcag.php)
 
